@@ -1,0 +1,18 @@
+.home-screen {
+  max-width: 520px;
+  margin: 0 auto;
+  background: #111827;
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 1px solid #334155;
+}
+
+.home-screen h2 {
+  margin-top: 0;
+  color: #e2e8f0;
+}
+
+.home-screen p {
+  color: #cbd5e1;
+  line-height: 1.7;
+}

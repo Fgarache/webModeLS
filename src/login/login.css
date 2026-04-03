@@ -1,0 +1,53 @@
+.login-screen {
+  max-width: 520px;
+  margin: 0 auto;
+  background: #111827;
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 1px solid #334155;
+}
+
+.login-screen h2 {
+  margin-top: 0;
+  color: #e2e8f0;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.google-button {
+  background: #4285f4;
+  color: white;
+  border: none;
+  padding: 0.9rem 1.2rem;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+}
+
+.google-button:disabled {
+  background: #334155;
+  cursor: not-allowed;
+}
+
+.login-hint {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+.login-error {
+  color: #f87171;
+  margin-top: 0.25rem;
+  font-size: 0.95rem;
+}
+
+.login-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
