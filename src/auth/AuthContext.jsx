@@ -23,16 +23,22 @@ export function AuthProvider({ children }) {
           } else {
             // Crear perfil básico si no existe
             const newProfile = {
+              descripcion: '',
               disponible: true,
+              disponible_hoy_en: '',
               email: firebaseUser.email,
+              estado_texto: '',
               foto_perfil: firebaseUser.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${firebaseUser.uid}`,
               fotos: {},
+              mis_tours: {},
               nombre_completo: firebaseUser.displayName || firebaseUser.email.split('@')[0],
               nombre_usuario: firebaseUser.email.split('@')[0],
               perfil_activo: true,
+              redes: {},
               rol: 'usuario',
               servicios: {},
               ubicaciones: {},
+              verificado: false,
             };
             await set(profileRef, newProfile);
             setProfile(newProfile);

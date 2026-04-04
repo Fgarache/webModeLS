@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { FaArrowLeft, FaGoogle, FaLock, FaMapMarkedAlt } from 'react-icons/fa';
 import './login.css';
 
 function Login({ config, onLogin, onCancel, errorMessage }) {
@@ -17,21 +18,53 @@ function Login({ config, onLogin, onCancel, errorMessage }) {
 
   return (
     <section className="login-screen">
-      <h2>{config.title}</h2>
-      <div className="login-form">
-        <button
-          className="google-button"
-          onClick={handleGoogleLogin}
-          disabled={loading}
-        >
-          {loading ? 'Cargando...' : config.googleButtonText}
-        </button>
-        <p className="login-hint">{config.hintText}</p>
-        {errorMessage && <p className="login-error">{errorMessage}</p>}
-        <div className="login-actions">
-          <button className="secondary-button" type="button" onClick={onCancel}>
-            {config.cancelButtonText}
-          </button>
+      <div className="login-shell-card">
+        <div className="login-showcase">
+          <div className="login-badge">Acceso seguro</div>
+          <h2>{config.title}</h2>
+          <p className="login-lead">
+            Gestiona tu perfil, tus tours y tus rifas desde un acceso unico con tu cuenta de Google.
+          </p>
+
+          <div className="login-feature-list">
+            <div className="login-feature-item">
+              <span className="login-feature-icon"><FaMapMarkedAlt /></span>
+              <div>
+                <strong>Ubicacion y disponibilidad</strong>
+                <p>Actualiza tu estado visible y donde estas disponible hoy.</p>
+              </div>
+            </div>
+            <div className="login-feature-item">
+              <span className="login-feature-icon"><FaLock /></span>
+              <div>
+                <strong>Ingreso directo</strong>
+                <p>Tu sesion usa Google para entrar rapido sin crear otra contraseña.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="login-panel">
+          <div className="login-panel-top">
+            <p className="login-kicker">Google Sign-In</p>
+            <h3>Continua con tu cuenta</h3>
+            <p className="login-hint">{config.hintText}</p>
+          </div>
+
+          <div className="login-form">
+            <button className="google-button" onClick={handleGoogleLogin} disabled={loading}>
+              <span className="google-button-icon"><FaGoogle /></span>
+              <span>{loading ? 'Cargando...' : config.googleButtonText}</span>
+            </button>
+
+            {errorMessage && <p className="login-error">{errorMessage}</p>}
+
+            <div className="login-actions">
+              <button className="secondary-button login-back-button" type="button" onClick={onCancel}>
+                <FaArrowLeft /> {config.cancelButtonText}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -1,0 +1,41 @@
+{
+  "rules": {
+    "perfil": {
+      ".read": true,
+      "$uid": { ".write": "auth != null && auth.uid == $uid" }
+    },
+    "tour": {
+      ".read": true,
+      "$tour_id": { ".write": "auth != null && (!data.exists() || data.child('creado_por_uid').val() == auth.uid)" }
+    },
+    "tourAgenda": {
+      ".read": false,
+      "$tour_id": {
+        ".read": "auth != null && root.child('tour').child($tour_id).child('creado_por_uid').val() == auth.uid",
+        ".write": "auth != null && root.child('tour').child($tour_id).child('creado_por_uid').val() == auth.uid"
+      }
+    },
+    "rifa": {
+      ".read": true,
+      "$rifa_id": {
+        ".write": "auth != null && (!data.exists() || data.child('creado_por_uid').val() == auth.uid)"
+      }
+    },
+    "rifaCompra": {
+      // Nadie puede leer esta tabla desde el navegador.
+      ".read": false,
+      "$rifa_id": {
+        // Solo el creador de la rifa puede ver los datos de contacto y canal.
+        ".read": "auth != null && root.child('rifa').child($rifa_id).child('creado_por_uid').val() == auth.uid",
+        ".write": "auth != null && root.child('rifa').child($rifa_id).child('creado_por_uid').val() == auth.uid"
+      }
+    },
+    "agenda": {
+      ".read": false,
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid"
+      }
+    }
+  }
+}

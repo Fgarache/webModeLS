@@ -1,13 +1,66 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { FaCheckCircle, FaPen } from 'react-icons/fa';
+import { ref, update } from 'firebase/database';
+import { db } from '../auth/firebaseConfig.js';
 import AppsLauncher from './AppsLauncher.jsx';
+import AgendaApp from './apps/agenda/AgendaApp.jsx';
 import PerfilApp from './apps/perfil/PerfilApp.jsx';
 import AgendaToursApp from './apps/agenda-tours/AgendaToursApp.jsx';
+import MediaApp from './apps/media/MediaApp.jsx';
 import RifasApp from './apps/rifas/RifasApp.jsx';
 import './dashboard.css';
 
-function Welcome({ config, user, profile, onLogout }) {
+function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, onLogout }) {
   const [currentProfile, setCurrentProfile] = useState(profile);
-  const [activeApp, setActiveApp] = useState(null);
+  const [activeApp, setActiveApp] = useState(initialApp);
+  const [headerModalOpen, setHeaderModalOpen] = useState(false);
+  const [savingHeader, setSavingHeader] = useState(false);
+  const [headerDraft, setHeaderDraft] = useState({ estado_texto: '', disponible_hoy_en: '' });
+  const isFullAppView = activeApp === 'perfil' || activeApp === 'agenda' || activeApp === 'agenda-tours' || activeApp === 'media' || activeApp === 'rifas';
+
+  useEffect(() => {
+    setCurrentProfile(profile);
+    setHeaderDraft({
+      estado_texto: profile?.estado_texto || '',
+      disponible_hoy_en: profile?.disponible_hoy_en || '',
+    });
+  }, [profile]);
+
+  useEffect(() => {
+    setActiveApp(initialApp);
+  }, [initialApp]);
+
+  const availableLocations = useMemo(() => {
+    const values = Object.values(currentProfile?.ubicaciones || {})
+      .map((item) => String(item || '').trim())
+      .filter(Boolean);
+
+    const uniqueValues = Array.from(new Set(values));
+    const current = String(currentProfile?.disponible_hoy_en || '').trim();
+
+    if (current && !uniqueValues.includes(current)) {
+      uniqueValues.push(current);
+    }
+
+    return uniqueValues;
+  }, [currentProfile]);
+
+  const visibleStatusText = useMemo(() => {
+    const statusText = String(currentProfile?.estado_texto || '').trim();
+    const updatedAt = currentProfile?.estado_actualizado_en;
+
+    if (!statusText || !updatedAt) {
+      return '';
+    }
+
+    const timestamp = new Date(updatedAt).getTime();
+    if (Number.isNaN(timestamp)) {
+      return '';
+    }
+
+    const maxAge = 48 * 60 * 60 * 1000;
+    return Date.now() - timestamp <= maxAge ? statusText : '';
+  }, [currentProfile?.estado_actualizado_en, currentProfile?.estado_texto]);
 
   if (!profile || !user) {
     return <div>Cargando perfil...</div>;
@@ -15,14 +68,110 @@ function Welcome({ config, user, profile, onLogout }) {
 
   const handleProfileUpdate = (updatedProfile) => {
     setCurrentProfile(updatedProfile);
+    setHeaderDraft({
+      estado_texto: updatedProfile?.estado_texto || '',
+      disponible_hoy_en: updatedProfile?.disponible_hoy_en || '',
+    });
   };
 
   const handleSelectApp = (appId) => {
     setActiveApp(appId);
+    onAppRouteChange?.(appId);
   };
 
   const handleBack = () => {
     setActiveApp(null);
+    onAppRouteChange?.(null);
+  };
+
+  const openHeaderModal = () => {
+    setHeaderDraft({
+      estado_texto: currentProfile?.estado_texto || '',
+      disponible_hoy_en: currentProfile?.disponible_hoy_en || '',
+    });
+    setHeaderModalOpen(true);
+  };
+
+  const closeHeaderModal = () => {
+    if (savingHeader) {
+      return;
+    }
+
+    setHeaderModalOpen(false);
+  };
+
+  const handleHeaderDraftChange = (field, value) => {
+    setHeaderDraft((current) => ({
+      ...current,
+      [field]: value,
+    }));
+  };
+
+  const saveHeaderProfile = async () => {
+    if (!user?.uid) {
+      return;
+    }
+
+    setSavingHeader(true);
+
+    try {
+      const payload = {
+        estado_texto: String(headerDraft.estado_texto || '').trim(),
+        estado_actualizado_en: new Date().toISOString(),
+        disponible_hoy_en: String(headerDraft.disponible_hoy_en || '').trim(),
+      };
+
+      await update(ref(db, `perfil/${user.uid}`), payload);
+      setCurrentProfile((current) => ({
+        ...current,
+        ...payload,
+      }));
+      setHeaderModalOpen(false);
+    } catch (error) {
+      console.error('Error guardando encabezado del perfil:', error);
+    } finally {
+      setSavingHeader(false);
+    }
+  };
+
+  const handleAvailabilityChange = async (value) => {
+    if (!user?.uid) {
+      return;
+    }
+
+    const nextValue = String(value || '').trim();
+    setCurrentProfile((current) => ({
+      ...current,
+      disponible_hoy_en: nextValue,
+    }));
+
+    try {
+      await update(ref(db, `perfil/${user.uid}`), {
+        disponible_hoy_en: nextValue,
+      });
+    } catch (error) {
+      console.error('Error guardando disponibilidad actual:', error);
+    }
+  };
+
+  const handleDisponibilidadToggle = async (value) => {
+    if (!user?.uid) {
+      return;
+    }
+
+    const nextValue = value === 'true';
+    setCurrentProfile((current) => ({
+      ...current,
+      disponible: nextValue,
+    }));
+
+    try {
+      await update(ref(db, `perfil/${user.uid}`), {
+        disponible: nextValue,
+      });
+    } catch (error) {
+      console.error('Error guardando disponibilidad general:', error);
+    }
   };
 
   const renderApp = () => {
@@ -34,11 +183,25 @@ function Welcome({ config, user, profile, onLogout }) {
             <PerfilApp user={user} profile={currentProfile} onUpdate={handleProfileUpdate} />
           </div>
         );
+      case 'agenda':
+        return (
+          <div className="app-content-wrapper">
+            <button className="back-button" onClick={handleBack}>← Volver</button>
+            <AgendaApp />
+          </div>
+        );
       case 'agenda-tours':
         return (
           <div className="app-content-wrapper">
             <button className="back-button" onClick={handleBack}>← Volver</button>
             <AgendaToursApp />
+          </div>
+        );
+      case 'media':
+        return (
+          <div className="app-content-wrapper">
+            <button className="back-button" onClick={handleBack}>← Volver</button>
+            <MediaApp user={user} profile={currentProfile} onUpdateProfile={handleProfileUpdate} />
           </div>
         );
       case 'rifas':
@@ -55,27 +218,122 @@ function Welcome({ config, user, profile, onLogout }) {
 
   return (
     <section className="welcome-screen">
-      <div className="welcome-header">
-        <div className="header-content">
-          {currentProfile.foto_perfil && (
-            <img src={currentProfile.foto_perfil} alt="Foto de perfil" className="profile-header-photo" />
-          )}
-          <div className="header-info">
-            <h2>{config.title}</h2>
-            <p className="header-name"><strong>{currentProfile.nombre_completo}</strong></p>
-            <p className="header-role">Rol: <span>{currentProfile.rol}</span></p>
+      {!isFullAppView && (
+        <div className="welcome-header">
+          <div className="header-content">
+            <div className="profile-header-block">
+              {currentProfile.foto_perfil && (
+                <img src={currentProfile.foto_perfil} alt="Foto de perfil" className="profile-header-photo" />
+              )}
+              <div className="profile-header-identity">
+                <div className="header-profile-name-row">
+                  <strong className="header-profile-name">{currentProfile.nombre_completo}</strong>
+                  <span className={`header-verified ${currentProfile.verificado ? 'verified' : 'unverified'}`}>
+                    <FaCheckCircle />
+                  </span>
+                </div>
+                <div className="header-profile-meta">
+                  <span className="header-role inline">{currentProfile.rol}</span>
+                  <span className="header-username">@{currentProfile.nombre_usuario || 'usuario'}</span>
+                </div>
+              </div>
+            </div>
+            <div className="header-info">
+              <div className="header-status-row">
+                <span className="header-status-bubble">{visibleStatusText || 'Sin estado activo'}</span>
+                <button
+                  type="button"
+                  className="header-edit-icon"
+                  onClick={openHeaderModal}
+                  aria-label="Editar estado"
+                  title="Editar estado"
+                >
+                  <FaPen />
+                </button>
+              </div>
+              <div className="header-availability">
+                <div className="header-availability-grid">
+                  <div>
+                    <label htmlFor="header_disponible_hoy_inline">Disponible en</label>
+                    <select
+                      id="header_disponible_hoy_inline"
+                      value={currentProfile.disponible_hoy_en || ''}
+                      onChange={(event) => handleAvailabilityChange(event.target.value)}
+                    >
+                      <option value="">Sin ubicacion</option>
+                      {availableLocations.map((location) => (
+                        <option key={location} value={location}>
+                          {location}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="header_disponible_inline">Disponibilidad</label>
+                    <select
+                      id="header_disponible_inline"
+                      value={currentProfile.disponible ? 'true' : 'false'}
+                      onChange={(event) => handleDisponibilidadToggle(event.target.value)}
+                    >
+                      <option value="true">Disponible</option>
+                      <option value="false">No disponible</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <p>{currentProfile.descripcion || config.message}</p>
+            </div>
           </div>
         </div>
-        <p>{config.message}</p>
-      </div>
+      )}
+
+      {headerModalOpen && (
+        <div className="header-modal-overlay" role="dialog" aria-modal="true">
+          <div className="header-modal-card">
+            <div className="header-modal-top">
+              <div>
+                <h3>Editar estado</h3>
+                <p>Actualiza tu estado visible y donde estas disponible hoy.</p>
+              </div>
+              <button type="button" className="modal-close-button" onClick={closeHeaderModal} disabled={savingHeader}>
+                Cerrar
+              </button>
+            </div>
+
+            <div className="header-modal-form">
+              <div className="form-group">
+                <label htmlFor="header_estado_texto">Estado</label>
+                <textarea
+                  id="header_estado_texto"
+                  rows="3"
+                  value={headerDraft.estado_texto}
+                  onChange={(event) => handleHeaderDraftChange('estado_texto', event.target.value)}
+                  disabled={savingHeader}
+                />
+              </div>
+            </div>
+
+            <div className="header-modal-actions">
+              <button type="button" className="primary-button" onClick={saveHeaderProfile} disabled={savingHeader}>
+                {savingHeader ? 'Guardando...' : 'Guardar'}
+              </button>
+              <button type="button" className="secondary-button" onClick={closeHeaderModal} disabled={savingHeader}>
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {renderApp()}
 
-      <div className="logout-section">
-        <button className="secondary-button" onClick={onLogout}>
-          {config.logoutButtonText}
-        </button>
-      </div>
+      {!isFullAppView && (
+        <div className="logout-section">
+          <button className="secondary-button" onClick={onLogout}>
+            {config.logoutButtonText}
+          </button>
+        </div>
+      )}
     </section>
   );
 }

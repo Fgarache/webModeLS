@@ -1,10 +1,12 @@
-import { FaCog, FaCalendarAlt, FaTicketAlt } from 'react-icons/fa';
+import { FaAddressBook, FaCalendarAlt, FaCog, FaImages, FaTicketAlt } from 'react-icons/fa';
 import appsConfig from '../config/appsConfig.js';
 import './appsLauncher.css';
 
 const iconMap = {
   FaCog,
   FaCalendarAlt,
+  FaAddressBook,
+  FaImages,
   FaTicketAlt,
 };
 

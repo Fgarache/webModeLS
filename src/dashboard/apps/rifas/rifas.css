@@ -1,0 +1,366 @@
+.rifas-app {
+  display: grid;
+  gap: 1rem;
+}
+
+.rifas-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.rifas-header h3 {
+  margin: 0 0 0.3rem;
+}
+
+.rifas-header p,
+.rifa-card p,
+.rifa-empty-text {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.rifas-section {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.rifas-section-title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.rifas-status,
+.rifas-error {
+  padding: 1rem 1.1rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.rifas-error {
+  border: 1px solid rgba(255, 107, 107, 0.45);
+  color: #ffd8d8;
+}
+
+.rifas-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+  align-items: start;
+}
+
+.rifa-card {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  align-self: start;
+}
+
+.rifa-card-header,
+.rifa-panel-header,
+.rifa-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.rifa-modal-header .modal-close-button {
+  margin-left: auto;
+}
+
+.rifa-card-header h4,
+.rifa-panel h5,
+.rifa-modal-header h4 {
+  margin: 0 0 0.25rem;
+}
+
+.rifa-date-only {
+  color: rgba(255, 255, 255, 0.88);
+  font-weight: 700;
+}
+
+.rifa-meta {
+  display: flex;
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.rifa-card-actions {
+  display: flex;
+  gap: 0.45rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 0.35rem;
+}
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #f7fbff;
+  cursor: pointer;
+}
+
+.icon-button.danger {
+  border-color: rgba(255, 135, 135, 0.42);
+  color: #ffc9c9;
+}
+
+.icon-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.icon-button.large {
+  width: 4.2rem;
+  height: 4.2rem;
+  border-radius: 1.2rem;
+  font-size: 1.25rem;
+}
+
+.rifa-panel {
+  display: grid;
+  gap: 0.8rem;
+  padding: 0.85rem;
+  border-radius: 0.95rem;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.rifa-number-legend {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.66);
+}
+
+.rifa-numbers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(58px, 1fr));
+  gap: 0.45rem;
+}
+
+.rifa-number-chip {
+  border: 1px solid rgba(82, 224, 160, 0.8);
+  border-radius: 0.75rem;
+  padding: 0.65rem 0.5rem;
+  background: rgba(31, 143, 106, 0.16);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.rifa-number-chip.occupied {
+  border-color: rgba(255, 135, 135, 0.84);
+  background: rgba(184, 66, 66, 0.22);
+}
+
+.rifa-number-chip:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.rifa-purchased-block {
+  display: grid;
+  gap: 0.7rem;
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rifa-expanded-info {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.rifa-expanded-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 0.45rem;
+}
+
+.rifa-expanded-section {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.rifa-expanded-section.compact,
+.rifa-expanded-section.compact-block,
+.rifa-expanded-hero {
+  padding: 0.55rem 0.65rem;
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.rifa-expanded-section.compact strong,
+.rifa-expanded-section.compact-block strong,
+.rifa-expanded-hero strong {
+  font-size: 0.84rem;
+}
+
+.rifa-expanded-section.compact p,
+.rifa-expanded-section.compact-block p,
+.rifa-expanded-hero p,
+.rifa-inline-list {
+  font-size: 0.84rem;
+}
+
+.rifa-icon-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 0.5rem 0;
+}
+
+.icon-tile-button {
+  display: grid;
+  justify-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem;
+  background: transparent;
+  border: 0;
+  color: #f7fbff;
+  cursor: pointer;
+}
+
+.icon-tile-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.icon-tile-label {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.rifa-inline-list {
+  margin: 0;
+  padding-left: 1rem;
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.rifa-purchased-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.6rem;
+}
+
+.rifa-purchased-card {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.8rem;
+  border-radius: 0.85rem;
+  background: rgba(180, 67, 67, 0.14);
+  border: 1px solid rgba(255, 140, 140, 0.3);
+}
+
+.rifa-purchased-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.rifa-purchased-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.rifa-purchased-detail {
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.84rem;
+  word-break: break-word;
+}
+
+.rifa-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  background: rgba(5, 10, 16, 0.72);
+  backdrop-filter: blur(8px);
+}
+
+.rifa-modal {
+  width: min(820px, 100%);
+  max-height: calc(100vh - 2.5rem);
+  overflow: auto;
+  padding: 1.2rem;
+  border-radius: 1.1rem;
+  background: #15202a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+.rifa-modal-compact {
+  width: min(620px, 100%);
+}
+
+.rifa-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.rifa-form-full {
+  grid-column: 1 / -1;
+}
+
+.form-group-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.form-group-checkbox input {
+  width: 1rem;
+  height: 1rem;
+}
+
+.rifa-field-help {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+}
+
+.rifa-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+@media (max-width: 720px) {
+  .rifas-list {
+    grid-template-columns: 1fr;
+  }
+
+  .rifa-card-header,
+  .rifa-panel-header {
+    flex-direction: column;
+  }
+
+  .rifa-modal-header {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .rifa-meta {
+    justify-content: flex-start;
+  }
+}
