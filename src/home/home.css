@@ -46,7 +46,7 @@
   opacity: var(--home-bg-opacity, 0.06); /* Prueba entre 0.05 y 0.10. Más de 0.10 distraerá. */
   
   /* Filtros para que no se vea oscura: Escala de grises y Brillo alto */
-  filter: var(--home-bg-filter, grayscale(1) brightness(2)); 
+  filter: blur(var(--home-bg-blur, 0px)) var(--home-bg-filter, grayscale(1) brightness(2)); 
   
   pointer-events: none; /* Asegura que el usuario pueda hacer clic a través del fondo */
 }
@@ -70,7 +70,7 @@
     linear-gradient(150deg, var(--home-hero-surface-start, rgba(18, 18, 20, 0.98)) 0%, var(--home-hero-surface-end, rgba(10, 10, 12, 0.99)) 100%);
   
   box-shadow: 0 50px 120px rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(5px); /* Un ligero blur del logo de fondo detrás de la tarjeta */
+  backdrop-filter: blur(var(--home-hero-backdrop-blur, 5px)); /* Un ligero blur del logo de fondo detrás de la tarjeta */
 }
 
 /* --- ESTILOS DE TEXTO PREMIUM --- */
@@ -156,7 +156,7 @@
 .glass-card {
   background: var(--home-glass-card, rgba(255, 255, 255, 0.02));
   border: 1px solid var(--home-glass-border, var(--glass-border));
-  backdrop-filter: blur(15px); /* Efecto de vidrio más fuerte */
+  backdrop-filter: blur(var(--home-glass-card-backdrop-blur, 15px)); /* Efecto de vidrio más fuerte */
   border-radius: 1.5rem;
   padding: 1.8rem;
 }
