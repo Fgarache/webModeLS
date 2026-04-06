@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FaArrowLeft, FaGoogle, FaLock, FaMapMarkedAlt } from 'react-icons/fa';
+import { FaArrowLeft, FaGoogle, FaMapMarkedAlt } from 'react-icons/fa';
 import './login.css';
 
 function Login({ config, onLogin, onCancel, errorMessage }) {
@@ -20,6 +20,7 @@ function Login({ config, onLogin, onCancel, errorMessage }) {
     <section className="login-screen">
       <div className="login-shell-card">
         <div className="login-showcase">
+          <img src="/icons/logo.png" alt="Site Mode LS" className="login-brand-logo" />
           <div className="login-badge">Acceso seguro</div>
           <h2>{config.title}</h2>
           <p className="login-lead">
@@ -34,18 +35,12 @@ function Login({ config, onLogin, onCancel, errorMessage }) {
                 <p>Actualiza tu estado visible y donde estas disponible hoy.</p>
               </div>
             </div>
-            <div className="login-feature-item">
-              <span className="login-feature-icon"><FaLock /></span>
-              <div>
-                <strong>Ingreso directo</strong>
-                <p>Tu sesion usa Google para entrar rapido sin crear otra contraseña.</p>
-              </div>
-            </div>
           </div>
         </div>
 
         <div className="login-panel">
           <div className="login-panel-top">
+            <img src="/icons/logoSmall.png" alt="Site Mode LS" className="login-panel-logo" />
             <p className="login-kicker">Google Sign-In</p>
             <h3>Continua con tu cuenta</h3>
             <p className="login-hint">{config.hintText}</p>

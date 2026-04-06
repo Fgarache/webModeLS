@@ -6,6 +6,7 @@ function Home({ config, onNavigate }) {
     <section className="home-screen">
       <div className="home-hero-card">
         <div className="home-hero-copy">
+          <img src="/icons/logo.png" alt="Site Mode LS" className="home-brand-logo" />
           <span className="home-kicker">LindasGt.com</span>
           <h2>{config.title}</h2>
           <p className="home-lead">{config.subtitle}</p>
