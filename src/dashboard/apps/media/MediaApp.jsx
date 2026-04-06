@@ -7,6 +7,7 @@ import ModalEditarFoto from './components/ModalEditarFoto.jsx';
 import ModalSubirFoto from './components/ModalSubirFoto.jsx';
 import PhotoCard from './components/PhotoCard.jsx';
 import ModalVistaFoto from './components/ModalVistaFoto.jsx';
+import TextInfoModal from '../../components/TextInfoModal.jsx';
 
 function MediaApp({ user, profile, onUpdateProfile }) {
   const { error, maxPhotosReached, photos, saving, uploadPhoto, updatePhotoTitle, deletePhoto, setProfilePhoto } = useMediaLibrary(user, profile, onUpdateProfile);
@@ -107,9 +108,16 @@ function MediaApp({ user, profile, onUpdateProfile }) {
           <p>{mediaConfig.description}</p>
         </div>
         <div className="media-header-side">
-          <button type="button" className="primary-button media-header-upload-button" onClick={openUploadModal} disabled={saving || maxPhotosReached}>
-            {mediaConfig.labels.uploadPhoto}
-          </button>
+          <div className="info-trigger-group">
+            <button type="button" className="primary-button media-header-upload-button" onClick={openUploadModal} disabled={saving || maxPhotosReached}>
+              {mediaConfig.labels.uploadPhoto}
+            </button>
+            <TextInfoModal
+              title={mediaConfig.help.title}
+              paragraphs={mediaConfig.help.text}
+              buttonLabel={`Explicacion de ${mediaConfig.labels.uploadPhoto}`}
+            />
+          </div>
         </div>
       </div>
 

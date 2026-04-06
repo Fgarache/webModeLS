@@ -8,6 +8,7 @@ import {
   getSortedSlots,
 } from '../agendaTours.utils.js';
 import agendaToursConfig from '../agendaTours.config.js';
+import TextInfoModal from '../../../components/TextInfoModal.jsx';
 
 function TourCard({
   tour,
@@ -125,6 +126,12 @@ function TourCard({
                       >
                         <FaPlus />
                       </button>
+                      <TextInfoModal
+                        title={tourCard.actions.addReservationHelpTitle}
+                        paragraphs={tourCard.actions.addReservationHelpText}
+                        buttonLabel={tourCard.actions.addReservationHelpTitle}
+                        triggerClassName="compact"
+                      />
                     </div>
                   </div>
                 );

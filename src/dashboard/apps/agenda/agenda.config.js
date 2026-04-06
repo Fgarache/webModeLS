@@ -8,6 +8,12 @@ const agendaConfig = {
     upcomingSection: 'Proximas agendas',
     pastSection: 'Agendas pasadas',
     pastEmptyText: 'No hay agendas pasadas.',
+    helpTitle: 'Como funciona tu agenda privada',
+    helpText: [
+      'Estas agendas son privadas. Solo tu puedes verlas y administrarlas.',
+      'Se hicieron para facilitar la gestion de agendas por hora dentro de tu panel.',
+      'La agenda mas cercana en fecha y hora siempre se muestra primero.',
+    ],
   },
   card: {
     untitledContact: 'Sin contacto',

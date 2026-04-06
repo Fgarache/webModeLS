@@ -1,0 +1,32 @@
+rules_version = '2';
+
+// Reglas de Firebase Storage para el proyecto sitemodelgt.
+// Este archivo se publica desde la raiz del proyecto con:
+// firebase deploy --only storage
+// o junto con Database con:
+// firebase deploy --only database,storage
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /media/{userId}/{fileName} {
+      // Lectura publica.
+      // Cualquier persona puede ver fotos publicadas en media/{userId}/.
+      allow read: if true;
+
+      // Subida restringida al propietario.
+      // Solo el propietario de la carpeta puede subir o reemplazar archivos en su ruta.
+      // El nombre del archivo debe seguir el patron generado por la app: f{timestamp}.{extension}.
+      // Solo se permiten imagenes jpeg, png, webp y gif.
+      // El tamano maximo permitido es 10 MB.
+      allow write: if request.auth != null
+        && request.auth.uid == userId
+        && fileName.matches('^f[0-9]+\\.(jpg|jpeg|png|webp|gif)$')
+        && request.resource.size < 10 * 1024 * 1024
+        && request.resource.contentType.matches('image/(jpeg|png|webp|gif)');
+
+      // Borrado restringido al propietario.
+      // Solo el propietario de la carpeta puede eliminar archivos de su propia ruta.
+      allow delete: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}

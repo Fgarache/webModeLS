@@ -1,0 +1,52 @@
+{
+  "rules": {
+    "perfil": {
+      ".read": true,
+      "$uid": {
+        ".write": "auth != null && auth.uid == $uid",
+        "rol": {
+          ".validate": "(!data.exists() && newData.val() == 'user') || (data.exists() && newData.val() == data.val())"
+        },
+        "tipo": {
+          ".validate": "(!data.exists() && !newData.exists()) || (data.exists() && newData.val() == data.val())"
+        },
+        "verificado": {
+          ".validate": "(!data.exists() && newData.val() == false) || (data.exists() && newData.val() == data.val())"
+        }
+      }
+    },
+    "tour": {
+      ".read": true,
+      "$tour_id": {
+        ".write": "auth != null && (!data.exists() || data.child('creado_por_uid').val() == auth.uid)"
+      }
+    },
+    "tourAgenda": {
+      ".read": false,
+      "$tour_id": {
+        ".read": "auth != null && root.child('tour').child($tour_id).child('creado_por_uid').val() == auth.uid",
+        ".write": "auth != null && root.child('tour').child($tour_id).child('creado_por_uid').val() == auth.uid"
+      }
+    },
+    "rifa": {
+      ".read": true,
+      "$rifa_id": {
+        ".write": "auth != null && (!data.exists() || data.child('creado_por_uid').val() == auth.uid)"
+      }
+    },
+    "rifaCompra": {
+      ".read": false,
+      "$rifa_id": {
+        ".read": "auth != null && root.child('rifa').child($rifa_id).child('creado_por_uid').val() == auth.uid",
+        ".write": "auth != null && root.child('rifa').child($rifa_id).child('creado_por_uid').val() == auth.uid"
+      }
+    },
+    "agenda": {
+      ".read": false,
+      "$uid": {
+        ".read": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && auth.uid == $uid"
+      }
+    }
+  }
+}

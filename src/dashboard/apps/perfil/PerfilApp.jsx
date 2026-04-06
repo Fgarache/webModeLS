@@ -78,6 +78,23 @@ function PerfilApp({ user, profile, onUpdate }) {
 
   const visibleFotos = useMemo(() => normalizeMediaPhotos(editedProfile?.fotos || {}).filter((foto) => foto?.url), [editedProfile?.fotos]);
 
+  const visibleStatusText = useMemo(() => {
+    const statusText = String(editedProfile?.estado_texto || '').trim();
+    const updatedAt = editedProfile?.estado_actualizado_en;
+
+    if (!statusText || !updatedAt) {
+      return '';
+    }
+
+    const timestamp = new Date(updatedAt).getTime();
+    if (Number.isNaN(timestamp)) {
+      return '';
+    }
+
+    const maxAge = 24 * 60 * 60 * 1000;
+    return Date.now() - timestamp <= maxAge ? statusText : '';
+  }, [editedProfile?.estado_actualizado_en, editedProfile?.estado_texto]);
+
   const handleInputChange = (field, value) => {
     setEditedProfile((current) => ({
       ...current,
@@ -186,12 +203,15 @@ function PerfilApp({ user, profile, onUpdate }) {
     };
   };
 
-  const saveProfile = async ({ closeModalOnSave = false, showAlert = true } = {}) => {
+  const saveProfile = async ({ closeModalOnSave = false, showAlert = true, includeStatusTimestamp = false } = {}) => {
     setSaving(true);
 
     try {
       const profileRef = ref(db, `perfil/${user.uid}`);
-      const dataToSave = buildProfilePayload();
+      const dataToSave = {
+        ...buildProfilePayload(),
+        ...(includeStatusTimestamp ? { estado_actualizado_en: new Date().toISOString() } : {}),
+      };
 
       await update(profileRef, dataToSave);
       onUpdate(dataToSave);
@@ -216,7 +236,7 @@ function PerfilApp({ user, profile, onUpdate }) {
   };
 
   const handleSaveStatus = async () => {
-    await saveProfile({ closeModalOnSave: false, showAlert: false });
+    await saveProfile({ closeModalOnSave: false, showAlert: false, includeStatusTimestamp: true });
   };
 
   const selectProfilePhoto = (photoUrl) => {
@@ -389,7 +409,7 @@ function PerfilApp({ user, profile, onUpdate }) {
               <div className="perfil-status-editor">
                 <input
                   type="text"
-                  value={editedProfile.estado_texto || ''}
+                  value={visibleStatusText || ''}
                   onChange={(event) => handleInputChange('estado_texto', event.target.value)}
                   placeholder="Escribe tu estado visible"
                   disabled={saving}

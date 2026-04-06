@@ -12,6 +12,7 @@ import {
   createEmptyTourForm,
   splitToursByStatus,
 } from './agendaTours.utils.js';
+import TextInfoModal from '../../components/TextInfoModal.jsx';
 
 function AgendaToursApp() {
   const { user } = useAuth();
@@ -261,9 +262,16 @@ function AgendaToursApp() {
           <h3>{header.title}</h3>
           <p>{header.description}</p>
         </div>
-        <button type="button" className="primary-button" onClick={openCreateTourModal} disabled={saving || !user?.uid}>
-          {header.addTourButton}
-        </button>
+        <div className="info-trigger-group">
+          <button type="button" className="primary-button" onClick={openCreateTourModal} disabled={saving || !user?.uid}>
+            {header.addTourButton}
+          </button>
+          <TextInfoModal
+            title={header.helpTitle}
+            paragraphs={header.helpText}
+            buttonLabel={`Explicacion de ${header.addTourButton}`}
+          />
+        </div>
       </div>
 
       {loading && <div className="agenda-tours-status">{header.loadingText}</div>}

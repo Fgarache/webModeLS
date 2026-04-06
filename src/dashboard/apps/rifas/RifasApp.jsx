@@ -10,6 +10,7 @@ import rifasConfig from './rifas.config.js';
 import './rifas.css';
 import useRifas from './hooks/useRifas.js';
 import { buildContactLink, createEmptyCompraForm, createEmptyRifaForm, mapToMultilineText, splitRifasByVisibility } from './rifas.utils.js';
+import TextInfoModal from '../../components/TextInfoModal.jsx';
 
 function RifasApp() {
   const { user } = useAuth();
@@ -270,9 +271,16 @@ function RifasApp() {
           <h3>{header.title}</h3>
           <p>{header.description}</p>
         </div>
-        <button type="button" className="primary-button" onClick={openRifaModal} disabled={saving || !user?.uid}>
-          {header.addButton}
-        </button>
+        <div className="info-trigger-group">
+          <button type="button" className="primary-button" onClick={openRifaModal} disabled={saving || !user?.uid}>
+            {header.addButton}
+          </button>
+          <TextInfoModal
+            title={header.helpTitle}
+            paragraphs={header.helpText}
+            buttonLabel={`Explicacion de ${header.addButton}`}
+          />
+        </div>
       </div>
 
       {loading && <div className="rifas-status">{header.loadingText}</div>}

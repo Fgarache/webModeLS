@@ -8,6 +8,12 @@ const rifasConfig = {
     activeSection: 'Rifas activas',
     archivedSection: 'Rifas vencidas o desactivadas',
     archivedEmptyText: 'No hay rifas vencidas o desactivadas.',
+    helpTitle: 'Como funcionan las rifas y los numeros apartados',
+    helpText: [
+      'Las rifas y los numeros disponibles pueden mostrarse en tu pagina publica.',
+      'Cuando registras un numero como comprado, ese numero deja de verse como disponible para los demas.',
+      'Los datos privados de la compra solo los ves y administras tu desde este panel.',
+    ],
   },
   card: {
     untitled: 'Sin titulo',

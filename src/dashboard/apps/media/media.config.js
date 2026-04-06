@@ -1,6 +1,12 @@
 const mediaConfig = {
   title: 'Fotos',
   description: 'Sube fotos a Firebase Storage, organiza tus imagenes y define tu foto principal.',
+  help: {
+    title: 'Como funcionan tus fotos',
+    text: [
+      'Estas son las fotos que apareceran en el perfil de tu pagina publica.',
+    ],
+  },
   upload: {
     maxPhotos: 12,
     acceptedTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],

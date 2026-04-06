@@ -7,6 +7,12 @@ const agendaToursConfig = {
     emptyText: 'Todavia no has creado tours. Usa "Agregar tour" para crear el primero.',
     archivedTitle: 'Tours inactivos o vencidos',
     archivedDescription: 'Estos tours ya no aceptan agendas nuevas.',
+    helpTitle: 'Como funcionan los tours y sus horarios',
+    helpText: [
+      'Los tours y sus horarios son publicos en tu pagina mientras estan disponibles.',
+      'Cuando pulsas un horario disponible y agregas una agenda, ese horario deja de ser publico y ya no aparece para los demas.',
+      'Ese horario reservado solo podras verlo y administrarlo tu desde este panel.',
+    ],
   },
   tourCard: {
     untitledTour: 'Sin titulo',
@@ -33,6 +39,11 @@ const agendaToursConfig = {
     actions: {
       openLocation: 'Abrir ubicacion',
       addReservation: 'Agregar agenda',
+      addReservationHelpTitle: 'Como funciona la agenda del horario',
+      addReservationHelpText: [
+        'Al agregar una agenda en un horario disponible, ese espacio deja de mostrarse al publico.',
+        'La reserva del horario solo la veras tu dentro del panel para administrarla con privacidad.',
+      ],
       viewReservation: 'Ver agenda',
       editReservation: 'Editar agenda',
       openContact: 'Abrir contacto',

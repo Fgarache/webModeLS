@@ -1,9 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
-import { ref, get, set } from 'firebase/database';
+import { ref, get, set, update } from 'firebase/database';
 import { auth, db, googleProvider } from './firebaseConfig.js';
 
 const AuthContext = createContext(null);
+const DEFAULT_ROLE = 'user';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -19,7 +20,19 @@ export function AuthProvider({ children }) {
         try {
           const snapshot = await get(profileRef);
           if (snapshot.exists()) {
-            setProfile(snapshot.val());
+            const existingProfile = snapshot.val();
+
+            if (!String(existingProfile?.rol || '').trim()) {
+              const nextProfile = {
+                ...existingProfile,
+                rol: DEFAULT_ROLE,
+              };
+
+              await update(profileRef, { rol: DEFAULT_ROLE });
+              setProfile(nextProfile);
+            } else {
+              setProfile(existingProfile);
+            }
           } else {
             // Crear perfil básico si no existe
             const newProfile = {
@@ -35,7 +48,7 @@ export function AuthProvider({ children }) {
               nombre_usuario: firebaseUser.email.split('@')[0],
               perfil_activo: true,
               redes: {},
-              rol: 'usuario',
+              rol: DEFAULT_ROLE,
               servicios: {},
               ubicaciones: {},
               verificado: false,

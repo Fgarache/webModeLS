@@ -87,11 +87,32 @@ function AppInner() {
     return <div>Cargando...</div>;
   }
 
+  const handleAuthenticatedBack = () => {
+    if (routeState.app) {
+      navigateTo('/');
+      return;
+    }
+
+    navigateTo('/');
+  };
+
   if (user && profile) {
     return (
       <div className="app-shell">
-        <header className="app-header">
-          <h1>{config.app.title}</h1>
+        <header className="app-header auth-app-header">
+          <div className="auth-navbar">
+            <div className="auth-navbar-brand">
+              <span className="auth-navbar-logo" aria-hidden="true">LS</span>
+              <h1>{config.app.title}</h1>
+            </div>
+            <div className="auth-navbar-side right">
+              {routeState.app && (
+                <button type="button" className="auth-nav-text-button" onClick={handleAuthenticatedBack}>
+                  Volver
+                </button>
+              )}
+            </div>
+          </div>
         </header>
         <main className="app-main">
           <Welcome

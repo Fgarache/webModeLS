@@ -1,34 +1,36 @@
+import { getAppRoles } from '../dashboard/apps/apps.roles.config.js';
+
 const appsConfig = {
   apps: [
     {
       id: 'perfil',
       icon: 'FaCog',
       titulo: 'Configuración del perfil',
-      rolesPermitidos: ['usuario', 'prestador', 'user'],
+      rolesPermitidos: getAppRoles('perfil'),
     },
     {
       id: 'agenda-tours',
-      icon: 'FaCalendarAlt',
+      icon: 'FaSuitcaseRolling',
       titulo: 'Agenda Tours',
-      rolesPermitidos: ['prestador', 'user'],
+      rolesPermitidos: getAppRoles('agenda-tours'),
     },
     {
       id: 'agenda',
       icon: 'FaAddressBook',
       titulo: 'Agenda',
-      rolesPermitidos: ['usuario', 'prestador', 'user', 'admin'],
+      rolesPermitidos: getAppRoles('agenda'),
     },
     {
       id: 'media',
       icon: 'FaImages',
       titulo: 'Fotos',
-      rolesPermitidos: ['usuario', 'prestador', 'user', 'admin'],
+      rolesPermitidos: getAppRoles('media'),
     },
     {
       id: 'rifas',
       icon: 'FaTicketAlt',
       titulo: 'Rifas',
-      rolesPermitidos: ['user', 'prestador', 'admin'],
+      rolesPermitidos: getAppRoles('rifas'),
     },
   ],
 };

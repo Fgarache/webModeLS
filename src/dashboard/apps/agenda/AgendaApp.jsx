@@ -7,6 +7,7 @@ import ModalCrearAgenda from './components/ModalCrearAgenda.jsx';
 import AgendaCard from './components/AgendaCard.jsx';
 import ModalConfirmarAgenda from './components/ModalConfirmarAgenda.jsx';
 import { createEmptyAgendaForm, splitAgendaByTime, splitAgendaDateTime } from './agenda.utils.js';
+import TextInfoModal from '../../components/TextInfoModal.jsx';
 
 function AgendaApp() {
   const { user } = useAuth();
@@ -96,9 +97,17 @@ function AgendaApp() {
           <h3>{header.title}</h3>
           <p>{header.description}</p>
         </div>
-        <button type="button" className="primary-button" onClick={openCreateModal} disabled={saving || !user?.uid}>
-          {header.addButton}
-        </button>
+
+        <div className="info-trigger-group">
+          <button type="button" className="primary-button" onClick={openCreateModal} disabled={saving || !user?.uid}>
+            {header.addButton}
+          </button>
+          <TextInfoModal
+            title={header.helpTitle}
+            paragraphs={header.helpText}
+            buttonLabel={`Explicacion de ${header.addButton}`}
+          />
+        </div>
       </div>
 
       {loading && <div className="agenda-status">{header.loadingText}</div>}

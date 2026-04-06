@@ -58,7 +58,7 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
       return '';
     }
 
-    const maxAge = 48 * 60 * 60 * 1000;
+    const maxAge = 24 * 60 * 60 * 1000;
     return Date.now() - timestamp <= maxAge ? statusText : '';
   }, [currentProfile?.estado_actualizado_en, currentProfile?.estado_texto]);
 
@@ -179,35 +179,30 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
       case 'perfil':
         return (
           <div className="app-content-wrapper">
-            <button className="back-button" onClick={handleBack}>← Volver</button>
             <PerfilApp user={user} profile={currentProfile} onUpdate={handleProfileUpdate} />
           </div>
         );
       case 'agenda':
         return (
           <div className="app-content-wrapper">
-            <button className="back-button" onClick={handleBack}>← Volver</button>
             <AgendaApp />
           </div>
         );
       case 'agenda-tours':
         return (
           <div className="app-content-wrapper">
-            <button className="back-button" onClick={handleBack}>← Volver</button>
             <AgendaToursApp />
           </div>
         );
       case 'media':
         return (
           <div className="app-content-wrapper">
-            <button className="back-button" onClick={handleBack}>← Volver</button>
             <MediaApp user={user} profile={currentProfile} onUpdateProfile={handleProfileUpdate} />
           </div>
         );
       case 'rifas':
         return (
           <div className="app-content-wrapper">
-            <button className="back-button" onClick={handleBack}>← Volver</button>
             <RifasApp />
           </div>
         );
@@ -239,45 +234,47 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
               </div>
             </div>
             <div className="header-info">
-              <div className="header-status-row">
-                <span className="header-status-bubble">{visibleStatusText || 'Sin estado activo'}</span>
-                <button
-                  type="button"
-                  className="header-edit-icon"
-                  onClick={openHeaderModal}
-                  aria-label="Editar estado"
-                  title="Editar estado"
-                >
-                  <FaPen />
-                </button>
-              </div>
-              <div className="header-availability">
-                <div className="header-availability-grid">
-                  <div>
-                    <label htmlFor="header_disponible_hoy_inline">Disponible en</label>
-                    <select
-                      id="header_disponible_hoy_inline"
-                      value={currentProfile.disponible_hoy_en || ''}
-                      onChange={(event) => handleAvailabilityChange(event.target.value)}
-                    >
-                      <option value="">Sin ubicacion</option>
-                      {availableLocations.map((location) => (
-                        <option key={location} value={location}>
-                          {location}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label htmlFor="header_disponible_inline">Disponibilidad</label>
-                    <select
-                      id="header_disponible_inline"
-                      value={currentProfile.disponible ? 'true' : 'false'}
-                      onChange={(event) => handleDisponibilidadToggle(event.target.value)}
-                    >
-                      <option value="true">Disponible</option>
-                      <option value="false">No disponible</option>
-                    </select>
+              <div className="header-summary-row">
+                <div className="header-status-row">
+                  <span className="header-status-bubble">{visibleStatusText || 'Sin estado activo'}</span>
+                  <button
+                    type="button"
+                    className="header-edit-icon"
+                    onClick={openHeaderModal}
+                    aria-label="Editar estado"
+                    title="Editar estado"
+                  >
+                    <FaPen />
+                  </button>
+                </div>
+                <div className="header-availability">
+                  <div className="header-availability-grid">
+                    <div>
+                      <label htmlFor="header_disponible_hoy_inline">Disponible en</label>
+                      <select
+                        id="header_disponible_hoy_inline"
+                        value={currentProfile.disponible_hoy_en || ''}
+                        onChange={(event) => handleAvailabilityChange(event.target.value)}
+                      >
+                        <option value="">Sin ubicacion</option>
+                        {availableLocations.map((location) => (
+                          <option key={location} value={location}>
+                            {location}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <label htmlFor="header_disponible_inline">Disponibilidad</label>
+                      <select
+                        id="header_disponible_inline"
+                        value={currentProfile.disponible ? 'true' : 'false'}
+                        onChange={(event) => handleDisponibilidadToggle(event.target.value)}
+                      >
+                        <option value="true">Disponible</option>
+                        <option value="false">No disponible</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>

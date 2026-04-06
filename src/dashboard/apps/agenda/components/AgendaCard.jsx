@@ -11,7 +11,7 @@ function AgendaCard({ item, expanded, saving, subdued = false, onDelete, onEdit,
   return (
     <article className={`agenda-card ${subdued ? 'agenda-card-subdued' : ''}`}>
       <div className="agenda-card-header">
-        <div>
+        <div className="agenda-card-summary">
           <h4>{item.contacto || card.untitledContact}</h4>
           <p>{formatAgendaDate(item.fecha)}</p>
         </div>
@@ -29,34 +29,35 @@ function AgendaCard({ item, expanded, saving, subdued = false, onDelete, onEdit,
           >
             {contactIcon}
           </button>
+          {expanded && (
+            <>
+              <button type="button" className="icon-button" onClick={() => onEdit(item)} disabled={saving} title={card.actions.edit} aria-label={card.actions.edit}>
+                <FaPen />
+              </button>
+              <button type="button" className="icon-button danger" onClick={() => onDelete(item)} disabled={saving} title={card.actions.delete} aria-label={card.actions.delete}>
+                <FaTrash />
+              </button>
+            </>
+          )}
         </div>
       </div>
 
       {expanded && (
         <>
-          <div className="agenda-card-expanded-actions">
-            <button type="button" className="icon-button" onClick={() => onEdit(item)} disabled={saving} title={card.actions.edit} aria-label={card.actions.edit}>
-              <FaPen />
-            </button>
-            <button type="button" className="icon-button danger" onClick={() => onDelete(item)} disabled={saving} title={card.actions.delete} aria-label={card.actions.delete}>
-              <FaTrash />
-            </button>
-          </div>
-
           <div className="agenda-card-expanded">
-            <div className="agenda-card-panel compact">
+            <div className="agenda-card-panel compact agenda-card-panel-row">
               <strong>Tipo</strong>
               <p>{item.tipo_contacto || '-'}</p>
             </div>
-            <div className="agenda-card-panel compact">
+            <div className="agenda-card-panel compact agenda-card-panel-row">
               <strong>Deposito</strong>
               <p>{item.deposito || '-'}</p>
             </div>
-            <div className="agenda-card-panel compact">
+            <div className="agenda-card-panel compact agenda-card-panel-row">
               <strong>{card.labels.date}</strong>
               <p>{formatAgendaDate(item.fecha)}</p>
             </div>
-            <div className="agenda-card-panel compact agenda-card-expanded-full">
+            <div className="agenda-card-panel compact agenda-card-panel-row">
               <strong>Detalles</strong>
               <p>{item.detalles || 'Sin detalles.'}</p>
             </div>
