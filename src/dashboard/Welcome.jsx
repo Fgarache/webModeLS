@@ -11,16 +11,41 @@ import RedesApp from './apps/redes/RedesApp.jsx';
 import RifasApp from './apps/rifas/RifasApp.jsx';
 import './dashboard.css';
 
+const DESCRIPTION_PREVIEW_LIMIT = 180;
+
+function renderFormattedText(text) {
+  return String(text || '')
+    .split(/\r?\n/)
+    .map((line, lineIndex) => {
+      const parts = line.split(/(\*\*.*?\*\*)/g).filter(Boolean);
+
+      return (
+        <span key={`line-${lineIndex}`} className="formatted-text-line">
+          {parts.map((part, partIndex) => {
+            const boldMatch = part.match(/^\*\*(.*)\*\*$/);
+            if (boldMatch) {
+              return <strong key={`part-${lineIndex}-${partIndex}`}>{boldMatch[1]}</strong>;
+            }
+
+            return <span key={`part-${lineIndex}-${partIndex}`}>{part}</span>;
+          })}
+        </span>
+      );
+    });
+}
+
 function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, onLogout }) {
   const [currentProfile, setCurrentProfile] = useState(profile);
   const [activeApp, setActiveApp] = useState(initialApp);
   const [headerModalOpen, setHeaderModalOpen] = useState(false);
   const [savingHeader, setSavingHeader] = useState(false);
   const [headerDraft, setHeaderDraft] = useState({ estado_texto: '', disponible_hoy_en: '' });
+  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const isFullAppView = activeApp === 'perfil' || activeApp === 'agenda' || activeApp === 'agenda-tours' || activeApp === 'media' || activeApp === 'redes' || activeApp === 'rifas';
 
   useEffect(() => {
     setCurrentProfile(profile);
+    setDescriptionExpanded(false);
     setHeaderDraft({
       estado_texto: profile?.estado_texto || '',
       disponible_hoy_en: profile?.disponible_hoy_en || '',
@@ -62,6 +87,9 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
     const maxAge = 24 * 60 * 60 * 1000;
     return Date.now() - timestamp <= maxAge ? statusText : '';
   }, [currentProfile?.estado_actualizado_en, currentProfile?.estado_texto]);
+
+  const descriptionText = String(currentProfile?.descripcion || config.message || '').trim();
+  const shouldCollapseDescription = descriptionText.length > DESCRIPTION_PREVIEW_LIMIT || descriptionText.split(/\r?\n/).length > 3;
 
   if (!profile || !user) {
     return <div>Cargando perfil...</div>;
@@ -285,7 +313,20 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
                   </div>
                 </div>
               </div>
-              <p>{currentProfile.descripcion || config.message}</p>
+              <div className="header-description-block">
+                <div className={`header-description-copy ${descriptionExpanded ? 'expanded' : 'collapsed'}`.trim()}>
+                  {renderFormattedText(descriptionText)}
+                </div>
+                {shouldCollapseDescription && (
+                  <button
+                    type="button"
+                    className="header-description-toggle"
+                    onClick={() => setDescriptionExpanded((current) => !current)}
+                  >
+                    {descriptionExpanded ? 'Ver menos' : 'Ver mas'}
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
