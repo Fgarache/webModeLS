@@ -1,0 +1,74 @@
+{
+  "id": "/",
+  "name": "Site Mode LS",
+  "short_name": "Mode LS",
+  "description": "Panel para administrar perfil, agenda, tours, rifas y fotos.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/icons/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Agenda",
+      "short_name": "Agenda",
+      "description": "Abre la agenda privada del panel.",
+      "url": "/agenda",
+      "icons": [
+        {
+          "src": "/icons/app-icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Tours",
+      "short_name": "Tours",
+      "description": "Abre la gestion de tours.",
+      "url": "/tours",
+      "icons": [
+        {
+          "src": "/icons/app-icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Rifas",
+      "short_name": "Rifas",
+      "description": "Abre la gestion de rifas.",
+      "url": "/rifas",
+      "icons": [
+        {
+          "src": "/icons/app-icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Fotos",
+      "short_name": "Fotos",
+      "description": "Abre la galeria de fotos.",
+      "url": "/fotos",
+      "icons": [
+        {
+          "src": "/icons/app-icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ]
+}

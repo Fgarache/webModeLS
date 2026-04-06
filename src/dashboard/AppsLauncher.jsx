@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { FaAddressBook, FaCalendarAlt, FaCog, FaImages, FaLock, FaSuitcaseRolling, FaTelegramPlane, FaTicketAlt, FaTimes, FaWhatsapp } from 'react-icons/fa';
+import { FaAddressBook, FaCalendarAlt, FaCog, FaImages, FaLock, FaShareAlt, FaSuitcaseRolling, FaTelegramPlane, FaTicketAlt, FaTimes, FaWhatsapp } from 'react-icons/fa';
 import appsConfig from '../config/appsConfig.js';
 import {
   canUseApp,
@@ -15,6 +15,7 @@ const iconMap = {
   FaSuitcaseRolling,
   FaAddressBook,
   FaImages,
+  FaShareAlt,
   FaTicketAlt,
 };
 

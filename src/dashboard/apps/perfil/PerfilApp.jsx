@@ -12,24 +12,6 @@ const SECTION_ITEMS = [
   { id: 'ubicaciones', label: 'Ubicaciones', Icon: FaMapMarkerAlt },
 ];
 
-function normalizeRedes(redes = {}) {
-  return Object.entries(redes).reduce((accumulator, [key, value]) => {
-    if (value && typeof value === 'object') {
-      accumulator[key] = {
-        nombre: value.nombre || '',
-        enlace: value.enlace || '',
-      };
-      return accumulator;
-    }
-
-    accumulator[key] = {
-      nombre: key,
-      enlace: value || '',
-    };
-    return accumulator;
-  }, {});
-}
-
 function PerfilApp({ user, profile, onUpdate }) {
   const [activeSection, setActiveSection] = useState('nombre');
   const [editedProfile, setEditedProfile] = useState(profile);
@@ -41,7 +23,6 @@ function PerfilApp({ user, profile, onUpdate }) {
     setEditedProfile({
       ...profile,
       estado_texto: profile?.estado_texto || '',
-      redes: normalizeRedes(profile?.redes || {}),
       verificado: profile?.verificado === true,
     });
   }, [profile]);
@@ -60,11 +41,6 @@ function PerfilApp({ user, profile, onUpdate }) {
 
     return uniqueValues;
   }, [editedProfile]);
-
-  const visibleRedes = useMemo(
-    () => Object.values(normalizeRedes(editedProfile?.redes || {})).filter((item) => item.nombre || item.enlace),
-    [editedProfile]
-  );
 
   const visibleServicios = useMemo(
     () => Object.values(editedProfile?.servicios || {}).filter(Boolean),
@@ -112,19 +88,6 @@ function PerfilApp({ user, profile, onUpdate }) {
     }));
   };
 
-  const handleMapObjectChange = (parent, key, field, value) => {
-    setEditedProfile((current) => ({
-      ...current,
-      [parent]: {
-        ...(current[parent] || {}),
-        [key]: {
-          ...(current[parent]?.[key] || {}),
-          [field]: value,
-        },
-      },
-    }));
-  };
-
   const removeMapItem = (parent, key) => {
     setEditedProfile((current) => {
       const nextItems = { ...(current[parent] || {}) };
@@ -160,18 +123,6 @@ function PerfilApp({ user, profile, onUpdate }) {
       return accumulator;
     }, {});
 
-  const cleanRedes = (redes) =>
-    Object.entries(redes || {}).reduce((accumulator, [key, value]) => {
-      const nombre = String(value?.nombre || '').trim();
-      const enlace = String(value?.enlace || '').trim();
-
-      if (nombre || enlace) {
-        accumulator[key] = { nombre, enlace };
-      }
-
-      return accumulator;
-    }, {});
-
   const cleanFotos = (fotos) =>
     Object.entries(fotos || {}).reduce((accumulator, [key, foto]) => {
       const url = String(foto?.url || '').trim();
@@ -195,7 +146,6 @@ function PerfilApp({ user, profile, onUpdate }) {
       ...editedProfile,
       estado_texto: String(editedProfile.estado_texto || '').trim(),
       fotos: cleanFotos(editedProfile.fotos),
-      redes: cleanRedes(editedProfile.redes),
       servicios: cleanStringMap(editedProfile.servicios),
       ubicaciones,
       disponible_hoy_en: disponibleHoy,
@@ -302,26 +252,6 @@ function PerfilApp({ user, profile, onUpdate }) {
             </option>
           ))}
         </select>
-      </div>
-
-      <div className="perfil-form-full">
-        <div className="perfil-subheader">
-          <h4>Redes</h4>
-          <button type="button" className="secondary-button" onClick={() => addMapItem('redes', 'r', { nombre: '', enlace: '' })}>
-            Agregar red
-          </button>
-        </div>
-        <div className="perfil-stack-list">
-          {Object.entries(editedProfile.redes || {}).map(([key, red]) => (
-            <div key={key} className="perfil-inline-grid">
-              <input type="text" placeholder="Nombre" value={red?.nombre || ''} onChange={(event) => handleMapObjectChange('redes', key, 'nombre', event.target.value)} />
-              <input type="text" placeholder="Enlace" value={red?.enlace || ''} onChange={(event) => handleMapObjectChange('redes', key, 'enlace', event.target.value)} />
-              <button type="button" className="secondary-button" onClick={() => removeMapItem('redes', key)}>
-                Quitar
-              </button>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
@@ -460,20 +390,6 @@ function PerfilApp({ user, profile, onUpdate }) {
             <div className="perfil-chip-list">
               {visibleUbicaciones.map((item) => (
                 <span key={item} className="perfil-chip">{item}</span>
-              ))}
-            </div>
-          )}
-        </article>
-
-        <article className="perfil-summary-card">
-          <h4>Redes</h4>
-          {!visibleRedes.length && <p>Sin redes registradas.</p>}
-          {!!visibleRedes.length && (
-            <div className="perfil-link-list">
-              {visibleRedes.map((red) => (
-                <a key={`${red.nombre}-${red.enlace}`} href={red.enlace || '#'} target="_blank" rel="noreferrer">
-                  {red.nombre || 'Red'}
-                </a>
               ))}
             </div>
           )}

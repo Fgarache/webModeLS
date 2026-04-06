@@ -3,6 +3,7 @@ const appRolesConfig = {
   'agenda-tours': ['model', 'user'],
   agenda: ['model', 'prestador', 'user', 'admin'],
   media: ['model', 'prestador', 'user', 'admin'],
+  redes: ['model', 'prestador', 'user', 'admin'],
   rifas: ['model', 'prestador', 'admin'],
 };
 

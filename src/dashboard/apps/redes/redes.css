@@ -1,0 +1,154 @@
+.redes-app {
+  display: grid;
+  gap: 1rem;
+}
+
+.redes-header,
+.redes-card,
+.redes-empty,
+.redes-modal-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+}
+
+.redes-header,
+.redes-empty {
+  padding: 1.1rem;
+}
+
+.redes-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.redes-header-copy,
+.redes-header-copy h3,
+.redes-header-copy p {
+  margin: 0;
+}
+
+.redes-header-copy {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.redes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.redes-card {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.9rem;
+}
+
+.redes-card-main {
+  display: grid;
+  gap: 0.9rem;
+  justify-items: center;
+  text-align: center;
+  background: transparent;
+  border: 0;
+  color: #f8fafc;
+}
+
+.redes-card-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 1.4rem;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 1.8rem;
+}
+
+.redes-card-icon.type-whatsapp,
+.redes-card-icon.type-whatsapp-grupo {
+  background: rgba(34, 197, 94, 0.18);
+  color: #c7ffdd;
+}
+
+.redes-card-icon.type-telegram,
+.redes-card-icon.type-telegram-canal,
+.redes-card-icon.type-telegram-grupo {
+  background: rgba(56, 189, 248, 0.18);
+  color: #d9f5ff;
+}
+
+.redes-card-icon.type-facebook {
+  background: rgba(59, 130, 246, 0.18);
+  color: #dbeafe;
+}
+
+.redes-card-icon.type-instagram {
+  background: rgba(236, 72, 153, 0.18);
+  color: #ffe1f0;
+}
+
+.redes-card-copy {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.redes-card-copy strong,
+.redes-card-copy span {
+  overflow-wrap: anywhere;
+}
+
+.redes-card-copy span {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+.redes-card-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.65rem;
+}
+
+.redes-empty {
+  color: rgba(255, 255, 255, 0.74);
+}
+
+.redes-error {
+  padding: 0.9rem 1rem;
+  border-radius: 0.95rem;
+  background: rgba(180, 67, 67, 0.18);
+  color: #ffe4e4;
+}
+
+.redes-modal-card {
+  width: min(720px, 100%);
+}
+
+.redes-modal-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.redes-modal-full {
+  grid-column: 1 / -1;
+}
+
+.redes-modal-actions {
+  margin-top: 1rem;
+}
+
+@media (max-width: 720px) {
+  .redes-header,
+  .redes-modal-form {
+    grid-template-columns: 1fr;
+  }
+
+  .redes-grid {
+    grid-template-columns: 1fr;
+  }
+}

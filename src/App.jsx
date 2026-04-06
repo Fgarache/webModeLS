@@ -12,6 +12,7 @@ const PATH_TO_APP = {
   '/tours': 'agenda-tours',
   '/rifas': 'rifas',
   '/fotos': 'media',
+  '/redes': 'redes',
 };
 
 const APP_TO_PATH = {
@@ -20,6 +21,7 @@ const APP_TO_PATH = {
   'agenda-tours': '/tours',
   rifas: '/rifas',
   media: '/fotos',
+  redes: '/redes',
 };
 
 function getRouteState(pathname) {

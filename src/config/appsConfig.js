@@ -27,6 +27,12 @@ const appsConfig = {
       rolesPermitidos: getAppRoles('media'),
     },
     {
+      id: 'redes',
+      icon: 'FaShareAlt',
+      titulo: 'Redes',
+      rolesPermitidos: getAppRoles('redes'),
+    },
+    {
       id: 'rifas',
       icon: 'FaTicketAlt',
       titulo: 'Rifas',

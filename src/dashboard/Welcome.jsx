@@ -7,6 +7,7 @@ import AgendaApp from './apps/agenda/AgendaApp.jsx';
 import PerfilApp from './apps/perfil/PerfilApp.jsx';
 import AgendaToursApp from './apps/agenda-tours/AgendaToursApp.jsx';
 import MediaApp from './apps/media/MediaApp.jsx';
+import RedesApp from './apps/redes/RedesApp.jsx';
 import RifasApp from './apps/rifas/RifasApp.jsx';
 import './dashboard.css';
 
@@ -16,7 +17,7 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
   const [headerModalOpen, setHeaderModalOpen] = useState(false);
   const [savingHeader, setSavingHeader] = useState(false);
   const [headerDraft, setHeaderDraft] = useState({ estado_texto: '', disponible_hoy_en: '' });
-  const isFullAppView = activeApp === 'perfil' || activeApp === 'agenda' || activeApp === 'agenda-tours' || activeApp === 'media' || activeApp === 'rifas';
+  const isFullAppView = activeApp === 'perfil' || activeApp === 'agenda' || activeApp === 'agenda-tours' || activeApp === 'media' || activeApp === 'redes' || activeApp === 'rifas';
 
   useEffect(() => {
     setCurrentProfile(profile);
@@ -198,6 +199,12 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
         return (
           <div className="app-content-wrapper">
             <MediaApp user={user} profile={currentProfile} onUpdateProfile={handleProfileUpdate} />
+          </div>
+        );
+      case 'redes':
+        return (
+          <div className="app-content-wrapper">
+            <RedesApp user={user} profile={currentProfile} onUpdateProfile={handleProfileUpdate} />
           </div>
         );
       case 'rifas':
