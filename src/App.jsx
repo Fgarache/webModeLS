@@ -104,7 +104,7 @@ function AppInner() {
         <header className="app-header auth-app-header">
           <div className="auth-navbar">
             <div className="auth-navbar-brand">
-              <img src="/icons/logoSmall.png" alt="Site Mode LS" className="auth-navbar-logo" />
+              <img src="/icons/logo.png" alt="Site Mode LS" className="auth-navbar-logo" />
               <h1>{config.app.title}</h1>
             </div>
             <div className="auth-navbar-side right">
@@ -136,7 +136,10 @@ function AppInner() {
   return (
     <div className="app-shell">
       <header className="app-header">
-        <h1>{config.app.title}</h1>
+        <div className="app-brand">
+          <img src="/icons/logo.png" alt="Site Mode LS" className="app-brand-logo" />
+          <h1>{config.app.title}</h1>
+        </div>
       </header>
       <main className="app-main">
         {routeState.page === 'home' && <Home config={config.home} onNavigate={handleNavigate} />}

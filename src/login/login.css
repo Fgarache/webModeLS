@@ -24,11 +24,9 @@
 }
 
 .login-brand-logo {
-  width: 84px;
-  height: 84px;
-  object-fit: cover;
-  border-radius: 1.25rem;
-  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.28);
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
 }
 
 .login-showcase {
@@ -131,10 +129,9 @@
 }
 
 .login-panel-logo {
-  width: 58px;
-  height: 58px;
-  object-fit: cover;
-  border-radius: 1rem;
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
 }
 
 .login-form {
@@ -219,13 +216,13 @@
   }
 
   .login-brand-logo {
-    width: 68px;
-    height: 68px;
+    width: 102px;
+    height: 102px;
   }
 
   .login-panel-logo {
-    width: 48px;
-    height: 48px;
+    width: 78px;
+    height: 78px;
   }
 
   .login-feature-item {

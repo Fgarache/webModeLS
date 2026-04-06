@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FaArrowLeft, FaGoogle, FaMapMarkedAlt } from 'react-icons/fa';
+import { FaArrowLeft, FaGoogle } from 'react-icons/fa';
 import './login.css';
 
 function Login({ config, onLogin, onCancel, errorMessage }) {
@@ -26,21 +26,11 @@ function Login({ config, onLogin, onCancel, errorMessage }) {
           <p className="login-lead">
             Gestiona tu perfil, tus tours y tus rifas desde un acceso unico con tu cuenta de Google.
           </p>
-
-          <div className="login-feature-list">
-            <div className="login-feature-item">
-              <span className="login-feature-icon"><FaMapMarkedAlt /></span>
-              <div>
-                <strong>Ubicacion y disponibilidad</strong>
-                <p>Actualiza tu estado visible y donde estas disponible hoy.</p>
-              </div>
-            </div>
-          </div>
         </div>
 
         <div className="login-panel">
           <div className="login-panel-top">
-            <img src="/icons/logoSmall.png" alt="Site Mode LS" className="login-panel-logo" />
+            <img src="/icons/logo.png" alt="Site Mode LS" className="login-panel-logo" />
             <p className="login-kicker">Google Sign-In</p>
             <h3>Continua con tu cuenta</h3>
             <p className="login-hint">{config.hintText}</p>
