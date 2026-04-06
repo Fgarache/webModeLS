@@ -19,6 +19,7 @@ const agendaConfig = {
     untitledContact: 'Sin contacto',
     labels: {
       date: 'Fecha y hora',
+      details: '',
     },
     actions: {
       view: 'Ver',

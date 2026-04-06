@@ -111,6 +111,18 @@
   line-height: 1.35;
 }
 
+.agenda-details-preview {
+  display: -webkit-box;
+  margin-top: 0.3rem;
+  font-size: 0.73rem;
+  line-height: 1.28;
+  color: rgba(255, 255, 255, 0.56);
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
 .agenda-card-actions {
   display: flex;
   gap: 0.35rem;
@@ -177,6 +189,15 @@
 
 .agenda-card-panel-row strong {
   line-height: 1.35;
+}
+
+.agenda-card-panel-row strong:empty {
+  display: none;
+}
+
+.agenda-card-panel-row strong:empty + p {
+  grid-column: 1 / -1;
+  text-align: left;
 }
 
 .agenda-modal-overlay {

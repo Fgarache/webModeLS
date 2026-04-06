@@ -204,6 +204,15 @@
     grid-template-columns: 1fr;
   }
 
+  .login-brand-logo {
+    display: none;
+  }
+
+  .login-panel-top {
+    justify-items: center;
+    text-align: center;
+  }
+
   .login-showcase h2 {
     max-width: none;
   }

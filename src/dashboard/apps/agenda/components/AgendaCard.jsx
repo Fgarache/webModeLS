@@ -7,6 +7,7 @@ function AgendaCard({ item, expanded, saving, subdued = false, onDelete, onEdit,
   const contactLink = buildAgendaContactLink(item);
   const canContact = Boolean(contactLink);
   const contactIcon = item.tipo_contacto === 'telegram' ? <FaTelegramPlane /> : <FaWhatsapp />;
+  const detailsPreview = String(item.detalles || '').trim();
 
   return (
     <article className={`agenda-card ${subdued ? 'agenda-card-subdued' : ''}`}>
@@ -14,6 +15,7 @@ function AgendaCard({ item, expanded, saving, subdued = false, onDelete, onEdit,
         <div className="agenda-card-summary">
           <h4>{item.contacto || card.untitledContact}</h4>
           <p>{formatAgendaDate(item.fecha)}</p>
+          {!!detailsPreview && !expanded && <span className="agenda-details-preview">{detailsPreview}</span>}
         </div>
         <div className="agenda-card-actions">
           <button type="button" className="icon-button" onClick={() => onToggleView(item.id)} disabled={saving} title={card.actions.view} aria-label={card.actions.view}>
@@ -58,7 +60,7 @@ function AgendaCard({ item, expanded, saving, subdued = false, onDelete, onEdit,
               <p>{formatAgendaDate(item.fecha)}</p>
             </div>
             <div className="agenda-card-panel compact agenda-card-panel-row">
-              <strong>Detalles</strong>
+              <strong>{card.labels.details}</strong>
               <p>{item.detalles || 'Sin detalles.'}</p>
             </div>
           </div>
