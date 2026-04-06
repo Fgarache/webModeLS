@@ -12,6 +12,8 @@ import RifasApp from './apps/rifas/RifasApp.jsx';
 import './dashboard.css';
 
 const DESCRIPTION_PREVIEW_LIMIT = 180;
+const SUPPORT_WHATSAPP_NUMBER = '50248037777';
+const SUPPORT_REFERENCE_EMAIL = 'velaxmia@gail.com';
 
 function renderFormattedText(text) {
   return String(text || '')
@@ -90,6 +92,7 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
 
   const descriptionText = String(currentProfile?.descripcion || config.message || '').trim();
   const shouldCollapseDescription = descriptionText.length > DESCRIPTION_PREVIEW_LIMIT || descriptionText.split(/\r?\n/).length > 3;
+  const supportWhatsappLink = `https://wa.me/${SUPPORT_WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hola, quiero sugerir cambios o reportar un error. Referencia: ${SUPPORT_REFERENCE_EMAIL}`)}`;
 
   if (!profile || !user) {
     return <div>Cargando perfil...</div>;
@@ -374,6 +377,9 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
 
       {!isFullAppView && (
         <div className="logout-section">
+          <a className="support-link" href={supportWhatsappLink} target="_blank" rel="noreferrer">
+            Sugerir cambios o reportar error
+          </a>
           <button className="secondary-button" onClick={onLogout}>
             {config.logoutButtonText}
           </button>

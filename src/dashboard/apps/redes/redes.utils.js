@@ -51,14 +51,37 @@ export function parseStoredValue(type, url) {
   const normalizedUrl = String(url || '').trim();
 
   if (type === 'whatsapp') {
-    return normalizedUrl.replace(/^https?:\/\/wa\.me\//i, '').replace(/\D/g, '');
+    return normalizedUrl.replace(/^(https?:\/\/wa\.me\/)+/i, '').replace(/\D/g, '');
   }
 
   if (type === 'telegram') {
-    return normalizedUrl.replace(/^https?:\/\/t\.me\//i, '').replace(/^@/, '').trim();
+    return normalizedUrl.replace(/^(https?:\/\/t\.me\/)+/i, '').replace(/^@/, '').trim();
   }
 
   return normalizedUrl;
+}
+
+function normalizeRepeatedPrefix(value, regex) {
+  let nextValue = String(value || '').trim();
+
+  while (regex.test(nextValue)) {
+    nextValue = nextValue.replace(regex, '');
+  }
+
+  return nextValue;
+}
+
+function normalizeGenericUrl(value) {
+  const trimmed = String(value || '').trim();
+  if (!trimmed) {
+    return '';
+  }
+
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed.replace(/(https?:\/\/)(https?:\/\/)+/i, '$1');
+  }
+
+  return `https://${trimmed}`;
 }
 
 export function buildCanonicalUrl(type, rawValue) {
@@ -69,16 +92,16 @@ export function buildCanonicalUrl(type, rawValue) {
   }
 
   if (type === 'whatsapp') {
-    const digits = value.replace(/\D/g, '');
+    const digits = normalizeRepeatedPrefix(value, /^(https?:\/\/wa\.me\/)+/i).replace(/\D/g, '');
     return digits ? `https://wa.me/${digits}` : '';
   }
 
   if (type === 'telegram') {
-    const username = value.replace(/^@/, '').replace(/\s+/g, '');
+    const username = normalizeRepeatedPrefix(value, /^(https?:\/\/t\.me\/)+/i).replace(/^@/, '').replace(/\s+/g, '');
     return username ? `https://t.me/${username}` : '';
   }
 
-  return value;
+  return normalizeGenericUrl(value);
 }
 
 export function generateRedKey() {

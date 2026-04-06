@@ -54,16 +54,11 @@ button {
 }
 
 .auth-navbar-logo {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
   width: 2.65rem;
   height: 2.65rem;
   border-radius: 0.85rem;
-  background: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);
-  color: #f8fafc;
-  font-weight: 800;
-  letter-spacing: 0.04em;
+  object-fit: cover;
   box-shadow: 0 10px 22px rgba(79, 70, 229, 0.28);
 }
 
