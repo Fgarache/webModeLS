@@ -13,9 +13,6 @@ function ModalEditarFoto({ open, photo, saving, title, onChangeTitle, onClose, o
             <h4>{mediaConfig.labels.editTitle}</h4>
             <p>{photo.titulo || 'Foto sin titulo'}</p>
           </div>
-          <button type="button" className="modal-close-button" onClick={onClose} disabled={saving}>
-            {mediaConfig.labels.close}
-          </button>
         </div>
 
         <div className="form-group">

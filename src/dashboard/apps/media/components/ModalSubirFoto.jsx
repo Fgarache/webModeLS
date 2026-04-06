@@ -52,9 +52,6 @@ function ModalSubirFoto({ open, saving, maxPhotosReached, acceptedTypes, onClose
             <h4>{mediaConfig.labels.uploadPhoto}</h4>
             <p>Prepara la foto en una ventana aparte antes de publicarla.</p>
           </div>
-          <button type="button" className="modal-close-button" onClick={onClose} disabled={saving}>
-            {mediaConfig.labels.close}
-          </button>
         </div>
 
         <div className="media-upload-card">
@@ -80,6 +77,9 @@ function ModalSubirFoto({ open, saving, maxPhotosReached, acceptedTypes, onClose
 
             <button type="button" className="primary-button media-upload-publish" onClick={handleSubmit} disabled={saving || !selectedFile || maxPhotosReached}>
               {saving ? mediaConfig.labels.uploading : mediaConfig.labels.uploadPhoto}
+            </button>
+            <button type="button" className="secondary-button media-upload-publish" onClick={onClose} disabled={saving}>
+              {mediaConfig.labels.cancel}
             </button>
           </div>
 
