@@ -1,6 +1,6 @@
 import mediaConfig from '../media.config.js';
 
-function ModalEditarFoto({ open, photo, saving, title, onChangeTitle, onClose, onSave }) {
+function ModalEditarFoto({ open, photo, saving, title, onChangeTitle, onClose, onDelete, onSave }) {
   if (!open || !photo) {
     return null;
   }
@@ -24,6 +24,9 @@ function ModalEditarFoto({ open, photo, saving, title, onChangeTitle, onClose, o
         </div>
 
         <div className="media-modal-actions">
+          <button type="button" className="danger-button" onClick={onDelete} disabled={saving}>
+            {mediaConfig.labels.confirmDeleteLabel}
+          </button>
           <button type="button" className="primary-button" onClick={onSave} disabled={saving}>
             {mediaConfig.labels.save}
           </button>

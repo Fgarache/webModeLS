@@ -16,7 +16,7 @@
 
 .media-header {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem;
@@ -28,24 +28,7 @@
 }
 
 .media-header-copy {
-  display: grid;
-  gap: 0.35rem;
-}
-
-.media-header-title-row {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  flex-wrap: wrap;
-}
-
-.media-header-count {
-  padding: 0.24rem 0.65rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.85rem;
-  font-weight: 700;
+  display: block;
 }
 
 .media-header p,
@@ -364,6 +347,7 @@
   .media-header,
   .media-modal-header {
     flex-direction: column;
+    align-items: stretch;
   }
 
   .media-header-side {
@@ -377,6 +361,7 @@
 
   .media-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
   }
 
   .media-upload-preview-image,
@@ -389,5 +374,40 @@
 
   .media-viewer-image {
     max-height: 72vh;
+  }
+
+  .media-photo-card {
+    padding: 0;
+    gap: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .media-photo-image {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 1 / 1;
+    border-radius: 0;
+  }
+
+  .media-photo-overlay-top,
+  .media-profile-badge {
+    display: none;
+  }
+
+  .media-photo-overlay-actions {
+    margin-top: 0;
+    padding: 0.35rem 0.2rem 0.55rem;
+    justify-content: center;
+    gap: 0.3rem;
+  }
+
+  .media-photo-overlay-actions .icon-button {
+    width: 1.95rem;
+    height: 1.95rem;
+    background: transparent;
+    border: 0;
+    box-shadow: none;
   }
 }

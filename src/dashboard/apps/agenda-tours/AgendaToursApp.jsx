@@ -260,7 +260,6 @@ function AgendaToursApp() {
       <div className="agenda-tours-header-row">
         <div className="agenda-tours-header">
           <h3>{header.title}</h3>
-          <p>{header.description}</p>
         </div>
         <div className="info-trigger-group">
           <button type="button" className="primary-button" onClick={openCreateTourModal} disabled={saving || !user?.uid}>
@@ -270,6 +269,7 @@ function AgendaToursApp() {
             title={header.helpTitle}
             paragraphs={header.helpText}
             buttonLabel={`Explicacion de ${header.addTourButton}`}
+            triggerClassName="compact"
           />
         </div>
       </div>

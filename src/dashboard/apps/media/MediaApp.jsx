@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import ModalEliminar from '../agenda-tours/components/ModalEliminar.jsx';
 import mediaConfig from './media.config.js';
 import './media.css';
 import useMediaLibrary from './hooks/useMediaLibrary.js';
@@ -14,7 +13,6 @@ function MediaApp({ user, profile, onUpdateProfile }) {
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [editingPhoto, setEditingPhoto] = useState(null);
   const [editingTitle, setEditingTitle] = useState('');
-  const [deletingPhoto, setDeletingPhoto] = useState(null);
   const [viewingPhoto, setViewingPhoto] = useState(null);
 
   const openUploadModal = () => {
@@ -74,26 +72,14 @@ function MediaApp({ user, profile, onUpdateProfile }) {
     setViewingPhoto(null);
   };
 
-  const requestDeletePhoto = (photo) => {
-    setDeletingPhoto(photo);
-  };
-
-  const closeDeleteModal = () => {
-    if (saving) {
+  const handleDeleteFromEdit = async () => {
+    if (!editingPhoto) {
       return;
     }
 
-    setDeletingPhoto(null);
-  };
-
-  const confirmDeletePhoto = async () => {
-    if (!deletingPhoto) {
-      return;
-    }
-
-    const success = await deletePhoto(deletingPhoto.id);
+    const success = await deletePhoto(editingPhoto.id);
     if (success) {
-      closeDeleteModal();
+      closeEditModal();
     }
   };
 
@@ -101,11 +87,7 @@ function MediaApp({ user, profile, onUpdateProfile }) {
     <section className="media-app">
       <div className="media-header">
         <div className="media-header-copy">
-          <div className="media-header-title-row">
-            <h3>{mediaConfig.title}</h3>
-            <span className="media-header-count">{photos.length}/{mediaConfig.upload.maxPhotos}</span>
-          </div>
-          <p>{mediaConfig.description}</p>
+          <h3>{mediaConfig.title}</h3>
         </div>
         <div className="media-header-side">
           <div className="info-trigger-group">
@@ -116,6 +98,7 @@ function MediaApp({ user, profile, onUpdateProfile }) {
               title={mediaConfig.help.title}
               paragraphs={mediaConfig.help.text}
               buttonLabel={`Explicacion de ${mediaConfig.labels.uploadPhoto}`}
+              triggerClassName="compact"
             />
           </div>
         </div>
@@ -134,7 +117,6 @@ function MediaApp({ user, profile, onUpdateProfile }) {
               photo={photo}
               isProfilePhoto={profile?.foto_perfil === photo.url}
               saving={saving}
-              onDelete={requestDeletePhoto}
               onEdit={openEditModal}
               onOpen={openPhotoViewer}
               onSetProfile={handleSetProfile}
@@ -150,6 +132,7 @@ function MediaApp({ user, profile, onUpdateProfile }) {
         title={editingTitle}
         onChangeTitle={setEditingTitle}
         onClose={closeEditModal}
+        onDelete={handleDeleteFromEdit}
         onSave={handleSaveTitle}
       />
 
@@ -160,16 +143,6 @@ function MediaApp({ user, profile, onUpdateProfile }) {
         acceptedTypes={mediaConfig.upload.acceptedTypes}
         onClose={closeUploadModal}
         onUpload={handleUpload}
-      />
-
-      <ModalEliminar
-        open={Boolean(deletingPhoto)}
-        title={mediaConfig.labels.confirmDeleteTitle}
-        message={mediaConfig.labels.confirmDeleteMessage}
-        confirmLabel={mediaConfig.labels.confirmDeleteLabel}
-        saving={saving}
-        onClose={closeDeleteModal}
-        onConfirm={confirmDeletePhoto}
       />
 
       <ModalVistaFoto

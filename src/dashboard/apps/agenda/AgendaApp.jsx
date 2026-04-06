@@ -95,7 +95,6 @@ function AgendaApp() {
       <div className="agenda-header-row">
         <div className="agenda-header">
           <h3>{header.title}</h3>
-          <p>{header.description}</p>
         </div>
 
         <div className="info-trigger-group">
@@ -106,6 +105,7 @@ function AgendaApp() {
             title={header.helpTitle}
             paragraphs={header.helpText}
             buttonLabel={`Explicacion de ${header.addButton}`}
+            triggerClassName="compact"
           />
         </div>
       </div>
