@@ -20,41 +20,36 @@
 .redes-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
 }
 
 .redes-header-copy,
-.redes-header-copy h3,
-.redes-header-copy p {
+.redes-header-copy h3 {
   margin: 0;
-}
-
-.redes-header-copy {
-  display: grid;
-  gap: 0.4rem;
 }
 
 .redes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
 }
 
 .redes-card {
-  display: grid;
-  gap: 0.75rem;
+  display: block;
   padding: 0.9rem;
 }
 
 .redes-card-main {
   display: grid;
-  gap: 0.9rem;
+  gap: 0.7rem;
   justify-items: center;
   text-align: center;
   background: transparent;
   border: 0;
   color: #f8fafc;
+  width: 100%;
 }
 
 .redes-card-icon {
@@ -92,24 +87,11 @@
 }
 
 .redes-card-copy {
-  display: grid;
-  gap: 0.35rem;
+  display: block;
 }
 
-.redes-card-copy strong,
-.redes-card-copy span {
+.redes-card-copy strong {
   overflow-wrap: anywhere;
-}
-
-.redes-card-copy span {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.9rem;
-}
-
-.redes-card-actions {
-  display: flex;
-  justify-content: center;
-  gap: 0.65rem;
 }
 
 .redes-empty {
@@ -139,16 +121,29 @@
 }
 
 .redes-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
   margin-top: 1rem;
 }
 
+.redes-delete-button {
+  margin-right: auto;
+}
+
 @media (max-width: 720px) {
-  .redes-header,
   .redes-modal-form {
     grid-template-columns: 1fr;
   }
 
   .redes-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .redes-grid {
+    grid-template-columns: 1fr 1fr;
   }
 }

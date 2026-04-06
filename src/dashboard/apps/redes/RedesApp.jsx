@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import ModalEliminar from '../agenda-tours/components/ModalEliminar.jsx';
 import TextInfoModal from '../../components/TextInfoModal.jsx';
 import redesConfig from './redes.config.js';
 import './redes.css';
@@ -11,7 +10,6 @@ function RedesApp({ user, profile, onUpdateProfile }) {
   const { error, redes, saving, addRed, updateRed, deleteRed } = useRedes(user, profile, onUpdateProfile);
   const [addModalOpen, setAddModalOpen] = useState(false);
   const [editingRed, setEditingRed] = useState(null);
-  const [deletingRed, setDeletingRed] = useState(null);
 
   const closeAddModal = () => {
     if (saving) {
@@ -27,14 +25,6 @@ function RedesApp({ user, profile, onUpdateProfile }) {
     }
 
     setEditingRed(null);
-  };
-
-  const closeDeleteModal = () => {
-    if (saving) {
-      return;
-    }
-
-    setDeletingRed(null);
   };
 
   const handleAddRed = async (draft) => {
@@ -57,15 +47,16 @@ function RedesApp({ user, profile, onUpdateProfile }) {
     return success;
   };
 
-  const handleDeleteRed = async () => {
-    if (!deletingRed) {
-      return;
+  const handleDeleteRed = async (redId) => {
+    if (!redId) {
+      return false;
     }
 
-    const success = await deleteRed(deletingRed.id);
+    const success = await deleteRed(redId);
     if (success) {
-      closeDeleteModal();
+      closeEditModal();
     }
+    return success;
   };
 
   return (
@@ -73,7 +64,6 @@ function RedesApp({ user, profile, onUpdateProfile }) {
       <div className="redes-header">
         <div className="redes-header-copy">
           <h3>{redesConfig.title}</h3>
-          <p>{redesConfig.description}</p>
         </div>
         <div className="info-trigger-group">
           <button type="button" className="primary-button" onClick={() => setAddModalOpen(true)} disabled={saving}>
@@ -83,6 +73,7 @@ function RedesApp({ user, profile, onUpdateProfile }) {
             title={redesConfig.help.title}
             paragraphs={redesConfig.help.text}
             buttonLabel={`Explicacion de ${redesConfig.title}`}
+            triggerClassName="compact"
           />
         </div>
       </div>
@@ -99,7 +90,6 @@ function RedesApp({ user, profile, onUpdateProfile }) {
               red={red}
               saving={saving}
               onEdit={setEditingRed}
-              onDelete={setDeletingRed}
             />
           ))}
         </div>
@@ -120,17 +110,8 @@ function RedesApp({ user, profile, onUpdateProfile }) {
         mode="edit"
         initialValue={editingRed}
         onClose={closeEditModal}
+        onDelete={() => handleDeleteRed(editingRed?.id)}
         onSave={handleUpdateRed}
-      />
-
-      <ModalEliminar
-        open={Boolean(deletingRed)}
-        title={redesConfig.labels.deleteTitle}
-        message={redesConfig.labels.deleteMessage}
-        confirmLabel={redesConfig.labels.deleteConfirm}
-        saving={saving}
-        onClose={closeDeleteModal}
-        onConfirm={handleDeleteRed}
       />
     </section>
   );

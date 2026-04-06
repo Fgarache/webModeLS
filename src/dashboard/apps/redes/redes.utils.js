@@ -22,6 +22,65 @@ export function getRedTypeConfig(type) {
   return RED_TYPE_OPTIONS.find((item) => item.value === type) || RED_TYPE_OPTIONS[RED_TYPE_OPTIONS.length - 1];
 }
 
+export function needsCustomTitle(type) {
+  return ['telegram-canal', 'telegram-grupo', 'whatsapp-grupo', 'otro'].includes(type);
+}
+
+export function getRedValueMeta(type) {
+  if (type === 'whatsapp') {
+    return {
+      label: 'Numero de WhatsApp',
+      placeholder: '50248037777',
+    };
+  }
+
+  if (type === 'telegram') {
+    return {
+      label: 'Usuario de Telegram',
+      placeholder: 'tu_usuario',
+    };
+  }
+
+  return {
+    label: 'Enlace',
+    placeholder: 'https://... o enlace de invitacion',
+  };
+}
+
+export function parseStoredValue(type, url) {
+  const normalizedUrl = String(url || '').trim();
+
+  if (type === 'whatsapp') {
+    return normalizedUrl.replace(/^https?:\/\/wa\.me\//i, '').replace(/\D/g, '');
+  }
+
+  if (type === 'telegram') {
+    return normalizedUrl.replace(/^https?:\/\/t\.me\//i, '').replace(/^@/, '').trim();
+  }
+
+  return normalizedUrl;
+}
+
+export function buildCanonicalUrl(type, rawValue) {
+  const value = String(rawValue || '').trim();
+
+  if (!value) {
+    return '';
+  }
+
+  if (type === 'whatsapp') {
+    const digits = value.replace(/\D/g, '');
+    return digits ? `https://wa.me/${digits}` : '';
+  }
+
+  if (type === 'telegram') {
+    const username = value.replace(/^@/, '').replace(/\s+/g, '');
+    return username ? `https://t.me/${username}` : '';
+  }
+
+  return value;
+}
+
 export function generateRedKey() {
   return `r${Date.now()}`;
 }
@@ -57,7 +116,7 @@ export function buildRedPayload(redes = []) {
   return redes.reduce((accumulator, item) => {
     const tipo = String(item?.tipo || 'otro').trim() || 'otro';
     const titulo = String(item?.titulo || getRedTypeConfig(tipo).defaultTitle).trim();
-    const url = String(item?.url || '').trim();
+    const url = buildCanonicalUrl(tipo, item?.url || '');
 
     if (!titulo && !url) {
       return accumulator;
