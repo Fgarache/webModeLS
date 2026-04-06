@@ -20,7 +20,7 @@ function Login({ config, onLogin, onCancel, errorMessage }) {
     <section className="login-screen">
       <div className="login-shell-card">
         <div className="login-showcase">
-          <img src="/icons/logo.png" alt="Site Mode LS" className="login-brand-logo" />
+          <img src="/icons/logo.png" alt="Lindas GT" className="login-brand-logo" />
           <div className="login-badge">Acceso seguro</div>
           <h2>{config.title}</h2>
           <p className="login-lead">
@@ -30,7 +30,7 @@ function Login({ config, onLogin, onCancel, errorMessage }) {
 
         <div className="login-panel">
           <div className="login-panel-top">
-            <img src="/icons/logo.png" alt="Site Mode LS" className="login-panel-logo" />
+            <img src="/icons/logo.png" alt="Lindas GT" className="login-panel-logo" />
             <p className="login-kicker">Google Sign-In</p>
             <h3>Continua con tu cuenta</h3>
             <p className="login-hint">{config.hintText}</p>

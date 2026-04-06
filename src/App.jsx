@@ -104,7 +104,7 @@ function AppInner() {
         <header className="app-header auth-app-header">
           <div className="auth-navbar">
             <div className="auth-navbar-brand">
-              <img src="/icons/logo.png" alt="Site Mode LS" className="auth-navbar-logo" />
+              <img src="/icons/logo.png" alt="Lindas GT" className="auth-navbar-logo" />
               <h1>{config.app.title}</h1>
             </div>
             <div className="auth-navbar-side right">

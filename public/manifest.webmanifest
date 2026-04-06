@@ -1,7 +1,7 @@
 {
   "id": "/",
-  "name": "Site Mode LS",
-  "short_name": "Mode LS",
+  "name": "Lindas GT",
+  "short_name": "Lindas GT",
   "description": "Panel para administrar perfil, agenda, tours, rifas y fotos.",
   "start_url": "/",
   "scope": "/",

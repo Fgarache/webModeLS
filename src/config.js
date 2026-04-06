@@ -1,14 +1,14 @@
 const config = {
   app: {
-    title: 'Site Mode LS',
+    title: 'Lindas GT',
   },
   home: {
-    title: 'Administra tu perfil de LindasGt.com',
-    subtitle: 'Organiza tu perfil, tus tours, tus rifas y tus fotos desde una sola pagina visual, clara y pensada para gestionar tu presencia en LindasGt.com.',
+    title: 'Administra tu perfil en Lindas GT',
+    subtitle: 'Organiza tu perfil, tus tours, tus rifas y tus fotos desde una sola pagina visual, clara y pensada para gestionar tu presencia en Lindas GT.',
     loginButtonText: 'Iniciar seccion',
     highlightTitle: 'Todo tu panel en un solo lugar',
     highlightText: 'Edita tu perfil, publica fotos, controla disponibilidad, administra tours y mueve tus rifas sin salir del mismo panel.',
-    footerTitle: 'LindasGt.com',
+    footerTitle: 'Lindas GT',
     footerText: 'Una portada clara para entrar, administrar tu perfil y mantener tus herramientas listas desde el mismo espacio.',
     footerTagline: 'Perfil, tours, rifas y fotos en una sola pagina.',
     features: [
