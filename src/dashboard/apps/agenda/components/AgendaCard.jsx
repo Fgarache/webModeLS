@@ -33,11 +33,9 @@ function AgendaCard({ item, expanded, saving, subdued = false, onEdit, onToggleV
           >
             {contactIcon}
           </button>
-          {expanded && (
-            <button type="button" className="icon-button" onClick={() => onEdit(item)} disabled={saving} title={card.actions.edit} aria-label={card.actions.edit}>
-              <FaPen />
-            </button>
-          )}
+          <button type="button" className="icon-button" onClick={() => onEdit(item)} disabled={saving} title={card.actions.edit} aria-label={card.actions.edit}>
+            <FaPen />
+          </button>
         </div>
       </div>
 

@@ -50,9 +50,10 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
                       className={`agenda-contact-type-button ${form.tipo_contacto === option.value ? 'active' : ''}`}
                       onClick={() => onChange('tipo_contacto', option.value)}
                       disabled={saving}
+                      title={option.label}
+                      aria-label={option.label}
                     >
                       <Icon />
-                      <span>{option.label}</span>
                     </button>
                   );
                 })}
