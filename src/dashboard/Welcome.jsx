@@ -302,16 +302,22 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
                         ))}
                       </select>
                     </div>
-                    <div>
-                      <label htmlFor="header_disponible_inline">Disponibilidad</label>
-                      <select
-                        id="header_disponible_inline"
-                        value={currentProfile.disponible ? 'true' : 'false'}
-                        onChange={(event) => handleDisponibilidadToggle(event.target.value)}
+                    <div className="header-availability-toggle-wrap">
+                      <label htmlFor="header_disponible_toggle">Disponible</label>
+                      <button
+                        id="header_disponible_toggle"
+                        type="button"
+                        className={`header-availability-toggle ${currentProfile.disponible ? 'active' : 'inactive'}`}
+                        onClick={() => handleDisponibilidadToggle(currentProfile.disponible ? 'false' : 'true')}
+                        aria-pressed={currentProfile.disponible}
                       >
-                        <option value="true">Disponible</option>
-                        <option value="false">No disponible</option>
-                      </select>
+                        <span className="header-availability-toggle-track">
+                          <span className="header-availability-toggle-thumb" />
+                        </span>
+                        <span className="header-availability-toggle-label">
+                          {currentProfile.disponible ? 'Si' : 'No'}
+                        </span>
+                      </button>
                     </div>
                   </div>
                 </div>

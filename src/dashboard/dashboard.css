@@ -264,6 +264,63 @@
   color: #f8fafc;
 }
 
+.header-availability-toggle-wrap {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 112px;
+}
+
+.header-availability-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 42px;
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: #f8fafc;
+}
+
+.header-availability-toggle.active {
+  background: rgba(31, 143, 106, 0.2);
+  border-color: rgba(82, 224, 160, 0.6);
+}
+
+.header-availability-toggle.inactive {
+  background: rgba(148, 163, 184, 0.12);
+  border-color: rgba(148, 163, 184, 0.28);
+}
+
+.header-availability-toggle-track {
+  position: relative;
+  width: 34px;
+  height: 18px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.header-availability-toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: #f8fafc;
+  transition: transform 0.18s ease;
+}
+
+.header-availability-toggle.active .header-availability-toggle-thumb {
+  transform: translateX(16px);
+}
+
+.header-availability-toggle-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
 .header-modal-overlay {
   position: fixed;
   inset: 0;
@@ -464,8 +521,8 @@
 
   .header-availability-grid {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.7rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.6rem;
     width: min(100%, 520px);
     margin: 0 auto;
   }
@@ -521,17 +578,18 @@
   }
 
   .header-availability-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.5rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: 0.45rem;
   }
 
   .header-availability-grid > div {
-    justify-items: center;
+    justify-items: stretch;
   }
 
   .header-availability label {
     width: 100%;
-    text-align: center;
+    text-align: left;
   }
 
   .header-availability label {
@@ -541,5 +599,29 @@
   .header-availability select {
     padding: 0.5rem 0.6rem;
     font-size: 0.9rem;
+  }
+
+  .header-availability-toggle-wrap {
+    min-width: 92px;
+  }
+
+  .header-availability-toggle {
+    min-height: 38px;
+    padding: 0.4rem 0.58rem;
+    gap: 0.4rem;
+  }
+
+  .header-availability-toggle-track {
+    width: 30px;
+    height: 16px;
+  }
+
+  .header-availability-toggle-thumb {
+    width: 12px;
+    height: 12px;
+  }
+
+  .header-availability-toggle.active .header-availability-toggle-thumb {
+    transform: translateX(14px);
   }
 }
