@@ -24,9 +24,10 @@
 }
 
 .login-brand-logo {
-  width: 140px;
-  height: 140px;
+  width: 210px;
+  height: 210px;
   object-fit: contain;
+  justify-self: center;
 }
 
 .login-showcase {
@@ -129,9 +130,10 @@
 }
 
 .login-panel-logo {
-  width: 96px;
-  height: 96px;
+  width: 136px;
+  height: 136px;
   object-fit: contain;
+  justify-self: center;
 }
 
 .login-form {
@@ -225,13 +227,13 @@
   }
 
   .login-brand-logo {
-    width: 102px;
-    height: 102px;
+    width: 150px;
+    height: 150px;
   }
 
   .login-panel-logo {
-    width: 78px;
-    height: 78px;
+    width: 112px;
+    height: 112px;
   }
 
   .login-feature-item {
