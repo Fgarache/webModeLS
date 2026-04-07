@@ -1,8 +1,8 @@
-import { FaEye, FaPen, FaTelegramPlane, FaTrash, FaWhatsapp } from 'react-icons/fa';
+import { FaEye, FaPen, FaTelegramPlane, FaWhatsapp } from 'react-icons/fa';
 import agendaConfig from '../agenda.config.js';
 import { buildAgendaContactLink, formatAgendaDate } from '../agenda.utils.js';
 
-function AgendaCard({ item, expanded, saving, subdued = false, onDelete, onEdit, onToggleView }) {
+function AgendaCard({ item, expanded, saving, subdued = false, onEdit, onToggleView }) {
   const { card } = agendaConfig;
   const contactLink = buildAgendaContactLink(item);
   const canContact = Boolean(contactLink);
@@ -13,8 +13,10 @@ function AgendaCard({ item, expanded, saving, subdued = false, onDelete, onEdit,
     <article className={`agenda-card ${subdued ? 'agenda-card-subdued' : ''}`}>
       <div className="agenda-card-header">
         <div className="agenda-card-summary">
-          <h4>{item.contacto || card.untitledContact}</h4>
-          <p>{formatAgendaDate(item.fecha)}</p>
+          <div className="agenda-card-title-row">
+            <h4>{item.contacto || card.untitledContact}</h4>
+            <span className="agenda-card-date-badge">{formatAgendaDate(item.fecha)}</span>
+          </div>
           {!!detailsPreview && !expanded && <span className="agenda-details-preview">{detailsPreview}</span>}
         </div>
         <div className="agenda-card-actions">
@@ -32,14 +34,9 @@ function AgendaCard({ item, expanded, saving, subdued = false, onDelete, onEdit,
             {contactIcon}
           </button>
           {expanded && (
-            <>
-              <button type="button" className="icon-button" onClick={() => onEdit(item)} disabled={saving} title={card.actions.edit} aria-label={card.actions.edit}>
-                <FaPen />
-              </button>
-              <button type="button" className="icon-button danger" onClick={() => onDelete(item)} disabled={saving} title={card.actions.delete} aria-label={card.actions.delete}>
-                <FaTrash />
-              </button>
-            </>
+            <button type="button" className="icon-button" onClick={() => onEdit(item)} disabled={saving} title={card.actions.edit} aria-label={card.actions.edit}>
+              <FaPen />
+            </button>
           )}
         </div>
       </div>

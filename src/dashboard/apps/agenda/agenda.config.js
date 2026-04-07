@@ -35,6 +35,7 @@ const agendaConfig = {
     save: 'Guardar agenda',
     saveEdit: 'Guardar cambios',
     saving: 'Guardando...',
+    delete: 'Eliminar',
     cancel: 'Cancelar',
     fields: {
       contact: 'Contacto',
@@ -48,7 +49,6 @@ const agendaConfig = {
     contactTypes: [
       { value: 'whatsapp', label: 'WhatsApp' },
       { value: 'telegram', label: 'Telegram' },
-      { value: 'deposito', label: 'Deposito' },
     ],
     periods: [
       { value: 'AM', label: 'AM' },

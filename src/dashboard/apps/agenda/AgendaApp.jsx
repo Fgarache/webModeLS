@@ -67,6 +67,20 @@ function AgendaApp() {
     }
   };
 
+  const handleDeleteFromEdit = () => {
+    if (!editingAgendaId || saving) {
+      return;
+    }
+
+    const currentItem = agendaItems.find((item) => item.id === editingAgendaId);
+    if (!currentItem) {
+      return;
+    }
+
+    setModalOpen(false);
+    setDeletingItem(currentItem);
+  };
+
   const toggleExpanded = (agendaId) => {
     setExpandedAgendaId((current) => (current === agendaId ? null : agendaId));
   };
@@ -143,6 +157,7 @@ function AgendaApp() {
         saving={saving}
         error={error}
         onChange={handleFieldChange}
+        onDelete={handleDeleteFromEdit}
         onClose={closeModal}
         onSubmit={handleSave}
       />

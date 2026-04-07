@@ -89,6 +89,20 @@
   min-width: 0;
 }
 
+.agenda-card-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.agenda-card-date-badge {
+  font-size: 0.68rem;
+  line-height: 1.2;
+  color: rgba(255, 255, 255, 0.58);
+  white-space: nowrap;
+}
+
 .agenda-card-expanded {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -104,11 +118,6 @@
 .agenda-card-header h4,
 .agenda-card-header p {
   overflow-wrap: anywhere;
-}
-
-.agenda-card-header p {
-  font-size: 0.83rem;
-  line-height: 1.35;
 }
 
 .agenda-details-preview {
@@ -232,6 +241,47 @@
   gap: 1rem;
 }
 
+.agenda-inline-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(220px, 0.95fr);
+  gap: 0.8rem;
+  align-items: start;
+}
+
+.agenda-contact-group,
+.agenda-type-group {
+  min-width: 0;
+}
+
+.agenda-contact-type-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.agenda-contact-type-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.85rem;
+  padding: 0.7rem 0.8rem;
+  border-radius: 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+  color: #f8fafc;
+}
+
+.agenda-contact-type-button.active {
+  background: rgba(31, 143, 106, 0.22);
+  border-color: rgba(82, 224, 160, 0.7);
+  color: #e9fff5;
+}
+
+.agenda-contact-type-button svg {
+  font-size: 1rem;
+}
+
 .agenda-time-row {
   display: grid;
   grid-template-columns: 110px 110px auto;
@@ -294,6 +344,12 @@
   margin-top: 1rem;
 }
 
+.agenda-delete-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
 @media (max-width: 900px) {
   .agenda-header-row {
     grid-template-columns: 1fr;
@@ -308,7 +364,77 @@
     grid-template-columns: 1fr;
   }
 
+  .agenda-form-grid {
+    gap: 0.8rem;
+  }
+
+  .agenda-form-grid .agenda-contact-group,
+  .agenda-form-grid .agenda-type-group {
+    grid-column: span 1;
+  }
+
+  .agenda-form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .agenda-inline-row {
+    grid-template-columns: minmax(0, 1.2fr) minmax(210px, 0.9fr);
+  }
+
   .agenda-time-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: 0.6rem;
+  }
+
+  .agenda-period-toggle {
+    padding-top: 1.4rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .agenda-list,
+  .agenda-form-grid {
     grid-template-columns: 1fr;
+  }
+
+  .agenda-inline-row {
+    grid-template-columns: minmax(0, 1.1fr) minmax(150px, 0.9fr);
+    gap: 0.6rem;
+  }
+
+  .agenda-form-grid .agenda-contact-group,
+  .agenda-form-grid .agenda-type-group {
+    grid-column: auto;
+  }
+
+  .agenda-form-grid .agenda-contact-group,
+  .agenda-form-grid .agenda-type-group {
+    margin: 0;
+  }
+
+  .agenda-form-grid .agenda-contact-group + .agenda-type-group {
+    margin-top: -0.15rem;
+  }
+
+  .agenda-contact-type-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .agenda-time-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    align-items: end;
+  }
+
+  .agenda-time-field-label {
+    font-size: 0.78rem;
+  }
+
+  .agenda-period-toggle {
+    gap: 0.4rem;
+  }
+
+  .agenda-period-button {
+    min-width: 56px;
+    padding: 0.78rem 0.7rem;
   }
 }

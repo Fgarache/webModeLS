@@ -51,8 +51,8 @@ function getDefaultAgendaTimeParts() {
 
   return {
     fecha_dia: `${year}-${month}-${day}`,
-    fecha_hora: `${String(hour12).padStart(2, '0')}:00`,
-    fecha_minutos: normalizeQuarterMinute(now.getMinutes()),
+    fecha_hora: String(hour12).padStart(2, '0'),
+    fecha_minutos: '00',
     fecha_periodo: period,
   };
 }
@@ -88,7 +88,7 @@ export function splitAgendaDateTime(value) {
 export function buildAgendaDateTime({ fecha_dia, fecha_hora, fecha_minutos, fecha_periodo }) {
   const safeDate = String(fecha_dia || '').trim();
   const safeHour = String(fecha_hora || '12').trim();
-  const safeMinutes = String(fecha_minutos || '15').trim();
+  const safeMinutes = String(fecha_minutos || '00').trim();
   const safePeriod = String(fecha_periodo || 'AM').trim().toUpperCase();
 
   if (!safeDate) {
@@ -96,7 +96,7 @@ export function buildAgendaDateTime({ fecha_dia, fecha_hora, fecha_minutos, fech
   }
 
   const hour12 = Math.max(1, Math.min(12, Number(safeHour) || 12));
-  const minuteText = safeMinutes === '30' || safeMinutes === '45' ? safeMinutes : '15';
+  const minuteText = ['00', '15', '30', '45'].includes(safeMinutes) ? safeMinutes : '00';
   let hour24 = hour12 % 12;
 
   if (safePeriod === 'PM') {
@@ -129,6 +129,24 @@ export function formatAgendaDate(value) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) {
     return value;
+  }
+
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const tomorrowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+  const dayAfterTomorrowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2);
+  const timeLabel = new Intl.DateTimeFormat('es-GT', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  }).format(date);
+
+  if (date >= todayStart && date < tomorrowStart) {
+    return `Hoy ${timeLabel}`;
+  }
+
+  if (date >= tomorrowStart && date < dayAfterTomorrowStart) {
+    return `Manana ${timeLabel}`;
   }
 
   return new Intl.DateTimeFormat('es-GT', {

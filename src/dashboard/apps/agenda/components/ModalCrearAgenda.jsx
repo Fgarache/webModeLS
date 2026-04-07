@@ -1,7 +1,13 @@
+import { FaTelegramPlane, FaTrash, FaWhatsapp } from 'react-icons/fa';
 import agendaConfig from '../agenda.config.js';
 import { createHourOptions, createMinuteOptions, sanitizeAgendaContact } from '../agenda.utils.js';
 
-function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClose, onSubmit }) {
+const contactTypeIcons = {
+  whatsapp: FaWhatsapp,
+  telegram: FaTelegramPlane,
+};
+
+function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClose, onDelete, onSubmit }) {
   if (!open) {
     return null;
   }
@@ -25,18 +31,33 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
         {error && <div className="agenda-error">{error}</div>}
 
         <div className="agenda-form-grid">
-          <div className="form-group">
-            <label htmlFor="agenda_contacto">{modal.fields.contact}</label>
-            <input id="agenda_contacto" type="text" value={form.contacto} onChange={(event) => onChange('contacto', sanitizeAgendaContact(event.target.value))} disabled={saving} />
-          </div>
+          <div className="agenda-inline-row agenda-form-full">
+            <div className="form-group agenda-contact-group">
+              <label htmlFor="agenda_contacto">{modal.fields.contact}</label>
+              <input id="agenda_contacto" type="text" value={form.contacto} onChange={(event) => onChange('contacto', sanitizeAgendaContact(event.target.value))} disabled={saving} />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="agenda_tipo">{modal.fields.type}</label>
-            <select id="agenda_tipo" value={form.tipo_contacto} onChange={(event) => onChange('tipo_contacto', event.target.value)} disabled={saving}>
-              {modal.contactTypes.map((option) => (
-                <option key={option.value} value={option.value}>{option.label}</option>
-              ))}
-            </select>
+            <div className="form-group agenda-type-group">
+              <label>{modal.fields.type}</label>
+              <div className="agenda-contact-type-row" role="group" aria-label={modal.fields.type}>
+                {modal.contactTypes.map((option) => {
+                  const Icon = contactTypeIcons[option.value];
+
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      className={`agenda-contact-type-button ${form.tipo_contacto === option.value ? 'active' : ''}`}
+                      onClick={() => onChange('tipo_contacto', option.value)}
+                      disabled={saving}
+                    >
+                      <Icon />
+                      <span>{option.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
           <div className="form-group">
@@ -93,6 +114,11 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
         </div>
 
         <div className="agenda-modal-actions">
+          {editing && (
+            <button type="button" className="secondary-button agenda-delete-button" onClick={onDelete} disabled={saving}>
+              <FaTrash /> {modal.delete}
+            </button>
+          )}
           <button type="button" className="primary-button" onClick={onSubmit} disabled={saving}>
             {saving ? modal.saving : editing ? modal.saveEdit : modal.save}
           </button>
