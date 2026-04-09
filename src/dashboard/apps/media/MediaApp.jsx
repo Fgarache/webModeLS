@@ -6,7 +6,7 @@ import ModalEditarFoto from './components/ModalEditarFoto.jsx';
 import ModalSubirFoto from './components/ModalSubirFoto.jsx';
 import PhotoCard from './components/PhotoCard.jsx';
 import ModalVistaFoto from './components/ModalVistaFoto.jsx';
-import TextInfoModal from '../../components/TextInfoModal.jsx';
+import AppSectionHeader from '../../components/AppSectionHeader.jsx';
 
 function MediaApp({ user, profile, onUpdateProfile }) {
   const { error, maxPhotosReached, photos, saving, uploadPhoto, updatePhotoTitle, deletePhoto, setProfilePhoto } = useMediaLibrary(user, profile, onUpdateProfile);
@@ -72,6 +72,11 @@ function MediaApp({ user, profile, onUpdateProfile }) {
     setViewingPhoto(null);
   };
 
+  const handleEditFromViewer = (photo) => {
+    setViewingPhoto(null);
+    openEditModal(photo);
+  };
+
   const handleDeleteFromEdit = async () => {
     if (!editingPhoto) {
       return;
@@ -85,24 +90,15 @@ function MediaApp({ user, profile, onUpdateProfile }) {
 
   return (
     <section className="media-app">
-      <div className="media-header">
-        <div className="media-header-copy">
-          <h3>{mediaConfig.title}</h3>
-        </div>
-        <div className="media-header-side">
-          <div className="info-trigger-group">
-            <button type="button" className="primary-button media-header-upload-button" onClick={openUploadModal} disabled={saving || maxPhotosReached}>
-              {mediaConfig.labels.uploadPhoto}
-            </button>
-            <TextInfoModal
-              title={mediaConfig.help.title}
-              paragraphs={mediaConfig.help.text}
-              buttonLabel={`Explicacion de ${mediaConfig.labels.uploadPhoto}`}
-              triggerClassName="compact"
-            />
-          </div>
-        </div>
-      </div>
+      <AppSectionHeader
+        title={mediaConfig.title}
+        addLabel={mediaConfig.labels.uploadPhoto}
+        helpTitle={mediaConfig.help.title}
+        helpText={mediaConfig.help.text}
+        onAdd={openUploadModal}
+        addDisabled={saving || maxPhotosReached}
+        addButtonClassName="media-header-upload-button"
+      />
 
       {maxPhotosReached && <div className="media-error">{mediaConfig.labels.limitReached}</div>}
       {error && <div className="media-error">{error}</div>}
@@ -116,10 +112,7 @@ function MediaApp({ user, profile, onUpdateProfile }) {
               key={photo.id}
               photo={photo}
               isProfilePhoto={profile?.foto_perfil === photo.url}
-              saving={saving}
-              onEdit={openEditModal}
               onOpen={openPhotoViewer}
-              onSetProfile={handleSetProfile}
             />
           ))}
         </div>
@@ -148,6 +141,10 @@ function MediaApp({ user, profile, onUpdateProfile }) {
       <ModalVistaFoto
         open={Boolean(viewingPhoto)}
         photo={viewingPhoto}
+        saving={saving}
+        isProfilePhoto={profile?.foto_perfil === viewingPhoto?.url}
+        onEdit={handleEditFromViewer}
+        onSetProfile={handleSetProfile}
         onClose={closePhotoViewer}
       />
     </section>

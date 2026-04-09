@@ -1,6 +1,8 @@
+import { FaCheckCircle, FaPen } from 'react-icons/fa';
+import mediaConfig from '../media.config.js';
 import { getRelativeUploadLabel } from '../media.utils.js';
 
-function ModalVistaFoto({ open, photo, onClose }) {
+function ModalVistaFoto({ open, photo, saving, isProfilePhoto, onClose, onEdit, onSetProfile }) {
   if (!open || !photo) {
     return null;
   }
@@ -19,6 +21,16 @@ function ModalVistaFoto({ open, photo, onClose }) {
             <strong>{photo.titulo || 'Sin titulo'}</strong>
             <span>{uploadLabel}</span>
           </div>
+        </div>
+        <div className="media-viewer-actions">
+          <button type="button" className="icon-button media-viewer-action-button" onClick={() => onEdit(photo)} disabled={saving}>
+            <FaPen />
+            <span>{mediaConfig.labels.editTitle}</span>
+          </button>
+          <button type="button" className="icon-button media-viewer-action-button" onClick={() => onSetProfile(photo)} disabled={saving || isProfilePhoto}>
+            <FaCheckCircle />
+            <span>{isProfilePhoto ? mediaConfig.labels.profile : mediaConfig.labels.makeProfile}</span>
+          </button>
         </div>
       </div>
     </div>

@@ -12,7 +12,7 @@ import {
   createEmptyTourForm,
   splitToursByStatus,
 } from './agendaTours.utils.js';
-import TextInfoModal from '../../components/TextInfoModal.jsx';
+import AppSectionHeader from '../../components/AppSectionHeader.jsx';
 
 function AgendaToursApp() {
   const { user } = useAuth();
@@ -65,7 +65,7 @@ function AgendaToursApp() {
       titulo: tour.publico?.titulo || '',
       detalles: tour.publico?.detalles || '',
       fecha: tour.publico?.fecha || createEmptyTourForm().fecha,
-      activo: tour.publico?.activo !== false,
+      activo: null,
       disponibles: tour.publico?.disponibles || {},
       ubicacion_maps: tour.publico?.ubicacion_maps || '',
     });
@@ -257,22 +257,7 @@ function AgendaToursApp() {
 
   return (
     <section className="agenda-tours">
-      <div className="agenda-tours-header-row">
-        <div className="agenda-tours-header">
-          <h3>{header.title}</h3>
-        </div>
-        <div className="info-trigger-group">
-          <button type="button" className="primary-button" onClick={openCreateTourModal} disabled={saving || !user?.uid}>
-            {header.addTourButton}
-          </button>
-          <TextInfoModal
-            title={header.helpTitle}
-            paragraphs={header.helpText}
-            buttonLabel={`Explicacion de ${header.addTourButton}`}
-            triggerClassName="compact"
-          />
-        </div>
-      </div>
+      <AppSectionHeader title={header.title} addLabel={header.addTourButton} helpTitle={header.helpTitle} helpText={header.helpText} onAdd={openCreateTourModal} addDisabled={saving || !user?.uid} addButtonClassName="agenda-tours-add-button" />
 
       {loading && <div className="agenda-tours-status">{header.loadingText}</div>}
       {!loading && error && <div className="agenda-tours-error">{error}</div>}
@@ -342,7 +327,6 @@ function AgendaToursApp() {
         error={error}
         onChange={handleTourFieldChange}
         onClose={closeTourModal}
-        onRemoveSlot={handleRemoveSlot}
         onSubmit={handleSaveTour}
         onToggleSlot={handleToggleSlot}
       />
@@ -363,6 +347,7 @@ function AgendaToursApp() {
         title={confirmState?.title}
         message={confirmState?.message}
         confirmLabel={confirmState?.confirmLabel}
+        hideCloseButton={confirmState?.type === 'agenda'}
         saving={saving}
         onClose={closeConfirmModal}
         onConfirm={confirmState?.onConfirm}

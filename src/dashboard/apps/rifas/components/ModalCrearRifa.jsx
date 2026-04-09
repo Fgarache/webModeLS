@@ -11,45 +11,45 @@ function ModalCrearRifa({ open, editing, form, saving, error, onChange, onClose,
     <div className="rifa-modal-overlay" role="dialog" aria-modal="true">
       <div className="rifa-modal">
         <div className="rifa-modal-header">
-          <div>
+          <div className="rifa-modal-title-row">
             <h4>{editing ? createModal.editTitle : createModal.title}</h4>
+            <div className="form-group-checkbox rifa-toggle-inline">
+              <label htmlFor="rifa_activa">{createModal.fields.enabled}</label>
+              <input id="rifa_activa" type="checkbox" checked={form.activa !== false} onChange={(event) => onChange('activa', event.target.checked)} disabled={saving} />
+            </div>
           </div>
-          <button type="button" className="modal-close-button" onClick={onClose} disabled={saving}>
-            {createModal.close}
-          </button>
         </div>
 
         {error && <div className="rifas-error">{error}</div>}
 
         <div className="rifa-form-grid">
-          <div className="form-group">
+          <div className="form-group rifa-form-full">
             <label htmlFor="rifa_titulo">{createModal.fields.title}</label>
             <input id="rifa_titulo" type="text" value={form.titulo} onChange={(event) => onChange('titulo', event.target.value)} disabled={saving} />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="rifa_fecha">{createModal.fields.drawDate}</label>
-            <input id="rifa_fecha" type="date" value={form.fecha_sorteo} onChange={(event) => onChange('fecha_sorteo', event.target.value)} disabled={saving} />
+          <div className="rifa-inline-row rifa-form-full">
+            <div className="form-group">
+              <label htmlFor="rifa_fecha">{createModal.fields.drawDate}</label>
+              <input id="rifa_fecha" type="date" value={form.fecha_sorteo} onChange={(event) => onChange('fecha_sorteo', event.target.value)} disabled={saving} />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="rifa_hora">{createModal.fields.drawTime}</label>
+              <input id="rifa_hora" type="time" value={form.hora_sorteo} onChange={(event) => onChange('hora_sorteo', event.target.value)} disabled={saving} />
+            </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="rifa_hora">{createModal.fields.drawTime}</label>
-            <input id="rifa_hora" type="time" value={form.hora_sorteo} onChange={(event) => onChange('hora_sorteo', event.target.value)} disabled={saving} />
-          </div>
+          <div className="rifa-inline-row rifa-form-full">
+            <div className="form-group">
+              <label htmlFor="rifa_precio">{createModal.fields.price}</label>
+              <input id="rifa_precio" type="number" inputMode="numeric" min="0" step="1" value={form.precio} onChange={(event) => onChange('precio', event.target.value.replace(/\D/g, ''))} disabled={saving} />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="rifa_precio">{createModal.fields.price}</label>
-            <input id="rifa_precio" type="number" min="0" value={form.precio} onChange={(event) => onChange('precio', event.target.value)} disabled={saving} />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="rifa_total">{createModal.fields.totalNumbers}</label>
-            <input id="rifa_total" type="number" min="1" value={form.total_numeros} onChange={(event) => onChange('total_numeros', event.target.value)} disabled={saving} />
-          </div>
-
-          <div className="form-group form-group-checkbox">
-            <label htmlFor="rifa_activa">{createModal.fields.enabled}</label>
-            <input id="rifa_activa" type="checkbox" checked={form.activa !== false} onChange={(event) => onChange('activa', event.target.checked)} disabled={saving} />
+            <div className="form-group">
+              <label htmlFor="rifa_total">{createModal.fields.totalNumbers}</label>
+              <input id="rifa_total" type="number" inputMode="numeric" min="1" step="1" value={form.total_numeros} onChange={(event) => onChange('total_numeros', event.target.value.replace(/\D/g, ''))} disabled={saving} />
+            </div>
           </div>
 
           <div className="form-group rifa-form-full">

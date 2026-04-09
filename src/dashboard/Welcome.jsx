@@ -14,6 +14,23 @@ import './dashboard.css';
 const DESCRIPTION_PREVIEW_LIMIT = 180;
 const SUPPORT_WHATSAPP_NUMBER = '50248037777';
 const SUPPORT_REFERENCE_EMAIL = 'velaxmia@gail.com';
+const STATUS_MAX_AGE = 24 * 60 * 60 * 1000;
+
+function getVisibleStatusText(profile) {
+  const statusText = String(profile?.estado_texto || '').trim();
+  const updatedAt = profile?.estado_actualizado_en;
+
+  if (!statusText || !updatedAt) {
+    return '';
+  }
+
+  const timestamp = new Date(updatedAt).getTime();
+  if (Number.isNaN(timestamp)) {
+    return '';
+  }
+
+  return Date.now() - timestamp <= STATUS_MAX_AGE ? statusText : '';
+}
 
 function renderFormattedText(text) {
   return String(text || '')
@@ -49,7 +66,7 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
     setCurrentProfile(profile);
     setDescriptionExpanded(false);
     setHeaderDraft({
-      estado_texto: profile?.estado_texto || '',
+      estado_texto: getVisibleStatusText(profile),
       disponible_hoy_en: profile?.disponible_hoy_en || '',
     });
   }, [profile]);
@@ -74,20 +91,7 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
   }, [currentProfile]);
 
   const visibleStatusText = useMemo(() => {
-    const statusText = String(currentProfile?.estado_texto || '').trim();
-    const updatedAt = currentProfile?.estado_actualizado_en;
-
-    if (!statusText || !updatedAt) {
-      return '';
-    }
-
-    const timestamp = new Date(updatedAt).getTime();
-    if (Number.isNaN(timestamp)) {
-      return '';
-    }
-
-    const maxAge = 24 * 60 * 60 * 1000;
-    return Date.now() - timestamp <= maxAge ? statusText : '';
+    return getVisibleStatusText(currentProfile);
   }, [currentProfile?.estado_actualizado_en, currentProfile?.estado_texto]);
 
   const descriptionText = String(currentProfile?.descripcion || config.message || '').trim();
@@ -101,7 +105,7 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
   const handleProfileUpdate = (updatedProfile) => {
     setCurrentProfile(updatedProfile);
     setHeaderDraft({
-      estado_texto: updatedProfile?.estado_texto || '',
+      estado_texto: getVisibleStatusText(updatedProfile),
       disponible_hoy_en: updatedProfile?.disponible_hoy_en || '',
     });
   };
@@ -118,7 +122,7 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
 
   const openHeaderModal = () => {
     setHeaderDraft({
-      estado_texto: currentProfile?.estado_texto || '',
+      estado_texto: getVisibleStatusText(currentProfile),
       disponible_hoy_en: currentProfile?.disponible_hoy_en || '',
     });
     setHeaderModalOpen(true);
@@ -349,9 +353,6 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
                 <h3>Editar estado</h3>
                 <p>Actualiza tu estado visible y donde estas disponible hoy.</p>
               </div>
-              <button type="button" className="modal-close-button" onClick={closeHeaderModal} disabled={savingHeader}>
-                Cerrar
-              </button>
             </div>
 
             <div className="header-modal-form">

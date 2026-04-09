@@ -61,14 +61,25 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
             </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="agenda_deposito">{modal.fields.deposit}</label>
-            <input id="agenda_deposito" type="text" value={form.deposito} onChange={(event) => onChange('deposito', event.target.value)} disabled={saving} />
-          </div>
+          <div className="agenda-inline-row agenda-form-full agenda-deposit-date-row">
+            <div className="form-group agenda-deposit-group">
+              <label htmlFor="agenda_deposito">{modal.fields.deposit}</label>
+              <input
+                id="agenda_deposito"
+                type="number"
+                inputMode="numeric"
+                min="0"
+                step="1"
+                value={form.deposito}
+                onChange={(event) => onChange('deposito', event.target.value.replace(/\D/g, ''))}
+                disabled={saving}
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="agenda_fecha_dia">{modal.fields.date}</label>
-            <input id="agenda_fecha_dia" type="date" value={form.fecha_dia} onChange={(event) => onChange('fecha_dia', event.target.value)} disabled={saving} />
+            <div className="form-group agenda-date-group">
+              <label htmlFor="agenda_fecha_dia">{modal.fields.date}</label>
+              <input id="agenda_fecha_dia" type="date" value={form.fecha_dia} onChange={(event) => onChange('fecha_dia', event.target.value)} disabled={saving} />
+            </div>
           </div>
 
           <div className="form-group agenda-form-full">

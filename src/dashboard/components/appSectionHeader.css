@@ -1,0 +1,42 @@
+.app-section-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.app-section-header-title {
+  margin: 0;
+  min-width: 0;
+  color: #f8fafc;
+}
+
+.app-section-header-add {
+  min-height: 1.52rem;
+  padding: 0.16rem 0.58rem;
+  font-size: 0.74rem;
+  border-radius: 0.58rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .app-section-header {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 0.32rem;
+  }
+
+  .app-section-header-title {
+    font-size: 0.92rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .app-section-header-add {
+    min-height: 1.36rem;
+    padding: 0.12rem 0.42rem;
+    font-size: 0.62rem;
+    border-radius: 0.44rem;
+  }
+}

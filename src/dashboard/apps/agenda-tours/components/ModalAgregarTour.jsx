@@ -1,7 +1,6 @@
 import {
   AVAILABLE_TIME_OPTIONS,
   formatHour12,
-  getSortedSlots,
 } from '../agendaTours.utils.js';
 import agendaToursConfig from '../agendaTours.config.js';
 
@@ -13,7 +12,6 @@ function ModalAgregarTour({
   error,
   onChange,
   onClose,
-  onRemoveSlot,
   onSubmit,
   onToggleSlot,
 }) {
@@ -22,7 +20,6 @@ function ModalAgregarTour({
   }
 
   const { tourModal } = agendaToursConfig;
-  const sortedSlots = getSortedSlots(form.disponibles);
 
   return (
     <div className="tour-modal-overlay" role="dialog" aria-modal="true">
@@ -32,47 +29,46 @@ function ModalAgregarTour({
             <h4>{editing ? tourModal.editTitle : tourModal.addTitle}</h4>
             <p>{tourModal.description}</p>
           </div>
-          <button type="button" className="modal-close-button" onClick={onClose} disabled={saving}>
-            {tourModal.closeButton}
-          </button>
         </div>
 
         {error && <div className="agenda-tours-error">{error}</div>}
 
         <div className="tour-editor-grid">
-          <div className="form-group">
-            <label htmlFor="titulo">{tourModal.fields.title}</label>
-            <input
-              id="titulo"
-              type="text"
-              value={form.titulo}
-              onChange={(event) => onChange('titulo', event.target.value)}
-              disabled={saving}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="fecha">{tourModal.fields.date}</label>
-            <input
-              id="fecha"
-              type="date"
-              value={form.fecha}
-              onChange={(event) => onChange('fecha', event.target.value)}
-              disabled={saving}
-            />
-          </div>
-
-          <div className="form-group tour-editor-toggle">
-            <label htmlFor="activo">
+          <div className="tour-editor-inline-row tour-editor-full-width">
+            <div className="form-group">
+              <label htmlFor="titulo">{tourModal.fields.title}</label>
               <input
-                id="activo"
-                type="checkbox"
-                checked={form.activo}
-                onChange={(event) => onChange('activo', event.target.checked)}
+                id="titulo"
+                type="text"
+                value={form.titulo}
+                onChange={(event) => onChange('titulo', event.target.value)}
                 disabled={saving}
               />
-              {tourModal.fields.active}
-            </label>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="fecha">{tourModal.fields.date}</label>
+              <input
+                id="fecha"
+                type="date"
+                value={form.fecha}
+                onChange={(event) => onChange('fecha', event.target.value)}
+                disabled={saving}
+              />
+            </div>
+
+            <div className="form-group tour-editor-toggle">
+              <label htmlFor="activo">
+                <input
+                  id="activo"
+                  type="checkbox"
+                  checked={form.activo}
+                  onChange={(event) => onChange('activo', event.target.checked)}
+                  disabled={saving}
+                />
+                {tourModal.fields.active}
+              </label>
+            </div>
           </div>
 
           <div className="form-group tour-editor-full-width">
@@ -122,19 +118,6 @@ function ModalAgregarTour({
               );
             })}
           </div>
-
-          {!!sortedSlots.length && (
-            <div className="slot-picker-grid slot-list-editor">
-              {sortedSlots.map(([slotKey, hourValue]) => (
-                <div key={slotKey} className="slot-editor-chip">
-                  <span>{formatHour12(hourValue)}</span>
-                  <button type="button" onClick={() => onRemoveSlot(slotKey)} disabled={saving}>
-                    {tourModal.removeSlot}
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
         </div>
 
         <div className="reservation-form-actions">

@@ -62,9 +62,6 @@ function ModalSubirFoto({ open, saving, maxPhotosReached, acceptedTypes, onClose
             </div>
 
             <div className="media-upload-toolbar">
-              <label htmlFor="media_file" className="secondary-button media-file-trigger">
-                {mediaConfig.labels.selectPhoto}
-              </label>
               <input
                 id="media_file"
                 type="file"
@@ -72,15 +69,22 @@ function ModalSubirFoto({ open, saving, maxPhotosReached, acceptedTypes, onClose
                 onChange={(event) => setSelectedFile(event.target.files?.[0] || null)}
                 disabled={saving || maxPhotosReached}
               />
+              <div className="media-upload-actions-row">
+                {!selectedFile ? (
+                  <label htmlFor="media_file" className="primary-button media-file-trigger media-upload-action-button">
+                    {mediaConfig.labels.selectPhoto}
+                  </label>
+                ) : (
+                  <button type="button" className="primary-button media-upload-action-button" onClick={handleSubmit} disabled={saving || maxPhotosReached}>
+                    {saving ? mediaConfig.labels.uploading : mediaConfig.labels.uploadPhoto}
+                  </button>
+                )}
+                <button type="button" className="secondary-button media-upload-action-button" onClick={onClose} disabled={saving}>
+                  {mediaConfig.labels.cancel}
+                </button>
+              </div>
               <span className="media-upload-helper">{selectedFile ? selectedFile.name : 'Selecciona una imagen para ver la vista previa completa.'}</span>
             </div>
-
-            <button type="button" className="primary-button media-upload-publish" onClick={handleSubmit} disabled={saving || !selectedFile || maxPhotosReached}>
-              {saving ? mediaConfig.labels.uploading : mediaConfig.labels.uploadPhoto}
-            </button>
-            <button type="button" className="secondary-button media-upload-publish" onClick={onClose} disabled={saving}>
-              {mediaConfig.labels.cancel}
-            </button>
           </div>
 
           <div className="media-upload-preview-shell">

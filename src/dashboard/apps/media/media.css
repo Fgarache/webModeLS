@@ -47,6 +47,9 @@
 
 .media-header-upload-button {
   margin-top: 0;
+  min-height: 1.48rem;
+  padding: 0.12rem 0.5rem;
+  font-size: 0.68rem;
 }
 
 .media-upload-card {
@@ -69,6 +72,13 @@
   gap: 0.7rem;
 }
 
+.media-upload-actions-row {
+  display: flex;
+  justify-content: stretch;
+  gap: 0.7rem;
+  align-items: center;
+}
+
 .media-upload-toolbar input[type='file'] {
   display: none;
 }
@@ -77,8 +87,27 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: fit-content;
+  width: 100%;
+  min-width: 0;
   cursor: pointer;
+}
+
+.media-upload-action-button {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.9rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 0.9rem;
+  font-size: 0.84rem;
+  justify-content: center;
+}
+
+.media-upload-actions-row .primary-button.media-upload-action-button {
+  flex: 1 1 50%;
+}
+
+.media-upload-actions-row .secondary-button.media-upload-action-button {
+  flex: 1 1 50%;
 }
 
 .media-upload-helper {
@@ -179,10 +208,6 @@
   font-size: 0.82rem;
 }
 
-.media-upload-publish {
-  width: 100%;
-}
-
 .media-upload-empty-state {
   display: grid;
   place-items: center;
@@ -221,6 +246,10 @@
   padding: 0.7rem;
 }
 
+.media-photo-caption {
+  display: none;
+}
+
 .media-photo-image-wrap {
   position: relative;
   display: block;
@@ -255,31 +284,6 @@
   pointer-events: none;
 }
 
-.media-photo-actions {
-  display: flex;
-  gap: 0.45rem;
-  justify-content: flex-end;
-}
-
-.media-photo-overlay-actions {
-  margin-top: -3rem;
-  padding: 0 0.4rem 0.2rem;
-  position: relative;
-  z-index: 3;
-}
-
-.media-photo-overlay-actions .icon-button {
-  background: rgba(3, 6, 12, 0.86);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  color: #f8fafc;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.36);
-}
-
-.media-photo-overlay-actions .icon-button.danger {
-  background: rgba(78, 15, 18, 0.9);
-  color: #fff1f2;
-}
-
 .media-modal-overlay {
   position: fixed;
   inset: 0;
@@ -303,6 +307,8 @@
 .media-viewer-card {
   position: relative;
   width: min(980px, 100%);
+  display: grid;
+  gap: 0.75rem;
 }
 
 .media-viewer-close {
@@ -318,6 +324,24 @@
   object-fit: contain;
   display: block;
   background: #081018;
+}
+
+.media-viewer-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.media-viewer-action-button {
+  width: auto;
+  min-height: 2.4rem;
+  padding: 0.58rem 0.8rem;
+  gap: 0.45rem;
+}
+
+.media-viewer-action-button span {
+  font-size: 0.84rem;
 }
 
 .media-modal-header {
@@ -359,6 +383,32 @@
     grid-template-columns: 1fr;
   }
 
+  .media-upload-actions-row {
+    display: flex;
+    gap: 0.38rem;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    min-width: 0;
+  }
+
+  .media-upload-action-button {
+    min-height: 2.7rem;
+    padding: 0.42rem 0.5rem;
+    font-size: 0.76rem;
+    border-radius: 0.8rem;
+    text-align: center;
+    white-space: nowrap;
+    line-height: 1;
+  }
+
+  .media-upload-actions-row .primary-button.media-upload-action-button {
+    flex-basis: 50%;
+  }
+
+  .media-upload-actions-row .secondary-button.media-upload-action-button {
+    flex-basis: 50%;
+  }
+
   .media-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0;
@@ -396,18 +446,30 @@
     display: none;
   }
 
-  .media-photo-overlay-actions {
-    margin-top: 0;
-    padding: 0.35rem 0.2rem 0.55rem;
-    justify-content: center;
-    gap: 0.3rem;
+  .media-photo-caption {
+    display: grid;
+    gap: 0.1rem;
+    padding: 0.35rem 0.28rem 0.55rem;
+    color: rgba(255, 255, 255, 0.82);
   }
 
-  .media-photo-overlay-actions .icon-button {
-    width: 1.95rem;
-    height: 1.95rem;
-    background: transparent;
-    border: 0;
-    box-shadow: none;
+  .media-photo-caption strong {
+    font-size: 0.74rem;
+    line-height: 1.2;
+    font-weight: 600;
+  }
+
+  .media-photo-caption span {
+    font-size: 0.68rem;
+    color: rgba(255, 255, 255, 0.56);
+  }
+
+  .media-viewer-actions {
+    justify-content: stretch;
+  }
+
+  .media-viewer-action-button {
+    flex: 1 1 calc(50% - 0.4rem);
+    justify-content: center;
   }
 }

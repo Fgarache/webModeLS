@@ -83,12 +83,16 @@ const rifasConfig = {
     fields: {
       place: 'Lugar',
       placePlaceholder: 'Lugar del comprador',
-      contact: 'Numero o usuario',
+      contact: 'Numero o contacto',
       contactPlaceholder: 'Telefono o usuario',
       channel: 'Canal',
       detail: 'Detalles',
       detailPlaceholder: 'Forma de pago o notas',
     },
+    channelOptions: [
+      { value: 'whatsapp', label: 'WhatsApp' },
+      { value: 'telegram', label: 'Telegram' },
+    ],
   },
   occupiedActions: {
     title: 'Numero ocupado',

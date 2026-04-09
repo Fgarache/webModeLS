@@ -249,8 +249,14 @@
 }
 
 .agenda-contact-group,
-.agenda-type-group {
+.agenda-type-group,
+.agenda-deposit-group,
+.agenda-date-group {
   min-width: 0;
+}
+
+.agenda-deposit-date-row {
+  grid-template-columns: minmax(0, 1fr) minmax(190px, 0.95fr);
 }
 
 .agenda-contact-type-row {
@@ -382,6 +388,10 @@
     grid-template-columns: minmax(0, 1.2fr) minmax(210px, 0.9fr);
   }
 
+  .agenda-deposit-date-row {
+    grid-template-columns: minmax(0, 1fr) minmax(180px, 0.95fr);
+  }
+
   .agenda-time-row {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
     gap: 0.6rem;
@@ -401,6 +411,10 @@
   .agenda-inline-row {
     grid-template-columns: minmax(0, 1.1fr) minmax(150px, 0.9fr);
     gap: 0.6rem;
+  }
+
+  .agenda-deposit-date-row {
+    grid-template-columns: minmax(0, 1fr) minmax(150px, 0.92fr);
   }
 
   .agenda-form-grid .agenda-contact-group,

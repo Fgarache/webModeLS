@@ -1,7 +1,6 @@
-import { FaCheckCircle, FaPen } from 'react-icons/fa';
 import { getRelativeUploadLabel } from '../media.utils.js';
 
-function PhotoCard({ isProfilePhoto, photo, saving, onEdit, onOpen, onSetProfile }) {
+function PhotoCard({ isProfilePhoto, photo, onOpen }) {
   const uploadLabel = getRelativeUploadLabel(photo);
 
   return (
@@ -14,14 +13,9 @@ function PhotoCard({ isProfilePhoto, photo, saving, onEdit, onOpen, onSetProfile
           <span>{uploadLabel}</span>
         </div>
       </button>
-
-      <div className="media-photo-actions media-photo-overlay-actions">
-        <button type="button" className="icon-button" onClick={() => onEdit(photo)} disabled={saving} title="Editar titulo" aria-label="Editar titulo">
-          <FaPen />
-        </button>
-        <button type="button" className="icon-button" onClick={() => onSetProfile(photo)} disabled={saving || isProfilePhoto} title="Poner de perfil" aria-label="Poner de perfil">
-          <FaCheckCircle />
-        </button>
+      <div className="media-photo-caption">
+        <strong>{photo.titulo || 'Sin titulo'}</strong>
+        <span>{uploadLabel}</span>
       </div>
     </article>
   );

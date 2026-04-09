@@ -25,6 +25,12 @@
   flex-wrap: wrap;
 }
 
+.perfil-hero-identity {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
 .perfil-avatar-wrap {
   display: grid;
   gap: 0.75rem;
@@ -79,7 +85,13 @@
   min-width: 260px;
 }
 
+.perfil-hero-heading {
+  display: grid;
+  gap: 0.2rem;
+}
+
 .perfil-hero-copy h3,
+.perfil-hero-heading h3,
 .perfil-summary-card h4,
 .perfil-subheader h4,
 .perfil-modal-header h4 {
@@ -248,7 +260,7 @@
 
 .perfil-menu-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.75rem;
   margin: 1rem 0;
 }
@@ -358,6 +370,19 @@
   grid-template-columns: 1fr auto;
 }
 
+.compact-action-row {
+  align-items: center;
+}
+
+.perfil-inline-delete-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  height: 2.75rem;
+  padding: 0.55rem;
+}
+
 .perfil-modal-actions {
   display: flex;
   gap: 0.75rem;
@@ -423,26 +448,108 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .perfil-section-content,
-  .perfil-summary-grid {
+  .perfil-section-content {
     grid-template-columns: 1fr;
+  }
+
+  .perfil-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .perfil-summary-grid > :first-child {
+    grid-column: 1 / -1;
   }
 }
 
 @media (max-width: 720px) {
-  .perfil-hero-main,
   .perfil-modal-header,
   .perfil-subheader {
     flex-direction: column;
   }
 
+  .perfil-hero-card {
+    gap: 0.85rem;
+    padding: 0.95rem;
+  }
+
+  .perfil-hero-main {
+    display: grid;
+    grid-template-columns: minmax(122px, 132px) minmax(0, 1fr);
+    gap: 0.9rem;
+    align-items: start;
+  }
+
+  .perfil-hero-identity {
+    gap: 0.55rem;
+    justify-items: start;
+  }
+
+  .perfil-avatar-wrap {
+    justify-items: start;
+    width: auto;
+  }
+
+  .perfil-avatar {
+    width: 98px;
+    height: 98px;
+  }
+
+  .perfil-hero-heading {
+    width: 100%;
+    text-align: left;
+  }
+
+  .perfil-hero-copy {
+    min-width: 0;
+    width: 100%;
+    justify-items: start;
+    text-align: left;
+    gap: 0.55rem;
+  }
+
+  .perfil-hero-copy p {
+    max-width: none;
+  }
+
+  .perfil-hero-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .perfil-hero-actions .primary-button {
+    width: min(100%, 210px);
+    justify-content: center;
+  }
+
   .perfil-menu-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+
+  .perfil-icon-tile {
+    padding: 0.6rem 0.35rem;
+  }
+
+  .perfil-icon-circle {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.85rem;
+    font-size: 0.9rem;
+  }
+
+  .perfil-icon-label {
+    font-size: 0.78rem;
   }
 
   .perfil-inline-grid,
-  .perfil-inline-grid.single-line {
+  .perfil-inline-grid {
     grid-template-columns: 1fr;
+  }
+
+  .perfil-inline-grid.single-line,
+  .perfil-inline-grid.compact-action-row {
+    grid-template-columns: 1fr auto;
+    align-items: center;
   }
 
   .perfil-photo-field-row,
@@ -450,7 +557,6 @@
     grid-template-columns: 1fr;
   }
 
-  .perfil-hero-actions,
   .perfil-modal-actions {
     justify-content: stretch;
   }

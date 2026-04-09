@@ -254,13 +254,13 @@
   }
 
   .apps-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0.65rem;
   }
 
   .app-icon-bg {
-    width: 58px;
-    height: 58px;
+    width: 54px;
+    height: 54px;
   }
 
   .app-icon {
@@ -269,7 +269,7 @@
   }
 
   .app-title {
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     max-width: none;
   }
 
@@ -280,11 +280,11 @@
 
 @media (max-width: 420px) {
   .app-icon-bg {
-    width: 54px;
-    height: 54px;
+    width: 48px;
+    height: 48px;
   }
 
   .app-title {
-    font-size: 0.74rem;
+    font-size: 0.68rem;
   }
 }

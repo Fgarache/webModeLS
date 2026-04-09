@@ -121,11 +121,14 @@ function useAgendaTours(user) {
       const tourId = editingTourId || push(ref(db, 'tour')).key;
       const now = new Date().toISOString();
       const currentTour = editingTourId ? tours.find((tour) => tour.id === editingTourId) : null;
+      const nextActiveValue = form.activo === null
+        ? currentTour?.publico?.activo !== false
+        : Boolean(form.activo);
       const tourPayload = {
         titulo: form.titulo.trim(),
         detalles: form.detalles.trim(),
         fecha: form.fecha,
-        activo: Boolean(form.activo),
+        activo: nextActiveValue,
         disponibles: form.disponibles || {},
         ubicacion_maps: form.ubicacion_maps.trim(),
         creado_por_uid: user.uid,
@@ -155,8 +158,8 @@ function useAgendaTours(user) {
       return false;
     }
 
-    if (!form.lugar.trim()) {
-      setError('La agenda necesita un lugar.');
+    if (!form.contacto.trim()) {
+      setError('La agenda necesita un contacto.');
       return false;
     }
 
@@ -218,8 +221,8 @@ function useAgendaTours(user) {
       return false;
     }
 
-    if (!form.lugar.trim()) {
-      setError('La agenda necesita un lugar.');
+    if (!form.contacto.trim()) {
+      setError('La agenda necesita un contacto.');
       return false;
     }
 

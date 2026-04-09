@@ -138,12 +138,37 @@
   }
 
   .redes-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.55rem;
+  }
+
+  .redes-card {
+    padding: 0.55rem 0.35rem;
+  }
+
+  .redes-card-main {
+    gap: 0.45rem;
+  }
+
+  .redes-card-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 1rem;
+    font-size: 1.2rem;
+  }
+
+  .redes-card-copy strong {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 0.68rem;
+    line-height: 1.15;
   }
 }
 
 @media (max-width: 520px) {
   .redes-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }

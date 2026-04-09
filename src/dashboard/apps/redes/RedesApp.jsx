@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import TextInfoModal from '../../components/TextInfoModal.jsx';
 import redesConfig from './redes.config.js';
 import './redes.css';
 import useRedes from './hooks/useRedes.js';
 import ModalRed from './components/ModalRed.jsx';
 import RedCard from './components/RedCard.jsx';
+import AppSectionHeader from '../../components/AppSectionHeader.jsx';
 
 function RedesApp({ user, profile, onUpdateProfile }) {
   const { error, redes, saving, addRed, updateRed, deleteRed } = useRedes(user, profile, onUpdateProfile);
@@ -61,22 +61,7 @@ function RedesApp({ user, profile, onUpdateProfile }) {
 
   return (
     <section className="redes-app">
-      <div className="redes-header">
-        <div className="redes-header-copy">
-          <h3>{redesConfig.title}</h3>
-        </div>
-        <div className="info-trigger-group">
-          <button type="button" className="primary-button" onClick={() => setAddModalOpen(true)} disabled={saving}>
-            {redesConfig.labels.add}
-          </button>
-          <TextInfoModal
-            title={redesConfig.help.title}
-            paragraphs={redesConfig.help.text}
-            buttonLabel={`Explicacion de ${redesConfig.title}`}
-            triggerClassName="compact"
-          />
-        </div>
-      </div>
+      <AppSectionHeader title={redesConfig.title} addLabel={redesConfig.labels.add} helpTitle={redesConfig.help.title} helpText={redesConfig.help.text} onAdd={() => setAddModalOpen(true)} addDisabled={saving} />
 
       {error && <div className="redes-error">{error}</div>}
 

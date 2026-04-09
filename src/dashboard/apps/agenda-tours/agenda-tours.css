@@ -95,6 +95,13 @@
   margin-top: 1rem;
 }
 
+.tour-editor-inline-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(180px, 0.95fr) auto;
+  gap: 0.75rem;
+  align-items: end;
+}
+
 .tour-editor-full-width {
   grid-column: 1 / -1;
 }
@@ -108,6 +115,8 @@
   display: flex;
   gap: 0.55rem;
   align-items: center;
+  min-height: 2.9rem;
+  white-space: nowrap;
 }
 
 .tour-slots-editor {
@@ -191,6 +200,12 @@
   justify-items: end;
 }
 
+.agenda-tours-add-button {
+  min-height: 1.48rem;
+  padding: 0.12rem 0.5rem;
+  font-size: 0.68rem;
+}
+
 .tour-panel {
   display: grid;
   gap: 0.6rem;
@@ -229,6 +244,11 @@
   color: #fff;
   text-align: left;
   min-width: 0;
+}
+
+.slot-card-clickable {
+  width: 100%;
+  cursor: pointer;
 }
 
 .slot-card-available {
@@ -402,6 +422,13 @@
   justify-content: flex-end;
 }
 
+.tour-card-footer-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  margin-top: 0.15rem;
+}
+
 .tour-details-panel {
   margin-top: 0.6rem;
 }
@@ -426,6 +453,17 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
+}
+
+.reservation-inline-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.reservation-contact-group {
+  min-width: 0;
 }
 
 .reservation-full-width {
@@ -468,6 +506,31 @@
   gap: 0.75rem;
 }
 
+.reservation-channel-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.reservation-channel-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  cursor: pointer;
+}
+
+.reservation-channel-button.active {
+  background: rgba(31, 143, 106, 0.22);
+  border-color: rgba(82, 224, 160, 0.72);
+}
+
 .contact-icon-link {
   display: inline-flex;
   align-items: center;
@@ -486,6 +549,34 @@
 
 .reservation-modal {
   width: min(620px, 100%);
+}
+
+.reservation-modal-heading {
+  display: grid;
+  gap: 0.3rem;
+}
+
+.reservation-modal-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.9rem;
+}
+
+.reservation-modal-meta-title,
+.reservation-modal-meta-date,
+.reservation-modal-meta-hour {
+  display: inline-flex;
+  align-items: center;
+}
+
+.reservation-modal-meta-date::before,
+.reservation-modal-meta-hour::before {
+  content: '|';
+  margin-right: 0.4rem;
+  color: rgba(255, 255, 255, 0.42);
 }
 
 .agenda-inline-panel {
@@ -625,16 +716,170 @@
   .agenda-inline-grid {
     grid-template-columns: 1fr;
   }
+
+  .tour-card,
+  .reservation-form {
+    padding: 0.42rem;
+    border-radius: 0.72rem;
+  }
+
+  .tour-card-header {
+    gap: 0.35rem;
+  }
+
+  .tour-card-header h4 {
+    font-size: 0.76rem;
+    margin: 0;
+  }
+
+  .tour-meta {
+    font-size: 0.62rem;
+    gap: 0.05rem;
+  }
+
+  .tour-action-icon {
+    width: 1.42rem;
+    height: 1.42rem;
+  }
+
+  .tour-panel {
+    padding: 0.34rem;
+    margin-top: 0.34rem;
+    border-radius: 0.7rem;
+    gap: 0.32rem;
+  }
+
+  .tour-panel h5 {
+    font-size: 0.76rem;
+  }
+
+  .slot-card {
+    padding: 0.34rem 0.4rem;
+    border-radius: 0.62rem;
+  }
+
+  .slot-row {
+    min-height: 38px;
+  }
+
+  .slot-row-main strong {
+    font-size: 0.72rem;
+  }
+
+  .slot-card-actions {
+    gap: 0.12rem;
+  }
+
+  .slot-card-actions .icon-button,
+  .agenda-inline-actions .icon-button {
+    width: 1.38rem;
+    height: 1.38rem;
+    border-radius: 0.45rem;
+  }
+
+  .agenda-inline-panel {
+    padding: 0.46rem 0.5rem;
+    border-radius: 0.68rem;
+  }
+
+  .agenda-inline-label {
+    font-size: 0.68rem;
+  }
+
+  .agenda-inline-grid strong {
+    font-size: 0.78rem;
+  }
 }
 
 @media (max-width: 1100px) {
   .agenda-tours-list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .tour-editor-inline-row {
+    grid-template-columns: minmax(0, 1fr) minmax(126px, 0.82fr) auto;
+    gap: 0.5rem;
+  }
+
+  .tour-editor-inline-row .form-group {
+    gap: 0.28rem;
+  }
+
+  .tour-editor-inline-row .form-group label {
+    font-size: 0.74rem;
+  }
+
+  .tour-editor-inline-row .form-group input {
+    padding: 0.52rem 0.62rem;
+    border-radius: 0.7rem;
+    font-size: 0.8rem;
+  }
+
+  .reservation-inline-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.55rem;
+  }
+
+  .reservation-modal-meta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.2rem 0.55rem;
+    align-items: center;
+  }
+
+  .reservation-modal-meta-title {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .reservation-modal-meta-date::before,
+  .reservation-modal-meta-hour::before {
+    content: none;
+  }
+
+  .reservation-modal-meta-hour {
+    grid-column: 1 / -1;
+  }
+
+  .reservation-channel-button {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+
+  .tour-editor-toggle {
+    align-items: end;
+  }
+
+  .tour-editor-toggle label {
+    min-height: 2.2rem;
+    font-size: 0.76rem;
+    gap: 0.38rem;
+  }
+
+  .slot-picker-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.35rem;
+  }
+
+  .slot-picker-button {
+    padding: 0.5rem 0.2rem;
+    border-radius: 0.62rem;
+    font-size: 0.72rem;
+  }
+
+  .agenda-tours-add-button {
+    min-height: 1.7rem;
+    padding: 0.34rem 0.5rem;
+    font-size: 0.7rem;
+    border-radius: 0.52rem;
+  }
 }
 
 @media (max-width: 720px) {
   .agenda-tours-list {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.48rem;
   }
 }

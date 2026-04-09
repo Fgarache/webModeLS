@@ -8,7 +8,6 @@ import {
   getSortedSlots,
 } from '../agendaTours.utils.js';
 import agendaToursConfig from '../agendaTours.config.js';
-import TextInfoModal from '../../../components/TextInfoModal.jsx';
 
 function TourCard({
   tour,
@@ -52,17 +51,6 @@ function TourCard({
 
         <div className="tour-meta">
           <span>{formatDateLabel(tour.publico?.fecha)}</span>
-          <div className="tour-actions-row">
-            <button type="button" className="icon-button tour-action-icon" onClick={() => onViewTour(tour.id)} disabled={saving} title={tourCard.viewTour}>
-              <FaEye />
-            </button>
-            <button type="button" className="icon-button tour-action-icon" onClick={() => onEditTour(tour)} disabled={saving} title={tourCard.editTour}>
-              <FaEdit />
-            </button>
-            <button type="button" className="icon-button icon-button-danger tour-action-icon" onClick={() => onDeleteTour(tour)} disabled={saving} title={tourCard.deleteTour}>
-              <FaTrashAlt />
-            </button>
-          </div>
         </div>
       </div>
 
@@ -126,12 +114,6 @@ function TourCard({
                       >
                         <FaPlus />
                       </button>
-                      <TextInfoModal
-                        title={tourCard.actions.addReservationHelpTitle}
-                        paragraphs={tourCard.actions.addReservationHelpText}
-                        buttonLabel={tourCard.actions.addReservationHelpTitle}
-                        triggerClassName="compact"
-                      />
                     </div>
                   </div>
                 );
@@ -141,20 +123,11 @@ function TourCard({
 
               return (
                 <div key={entry.slotKey} className="slot-stack">
-                  <div className="slot-card slot-card-reserved slot-row">
+                  <button type="button" className="slot-card slot-card-reserved slot-row slot-card-clickable" onClick={() => onViewReservation(tour.id, entry.slotKey, entry.reservation)} disabled={saving}>
                     <div className="slot-row-main">
                       <strong>{formatHour12(entry.hour)}</strong>
                     </div>
                     <div className="slot-card-actions">
-                      <button
-                        type="button"
-                        className="icon-button"
-                        title={tourCard.actions.viewReservation}
-                        onClick={() => onViewReservation(tour.id, entry.slotKey, entry.reservation)}
-                        disabled={saving}
-                      >
-                        <FaEye />
-                      </button>
                       {contactHref && (
                         <a
                           className="icon-button"
@@ -162,12 +135,13 @@ function TourCard({
                           href={contactHref}
                           target="_blank"
                           rel="noreferrer"
+                          onClick={(event) => event.stopPropagation()}
                         >
                           {entry.reservation?.canal_contacto === 'telegram' ? <FaTelegramPlane /> : <FaWhatsapp />}
                         </a>
                       )}
                     </div>
-                  </div>
+                  </button>
 
                   {expandedAgenda?.tourId === tour.id && expandedAgenda?.slotKey === entry.slotKey && (
                     <div className="agenda-inline-panel">
@@ -223,6 +197,18 @@ function TourCard({
           )}
         </section>
       )}
+
+      <div className="tour-card-footer-actions">
+        <button type="button" className="icon-button tour-action-icon" onClick={() => onViewTour(tour.id)} disabled={saving} title={tourCard.viewTour}>
+          <FaEye />
+        </button>
+        <button type="button" className="icon-button tour-action-icon" onClick={() => onEditTour(tour)} disabled={saving} title={tourCard.editTour}>
+          <FaEdit />
+        </button>
+        <button type="button" className="icon-button icon-button-danger tour-action-icon" onClick={() => onDeleteTour(tour)} disabled={saving} title={tourCard.deleteTour}>
+          <FaTrashAlt />
+        </button>
+      </div>
     </article>
   );
 }

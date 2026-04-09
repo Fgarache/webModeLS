@@ -7,7 +7,7 @@ import ModalCrearAgenda from './components/ModalCrearAgenda.jsx';
 import AgendaCard from './components/AgendaCard.jsx';
 import ModalConfirmarAgenda from './components/ModalConfirmarAgenda.jsx';
 import { createEmptyAgendaForm, splitAgendaByTime, splitAgendaDateTime } from './agenda.utils.js';
-import TextInfoModal from '../../components/TextInfoModal.jsx';
+import AppSectionHeader from '../../components/AppSectionHeader.jsx';
 
 function AgendaApp() {
   const { user } = useAuth();
@@ -106,23 +106,7 @@ function AgendaApp() {
 
   return (
     <section className="agenda-app">
-      <div className="agenda-header-row">
-        <div className="agenda-header">
-          <h3>{header.title}</h3>
-        </div>
-
-        <div className="info-trigger-group">
-          <button type="button" className="primary-button" onClick={openCreateModal} disabled={saving || !user?.uid}>
-            {header.addButton}
-          </button>
-          <TextInfoModal
-            title={header.helpTitle}
-            paragraphs={header.helpText}
-            buttonLabel={`Explicacion de ${header.addButton}`}
-            triggerClassName="compact"
-          />
-        </div>
-      </div>
+      <AppSectionHeader title={header.title} addLabel={header.addButton} helpTitle={header.helpTitle} helpText={header.helpText} onAdd={openCreateModal} addDisabled={saving || !user?.uid} />
 
       {loading && <div className="agenda-status">{header.loadingText}</div>}
       {!loading && error && <div className="agenda-error">{error}</div>}
@@ -133,7 +117,7 @@ function AgendaApp() {
           <h4 className="agenda-section-title">{header.upcomingSection}</h4>
           <div className="agenda-list">
             {upcoming.map((item) => (
-              <AgendaCard key={item.id} item={item} expanded={expandedAgendaId === item.id} saving={saving} onEdit={openEditModal} onDelete={setDeletingItem} onToggleView={toggleExpanded} />
+              <AgendaCard key={item.id} item={item} expanded={expandedAgendaId === item.id} saving={saving} onEdit={openEditModal} onToggleView={toggleExpanded} />
             ))}
           </div>
         </section>
@@ -144,7 +128,7 @@ function AgendaApp() {
           <h4 className="agenda-section-title">{header.pastSection}</h4>
           <div className="agenda-list">
             {past.map((item) => (
-              <AgendaCard key={item.id} item={item} expanded={expandedAgendaId === item.id} subdued saving={saving} onEdit={openEditModal} onDelete={setDeletingItem} onToggleView={toggleExpanded} />
+              <AgendaCard key={item.id} item={item} expanded={expandedAgendaId === item.id} subdued saving={saving} onEdit={openEditModal} onToggleView={toggleExpanded} />
             ))}
           </div>
         </section>

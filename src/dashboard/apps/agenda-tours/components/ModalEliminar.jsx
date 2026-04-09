@@ -1,6 +1,6 @@
 import agendaToursConfig from '../agendaTours.config.js';
 
-function ModalEliminar({ open, title, message, confirmLabel, saving, onClose, onConfirm }) {
+function ModalEliminar({ open, title, message, confirmLabel, hideCloseButton = false, saving, onClose, onConfirm }) {
   if (!open) {
     return null;
   }
@@ -15,9 +15,11 @@ function ModalEliminar({ open, title, message, confirmLabel, saving, onClose, on
             <h4>{title}</h4>
             <p>{message}</p>
           </div>
-          <button type="button" className="modal-close-button" onClick={onClose} disabled={saving}>
-            {confirmModal.closeButton}
-          </button>
+          {!hideCloseButton && (
+            <button type="button" className="modal-close-button" onClick={onClose} disabled={saving}>
+              {confirmModal.closeButton}
+            </button>
+          )}
         </div>
 
         <div className="confirm-modal-actions">

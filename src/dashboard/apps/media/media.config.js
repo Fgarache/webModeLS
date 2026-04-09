@@ -36,7 +36,7 @@ const mediaConfig = {
     confirmDeleteTitle: 'Eliminar foto',
     confirmDeleteMessage: 'Se eliminara la foto seleccionada del storage y del perfil.',
     confirmDeleteLabel: 'Eliminar foto',
-    editTitle: 'Editar titulo',
+    editTitle: 'Editar',
   },
 };
 

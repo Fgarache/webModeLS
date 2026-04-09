@@ -10,7 +10,7 @@ import rifasConfig from './rifas.config.js';
 import './rifas.css';
 import useRifas from './hooks/useRifas.js';
 import { buildContactLink, createEmptyCompraForm, createEmptyRifaForm, mapToMultilineText, splitRifasByVisibility } from './rifas.utils.js';
-import TextInfoModal from '../../components/TextInfoModal.jsx';
+import AppSectionHeader from '../../components/AppSectionHeader.jsx';
 
 function RifasApp() {
   const { user } = useAuth();
@@ -266,22 +266,7 @@ function RifasApp() {
 
   return (
     <section className="rifas-app">
-      <div className="rifas-header-row">
-        <div className="rifas-header">
-          <h3>{header.title}</h3>
-          <p>{header.description}</p>
-        </div>
-        <div className="info-trigger-group">
-          <button type="button" className="primary-button" onClick={openRifaModal} disabled={saving || !user?.uid}>
-            {header.addButton}
-          </button>
-          <TextInfoModal
-            title={header.helpTitle}
-            paragraphs={header.helpText}
-            buttonLabel={`Explicacion de ${header.addButton}`}
-          />
-        </div>
-      </div>
+      <AppSectionHeader title={header.title} addLabel={header.addButton} helpTitle={header.helpTitle} helpText={header.helpText} onAdd={openRifaModal} addDisabled={saving || !user?.uid} />
 
       {loading && <div className="rifas-status">{header.loadingText}</div>}
       {!loading && error && <div className="rifas-error">{error}</div>}
