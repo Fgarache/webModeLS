@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { equalTo, get, orderByChild, query, ref } from 'firebase/database';
 import { FaCameraRetro, FaMapMarkerAlt, FaSignInAlt, FaTicketAlt, FaUserCircle } from 'react-icons/fa';
 import { db } from '../auth/firebaseConfig.js';
+import AppLoader from '../components/AppLoader.jsx';
 import { normalizeMediaPhotos } from '../dashboard/apps/media/media.utils.js';
 import './public-profile.css';
 
@@ -56,7 +57,13 @@ function PublicProfilePage({ username, onNavigate }) {
   const ubicaciones = useMemo(() => Object.values(profile?.ubicaciones || {}).filter(Boolean), [profile?.ubicaciones]);
 
   if (loading) {
-    return <section className="public-profile-screen"><div className="public-profile-card">Cargando perfil...</div></section>;
+    return (
+      <section className="public-profile-screen">
+        <div className="public-profile-card public-profile-loading">
+          <AppLoader message="Cargando perfil" detail="Buscando la informacion publica..." compact />
+        </div>
+      </section>
+    );
   }
 
   if (!profile) {

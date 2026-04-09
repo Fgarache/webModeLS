@@ -5,6 +5,7 @@ import Login from './login/Login.jsx';
 import Welcome from './dashboard/Welcome.jsx';
 import PublicProfilePage from './public-profile/PublicProfilePage.jsx';
 import { AuthProvider, useAuth } from './auth/AuthContext.jsx';
+import AppLoader from './components/AppLoader.jsx';
 
 const PATH_TO_APP = {
   '/perfil': 'perfil',
@@ -86,7 +87,13 @@ function AppInner() {
   };
 
   if (loading) {
-    return <div>Cargando...</div>;
+    return (
+      <div className="app-shell app-shell-loading">
+        <main className="app-main app-main-loading">
+          <AppLoader message="Cargando" detail="Conectando tu perfil y configuracion..." />
+        </main>
+      </div>
+    );
   }
 
   const handleAuthenticatedBack = () => {

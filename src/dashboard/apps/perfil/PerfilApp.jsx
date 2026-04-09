@@ -5,6 +5,8 @@ import { db } from '../../../auth/firebaseConfig.js';
 import { normalizeMediaPhotos } from '../media/media.utils.js';
 import './perfil.css';
 
+const DESCRIPTION_PREVIEW_LIMIT = 180;
+
 const SECTION_ITEMS = [
   { id: 'nombre', label: 'Nombre', Icon: FaSignature },
   { id: 'servicios', label: 'Servicios', Icon: FaTools },
@@ -17,6 +19,7 @@ function PerfilApp({ user, profile, onUpdate }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [photoPickerOpen, setPhotoPickerOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [descriptionExpanded, setDescriptionExpanded] = useState(false);
 
   useEffect(() => {
     setEditedProfile({
@@ -24,6 +27,7 @@ function PerfilApp({ user, profile, onUpdate }) {
       estado_texto: profile?.estado_texto || '',
       verificado: profile?.verificado === true,
     });
+    setDescriptionExpanded(false);
   }, [profile]);
 
   const locationOptions = useMemo(() => {
@@ -52,6 +56,9 @@ function PerfilApp({ user, profile, onUpdate }) {
   );
 
   const visibleFotos = useMemo(() => normalizeMediaPhotos(editedProfile?.fotos || {}).filter((foto) => foto?.url), [editedProfile?.fotos]);
+
+  const descriptionText = String(editedProfile?.descripcion || '').trim();
+  const shouldCollapseDescription = descriptionText.length > DESCRIPTION_PREVIEW_LIMIT || descriptionText.split(/\r?\n/).length > 3;
 
   const handleInputChange = (field, value) => {
     setEditedProfile((current) => ({
@@ -267,7 +274,20 @@ function PerfilApp({ user, profile, onUpdate }) {
           </div>
 
           <div className="perfil-hero-copy">
-            <p>{editedProfile.descripcion || 'Todavia no has agregado una descripcion.'}</p>
+            <div className="perfil-description-block">
+              <p className={`perfil-description-copy ${descriptionExpanded ? 'expanded' : 'collapsed'}`.trim()}>
+                {descriptionText || 'Todavia no has agregado una descripcion.'}
+              </p>
+              {shouldCollapseDescription && (
+                <button
+                  type="button"
+                  className="perfil-description-toggle"
+                  onClick={() => setDescriptionExpanded((current) => !current)}
+                >
+                  {descriptionExpanded ? 'Ver menos' : 'Ver mas'}
+                </button>
+              )}
+            </div>
             <div className="perfil-hero-actions">
               <button type="button" className="primary-button" onClick={() => setModalOpen(true)}>
                 <FaEdit /> Editar perfil

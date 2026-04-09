@@ -9,6 +9,7 @@ import AgendaToursApp from './apps/agenda-tours/AgendaToursApp.jsx';
 import MediaApp from './apps/media/MediaApp.jsx';
 import RedesApp from './apps/redes/RedesApp.jsx';
 import RifasApp from './apps/rifas/RifasApp.jsx';
+import AppLoader from '../components/AppLoader.jsx';
 import './dashboard.css';
 
 const DESCRIPTION_PREVIEW_LIMIT = 180;
@@ -99,7 +100,7 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
   const supportWhatsappLink = `https://wa.me/${SUPPORT_WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hola, quiero sugerir cambios o reportar un error. Referencia: ${SUPPORT_REFERENCE_EMAIL}`)}`;
 
   if (!profile || !user) {
-    return <div>Cargando perfil...</div>;
+    return <AppLoader message="Cargando perfil" detail="Preparando tu panel personal..." />;
   }
 
   const handleProfileUpdate = (updatedProfile) => {

@@ -24,6 +24,13 @@ button {
   min-height: 100vh;
 }
 
+.app-shell-loading {
+  background:
+    radial-gradient(circle at top, rgba(79, 70, 229, 0.18), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.12), transparent 28%),
+    #0b1220;
+}
+
 .app-header {
   padding: 1.5rem;
   background: #111827;
@@ -112,6 +119,115 @@ button {
   padding: 2rem;
 }
 
+.app-main-loading {
+  display: grid;
+  place-items: center;
+}
+
+.app-loader {
+  width: min(420px, 100%);
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+  gap: 1.1rem;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.app-loader.compact {
+  min-height: 220px;
+  padding: 1.5rem 1rem;
+}
+
+.app-loader-visual {
+  position: relative;
+  width: 112px;
+  height: 112px;
+  display: grid;
+  place-items: center;
+}
+
+.app-loader-ring,
+.app-loader-core {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.app-loader-ring {
+  inset: 0;
+  border: 2px solid transparent;
+}
+
+.app-loader-ring.ring-one {
+  border-top-color: rgba(129, 140, 248, 0.95);
+  border-right-color: rgba(129, 140, 248, 0.3);
+  animation: app-loader-spin 1.15s linear infinite;
+}
+
+.app-loader-ring.ring-two {
+  inset: 14px;
+  border-bottom-color: rgba(52, 211, 153, 0.95);
+  border-left-color: rgba(52, 211, 153, 0.3);
+  animation: app-loader-spin-reverse 1.55s linear infinite;
+}
+
+.app-loader-core {
+  width: 32px;
+  height: 32px;
+  background: radial-gradient(circle at 30% 30%, #f8fafc, #818cf8 55%, #1e1b4b 100%);
+  box-shadow: 0 0 28px rgba(129, 140, 248, 0.45);
+  animation: app-loader-pulse 1.3s ease-in-out infinite;
+}
+
+.app-loader-copy {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.app-loader-copy strong {
+  color: #f8fafc;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+}
+
+.app-loader-copy span {
+  color: rgba(226, 232, 240, 0.72);
+  font-size: 0.94rem;
+}
+
+@keyframes app-loader-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes app-loader-spin-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes app-loader-pulse {
+  0%,
+  100% {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
 .primary-button,
 .secondary-button {
   border: none;
@@ -164,5 +280,15 @@ button {
 
   .app-main {
     padding: 1rem;
+  }
+
+  .app-loader {
+    min-height: 240px;
+    padding: 1.5rem 1rem;
+  }
+
+  .app-loader-visual {
+    width: 92px;
+    height: 92px;
   }
 }

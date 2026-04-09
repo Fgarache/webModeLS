@@ -85,6 +85,42 @@
   min-width: 260px;
 }
 
+.perfil-description-block {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.perfil-description-copy {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.65;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.perfil-description-copy.collapsed {
+  display: -webkit-box;
+  line-clamp: 3;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.perfil-description-toggle {
+  justify-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #8cc9ff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.perfil-description-toggle:hover {
+  text-decoration: underline;
+}
+
 .perfil-hero-heading {
   display: grid;
   gap: 0.2rem;
