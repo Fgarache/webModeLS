@@ -1,0 +1,45 @@
+.bottom-app-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  width: 100vw;
+  max-width: 430px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.2rem;
+  padding: 0.4rem 0.2rem 0.4rem 0.2rem;
+    border-radius: 1rem 1rem 0 0;
+    border: none;
+    background: var(--wa-bg-nav, #222e24);
+  box-shadow: 0 -2px 16px 0 rgba(0,0,0,0.18);
+}
+
+.bottom-app-tab {
+  border: 0;
+  background: transparent;
+  color: rgba(203, 213, 225, 0.8);
+  padding: 0.52rem 0.35rem;
+  border-radius: 0.75rem;
+  display: grid;
+  place-items: center;
+  gap: 0.22rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  transition: color 0.18s, background 0.18s;
+}
+
+.bottom-app-tab svg {
+  font-size: 1rem;
+}
+
+.bottom-app-tab.active {
+  background: rgba(37, 211, 102, 0.10);
+  color: var(--wa-bg-fab, #25D366);
+}
+
+.bottom-app-tab:disabled {
+  opacity: 0.45;
+}

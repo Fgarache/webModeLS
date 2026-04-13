@@ -65,7 +65,7 @@ function AgendaToursApp() {
       titulo: tour.publico?.titulo || '',
       detalles: tour.publico?.detalles || '',
       fecha: tour.publico?.fecha || createEmptyTourForm().fecha,
-      activo: null,
+      activo: typeof tour.publico?.activo === 'boolean' ? tour.publico.activo : true,
       disponibles: tour.publico?.disponibles || {},
       ubicacion_maps: tour.publico?.ubicacion_maps || '',
     });

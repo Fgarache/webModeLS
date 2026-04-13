@@ -1,8 +1,10 @@
+
 import {
   AVAILABLE_TIME_OPTIONS,
   formatHour12,
 } from '../agendaTours.utils.js';
 import agendaToursConfig from '../agendaTours.config.js';
+import ToggleSwitch from './ToggleSwitch.jsx';
 
 function ModalAgregarTour({
   open,
@@ -58,16 +60,13 @@ function ModalAgregarTour({
             </div>
 
             <div className="form-group tour-editor-toggle">
-              <label htmlFor="activo">
-                <input
-                  id="activo"
-                  type="checkbox"
-                  checked={form.activo}
-                  onChange={(event) => onChange('activo', event.target.checked)}
-                  disabled={saving}
-                />
-                {tourModal.fields.active}
-              </label>
+              <label htmlFor="activo" style={{marginBottom: 4, display: 'block'}}>{tourModal.fields.active}</label>
+              <ToggleSwitch
+                id="activo"
+                checked={!!form.activo}
+                onChange={checked => onChange('activo', Boolean(checked))}
+                disabled={saving}
+              />
             </div>
           </div>
 

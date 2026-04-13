@@ -68,11 +68,7 @@ function ModalCrearRifa({ open, editing, form, saving, error, onChange, onClose,
             <span className="rifa-field-help">{createModal.fields.multilineHelp}</span>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="rifa_ganadores">{createModal.fields.winners}</label>
-            <textarea id="rifa_ganadores" rows="4" value={form.ganadores_texto} onChange={(event) => onChange('ganadores_texto', event.target.value)} disabled={saving} />
-            <span className="rifa-field-help">{createModal.fields.multilineHelp}</span>
-          </div>
+          {/* Campo ganadores removido, ahora se edita desde detalles */}
         </div>
 
         <div className="rifa-modal-actions">
