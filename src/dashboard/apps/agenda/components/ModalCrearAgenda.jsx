@@ -1,4 +1,5 @@
 import { FaTelegramPlane, FaTrash, FaWhatsapp } from 'react-icons/fa';
+import ToggleSwitch from '../../agenda-tours/components/ToggleSwitch.jsx';
 import agendaConfig from '../agenda.config.js';
 import { createHourOptions, createMinuteOptions, sanitizeAgendaContact } from '../agenda.utils.js';
 
@@ -16,6 +17,34 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
   const hourOptions = createHourOptions();
   const minuteOptions = createMinuteOptions();
 
+  // Nuevo: control de fecha activa
+  const fechaActiva = form.fecha_activa !== undefined ? form.fecha_activa : true;
+  const handleToggleFecha = (checked) => {
+    onChange('fecha_activa', checked);
+    if (!checked) {
+      // Limpiar campos de fecha y hora si se desactiva
+      onChange('fecha_dia', '');
+      onChange('fecha_hora', '');
+      onChange('fecha_minutos', '');
+      onChange('fecha_periodo', 'AM');
+    } else {
+      // Si se activa y no hay fecha, poner fecha y hora actual
+      if (!form.fecha_dia) {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hour24 = now.getHours();
+        const period = hour24 >= 12 ? 'PM' : 'AM';
+        const hour12 = hour24 % 12 === 0 ? 12 : hour24 % 12;
+        onChange('fecha_dia', `${year}-${month}-${day}`);
+        onChange('fecha_hora', String(hour12).padStart(2, '0'));
+        onChange('fecha_minutos', '00');
+        onChange('fecha_periodo', period);
+      }
+    }
+  };
+
   return (
     <div className="agenda-modal-overlay" role="dialog" aria-modal="true">
       <div className="agenda-modal">
@@ -23,9 +52,7 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
           <div>
             <h4>{editing ? modal.editTitle : modal.title}</h4>
           </div>
-          <button type="button" className="modal-close-button" onClick={onClose} disabled={saving}>
-            {modal.close}
-          </button>
+          {/* Removed close (X) button for add agenda modal */}
         </div>
 
         {error && <div className="agenda-error">{error}</div>}
@@ -61,8 +88,8 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
             </div>
           </div>
 
-          <div className="agenda-inline-row agenda-form-full agenda-deposit-date-row">
-            <div className="form-group agenda-deposit-group">
+          <div className="agenda-deposit-fecha-toggle-row agenda-form-full">
+            <div className="form-group agenda-deposit-group agenda-deposit-inline">
               <label htmlFor="agenda_deposito">{modal.fields.deposit}</label>
               <input
                 id="agenda_deposito"
@@ -75,10 +102,25 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
                 disabled={saving}
               />
             </div>
-
-            <div className="form-group agenda-date-group">
+            <div className="form-group agenda-date-group agenda-date-inline">
               <label htmlFor="agenda_fecha_dia">{modal.fields.date}</label>
-              <input id="agenda_fecha_dia" type="date" value={form.fecha_dia} onChange={(event) => onChange('fecha_dia', event.target.value)} disabled={saving} />
+              <input
+                id="agenda_fecha_dia"
+                type="date"
+                value={form.fecha_dia}
+                onChange={(event) => onChange('fecha_dia', event.target.value)}
+                disabled={saving || !fechaActiva}
+              />
+            </div>
+            <div className="form-group agenda-toggle-group agenda-toggle-inline">
+              <label className="agenda-toggle-label-inline">Fecha</label>
+              <ToggleSwitch
+                id="agenda_fecha_toggle"
+                checked={fechaActiva}
+                onChange={handleToggleFecha}
+                disabled={saving}
+                label={undefined}
+              />
             </div>
           </div>
 
@@ -87,7 +129,7 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
             <div className="agenda-time-row">
               <div className="agenda-time-field">
                 <span className="agenda-time-field-label">Hora</span>
-                <select className="agenda-dark-select" id="agenda_fecha_hora" value={form.fecha_hora} onChange={(event) => onChange('fecha_hora', event.target.value)} disabled={saving}>
+                <select className="agenda-dark-select" id="agenda_fecha_hora" value={form.fecha_hora} onChange={(event) => onChange('fecha_hora', event.target.value)} disabled={saving || !fechaActiva}>
                   {hourOptions.map((option) => (
                     <option key={option.value} value={option.value}>{option.label}</option>
                   ))}
@@ -96,7 +138,7 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
 
               <div className="agenda-time-field">
                 <span className="agenda-time-field-label">Minutos</span>
-                <select className="agenda-dark-select" id="agenda_fecha_minutos" value={form.fecha_minutos} onChange={(event) => onChange('fecha_minutos', event.target.value)} disabled={saving}>
+                <select className="agenda-dark-select" id="agenda_fecha_minutos" value={form.fecha_minutos} onChange={(event) => onChange('fecha_minutos', event.target.value)} disabled={saving || !fechaActiva}>
                   {minuteOptions.map((option) => (
                     <option key={option.value} value={option.value}>{option.label}</option>
                   ))}
@@ -110,7 +152,7 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
                     type="button"
                     className={`agenda-period-button ${form.fecha_periodo === option.value ? 'active' : ''}`}
                     onClick={() => onChange('fecha_periodo', option.value)}
-                    disabled={saving}
+                    disabled={saving || !fechaActiva}
                   >
                     {option.label}
                   </button>

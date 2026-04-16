@@ -29,7 +29,7 @@ function AgendaApp() {
 
   const openEditModal = (item) => {
     setEditingAgendaId(item.id);
-    const { fecha_dia, fecha_hora, fecha_minutos, fecha_periodo } = splitAgendaDateTime(item.fecha);
+    const { fecha_dia, fecha_hora, fecha_minutos, fecha_periodo, fecha_activa } = splitAgendaDateTime(item.fecha);
     setAgendaForm({
       contacto: item.contacto || '',
       tipo_contacto: item.tipo_contacto || 'whatsapp',
@@ -38,6 +38,7 @@ function AgendaApp() {
       fecha_hora,
       fecha_minutos,
       fecha_periodo,
+      fecha_activa: item.fecha ? true : false,
       detalles: item.detalles || '',
     });
     setModalOpen(true);

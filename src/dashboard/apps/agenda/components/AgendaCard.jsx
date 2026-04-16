@@ -9,13 +9,14 @@ function AgendaCard({ item, expanded, saving, subdued = false, onEdit, onToggleV
   const contactIcon = item.tipo_contacto === 'telegram' ? <FaTelegramPlane /> : <FaWhatsapp />;
   const detailsPreview = String(item.detalles || '').trim();
 
+  const isPendiente = !item.fecha;
   return (
     <article className={`agenda-card ${subdued ? 'agenda-card-subdued' : ''}`}>
       <div className="agenda-card-header">
         <div className="agenda-card-summary">
           <div className="agenda-card-title-row">
             <h4>{item.contacto || card.untitledContact}</h4>
-            <span className="agenda-card-date-badge">{formatAgendaDate(item.fecha)}</span>
+            <span className={`agenda-card-date-badge${isPendiente ? ' agenda-card-date-pendiente' : ''}`}>{formatAgendaDate(item.fecha)}</span>
           </div>
           {!!detailsPreview && !expanded && <span className="agenda-details-preview">{detailsPreview}</span>}
         </div>
@@ -41,23 +42,23 @@ function AgendaCard({ item, expanded, saving, subdued = false, onEdit, onToggleV
 
       {expanded && (
         <>
-          <div className="agenda-card-expanded">
-            <div className="agenda-card-panel compact agenda-card-panel-row">
-              <strong>Tipo</strong>
-              <p>{item.tipo_contacto || '-'}</p>
+          <div className="agenda-card-expanded agenda-card-panel-horizontal-row">
+            <div className="agenda-card-panel-horizontal-block">
+              <div className="agenda-card-panel-titulo-peq">Tipo</div>
+              <div className="agenda-card-panel-valor-peq">{item.tipo_contacto || '-'}</div>
             </div>
-            <div className="agenda-card-panel compact agenda-card-panel-row">
-              <strong>Deposito</strong>
-              <p>{item.deposito || '-'}</p>
+            <div className="agenda-card-panel-horizontal-block">
+              <div className="agenda-card-panel-titulo-peq">Depósito</div>
+              <div className="agenda-card-panel-valor-peq">{item.deposito || '-'}</div>
             </div>
-            <div className="agenda-card-panel compact agenda-card-panel-row">
-              <strong>{card.labels.date}</strong>
-              <p>{formatAgendaDate(item.fecha)}</p>
+            <div className="agenda-card-panel-horizontal-block">
+              <div className="agenda-card-panel-titulo-peq">{card.labels.date}</div>
+              <div className="agenda-card-panel-valor-peq">{formatAgendaDate(item.fecha)}</div>
             </div>
-            <div className="agenda-card-panel compact agenda-card-panel-row">
-              <strong>{card.labels.details}</strong>
-              <p>{item.detalles || 'Sin detalles.'}</p>
-            </div>
+          </div>
+          <div className="agenda-card-panel compact agenda-card-panel-row">
+            <strong>{card.labels.details}</strong>
+            <p>{item.detalles || 'Sin detalles.'}</p>
           </div>
         </>
       )}

@@ -61,12 +61,12 @@ export function splitAgendaDateTime(value) {
   const fallback = getDefaultAgendaTimeParts();
 
   if (!value) {
-    return fallback;
+    return { ...fallback, fecha_activa: true };
   }
 
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) {
-    return fallback;
+    return { ...fallback, fecha_activa: true };
   }
 
   const year = date.getFullYear();
@@ -82,6 +82,7 @@ export function splitAgendaDateTime(value) {
     fecha_hora: String(hour12).padStart(2, '0'),
     fecha_minutos: minutes,
     fecha_periodo: period,
+    fecha_activa: true,
   };
 }
 
@@ -117,13 +118,14 @@ export function createEmptyAgendaForm() {
     fecha_hora,
     fecha_minutos,
     fecha_periodo,
+    fecha_activa: true,
     detalles: '',
   };
 }
 
 export function formatAgendaDate(value) {
   if (!value) {
-    return 'Sin fecha';
+    return 'Pendiente';
   }
 
   const date = new Date(value);
@@ -203,20 +205,36 @@ export function sortAgenda(list) {
 }
 
 export function splitAgendaByTime(list) {
-  const now = Date.now();
+  const now = new Date();
+  const nowTime = now.getTime();
+  const tomorrowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime();
+  const dayAfterTomorrowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2).getTime();
 
-  return list.reduce(
+  // Primero separar las pendientes (sin fecha)
+  const pending = [];
+  const result = list.reduce(
     (accumulator, item) => {
-      if (getAgendaTimestamp(item) >= now) {
-        accumulator.upcoming.push(item);
-      } else {
-        accumulator.past.push(item);
+      if (!item.fecha) {
+        pending.push(item);
+        return accumulator;
       }
-
+      const itemTime = getAgendaTimestamp(item);
+      if (itemTime < nowTime) {
+        accumulator.past.push(item);
+      } else if (itemTime < tomorrowStart) {
+        accumulator.today.push(item);
+      } else if (itemTime < dayAfterTomorrowStart) {
+        accumulator.tomorrow.push(item);
+      } else {
+        accumulator.upcoming.push(item);
+      }
       return accumulator;
     },
-    { upcoming: [], past: [] }
+    { today: [], tomorrow: [], upcoming: [], past: [] }
   );
+  // Agregar pendientes al final de upcoming
+  result.upcoming = result.upcoming.concat(pending);
+  return result;
 }
 
 export function buildAgendaContactLink(item) {

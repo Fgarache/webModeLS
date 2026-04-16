@@ -3,7 +3,7 @@ import { FaEye, FaPen, FaTrash } from 'react-icons/fa';
 import rifasConfig from '../rifas.config.js';
 import { buildNumbers, formatDateLabel, formatHour12, getRifaStatus } from '../rifas.utils.js';
 
-function RifaCard({ rifa, saving, expanded, onDeleteRifa, onEditRifa, onOpenCompra, onOpenOccupiedActions, onToggleViewRifa }) {
+function RifaCard({ rifa, saving, expanded, onDeleteRifa, onEditRifa, onOpenCompra, onOpenOccupiedActions, onToggleViewRifa, onEditGanador }) {
   const { card } = rifasConfig;
   const status = getRifaStatus(rifa);
   const statusLabel =
@@ -123,6 +123,15 @@ function RifaCard({ rifa, saving, expanded, onDeleteRifa, onEditRifa, onOpenComp
                 ) : (
                   <p>{card.detailFallback}</p>
                 )}
+                <button
+                  type="button"
+                  className="primary-button"
+                  style={{marginTop: 8}}
+                  onClick={() => onEditGanador(rifa)}
+                  disabled={saving}
+                >
+                  {winners.length ? 'Editar ganador' : 'Agregar ganador'}
+                </button>
               </div>
             </div>
 

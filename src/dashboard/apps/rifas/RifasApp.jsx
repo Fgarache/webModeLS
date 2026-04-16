@@ -287,6 +287,7 @@ function RifasApp() {
                 onOpenCompra={openCompraModal}
                 onOpenOccupiedActions={openOccupiedActions}
                 onToggleViewRifa={toggleViewRifa}
+                onEditGanador={openGanadorModal}
               />
             ))}
           </div>

@@ -69,7 +69,8 @@ function useAgenda(user) {
 
     const agendaDateTime = buildAgendaDateTime(form);
 
-    if (!agendaDateTime) {
+    // Solo validar fecha si el toggle está activo
+    if (form.fecha_activa !== false && !agendaDateTime) {
       setError('Debes elegir una fecha.');
       return false;
     }
