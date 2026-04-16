@@ -5,18 +5,23 @@ function AppSectionHeader({ title, addLabel, helpTitle, helpText, onAdd, addDisa
   return (
     <div className="app-section-header">
       <h3 className="app-section-header-title">{title}</h3>
-      <button
-        type="button"
-        className={`primary-button app-section-header-add ${addButtonClassName}`.trim()}
-        onClick={onAdd}
-        disabled={addDisabled}
-      >
-        {addLabel}
-      </button>
+      
+      {/* El botón solo se renderiza si existe onAdd */}
+      {onAdd && (
+        <button
+          type="button"
+          className={`primary-button app-section-header-add ${addButtonClassName}`.trim()}
+          onClick={onAdd}
+          disabled={addDisabled}
+        >
+          {addLabel}
+        </button>
+      )}
+
       <TextInfoModal
         title={helpTitle}
         paragraphs={helpText}
-        buttonLabel={`Explicacion de ${addLabel}`}
+        buttonLabel={onAdd ? `Explicación de ${addLabel}` : "Información"}
         triggerClassName="compact"
       />
     </div>

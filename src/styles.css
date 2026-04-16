@@ -196,36 +196,18 @@ button {
 }
 
 @keyframes app-loader-spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes app-loader-spin-reverse {
-  from {
-    transform: rotate(360deg);
-  }
-
-  to {
-    transform: rotate(0deg);
-  }
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
 }
 
 @keyframes app-loader-pulse {
-  0%,
-  100% {
-    transform: scale(0.9);
-    opacity: 0.8;
-  }
-
-  50% {
-    transform: scale(1.08);
-    opacity: 1;
-  }
+  0%, 100% { transform: scale(0.9); opacity: 0.8; }
+  50% { transform: scale(1.08); opacity: 1; }
 }
 
 .primary-button,
@@ -279,7 +261,7 @@ button {
   }
 
   .app-main {
-    padding: 1rem;
+    padding: 1rem 0.25rem;
   }
 
   .app-loader {

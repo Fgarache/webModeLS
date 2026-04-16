@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { FaPlus } from 'react-icons/fa';
 import { useAuth } from '../../../auth/AuthContext.jsx';
 import agendaConfig from './agenda.config.js';
 import './agenda.css';
@@ -19,7 +20,14 @@ function AgendaApp() {
   const [agendaForm, setAgendaForm] = useState(() => createEmptyAgendaForm());
   const [deletingItem, setDeletingItem] = useState(null);
   const [expandedAgendaId, setExpandedAgendaId] = useState(null);
-  const { upcoming, past } = useMemo(() => splitAgendaByTime(agendaItems), [agendaItems]);
+
+  const { upcoming, past } = useMemo(() => {
+    const split = splitAgendaByTime(agendaItems);
+    return {
+      upcoming: [...split.today, ...split.tomorrow, ...split.upcoming],
+      past: split.past
+    };
+  }, [agendaItems]);
 
   const openCreateModal = () => {
     setEditingAgendaId(null);
@@ -29,7 +37,7 @@ function AgendaApp() {
 
   const openEditModal = (item) => {
     setEditingAgendaId(item.id);
-    const { fecha_dia, fecha_hora, fecha_minutos, fecha_periodo, fecha_activa } = splitAgendaDateTime(item.fecha);
+    const { fecha_dia, fecha_hora, fecha_minutos, fecha_periodo } = splitAgendaDateTime(item.fecha);
     setAgendaForm({
       contacto: item.contacto || '',
       tipo_contacto: item.tipo_contacto || 'whatsapp',
@@ -38,46 +46,32 @@ function AgendaApp() {
       fecha_hora,
       fecha_minutos,
       fecha_periodo,
-      fecha_activa: item.fecha ? true : false,
+      fecha_activa: !!item.fecha,
       detalles: item.detalles || '',
     });
     setModalOpen(true);
   };
 
   const closeModal = () => {
-    if (saving) {
-      return;
-    }
-
+    if (saving) return;
     setModalOpen(false);
     setEditingAgendaId(null);
     setAgendaForm(createEmptyAgendaForm());
   };
 
   const handleFieldChange = (field, value) => {
-    setAgendaForm((current) => ({
-      ...current,
-      [field]: value,
-    }));
+    setAgendaForm((current) => ({ ...current, [field]: value }));
   };
 
   const handleSave = async () => {
     const success = await saveAgenda({ editingAgendaId, form: agendaForm });
-    if (success) {
-      closeModal();
-    }
+    if (success) closeModal();
   };
 
   const handleDeleteFromEdit = () => {
-    if (!editingAgendaId || saving) {
-      return;
-    }
-
+    if (!editingAgendaId || saving) return;
     const currentItem = agendaItems.find((item) => item.id === editingAgendaId);
-    if (!currentItem) {
-      return;
-    }
-
+    if (!currentItem) return;
     setModalOpen(false);
     setDeletingItem(currentItem);
   };
@@ -87,27 +81,25 @@ function AgendaApp() {
   };
 
   const closeDeleteModal = () => {
-    if (saving) {
-      return;
-    }
-
+    if (saving) return;
     setDeletingItem(null);
   };
 
   const confirmDelete = async () => {
-    if (!deletingItem) {
-      return;
-    }
-
+    if (!deletingItem) return;
     const success = await deleteAgenda(deletingItem.id);
-    if (success) {
-      closeDeleteModal();
-    }
+    if (success) closeDeleteModal();
   };
 
   return (
     <section className="agenda-app">
-      <AppSectionHeader title={header.title} addLabel={header.addButton} helpTitle={header.helpTitle} helpText={header.helpText} onAdd={openCreateModal} addDisabled={saving || !user?.uid} />
+      {/* Quitamos onAdd para que el encabezado no muestre el botón superior */}
+      <AppSectionHeader 
+        title={header.title} 
+        helpTitle={header.helpTitle} 
+        helpText={header.helpText} 
+        addDisabled={saving || !user?.uid} 
+      />
 
       {loading && <div className="agenda-status">{header.loadingText}</div>}
       {!loading && error && <div className="agenda-error">{error}</div>}
@@ -135,18 +127,18 @@ function AgendaApp() {
         </section>
       )}
 
-      <ModalCrearAgenda
-        open={modalOpen}
-        editing={Boolean(editingAgendaId)}
-        form={agendaForm}
-        saving={saving}
-        error={error}
-        onChange={handleFieldChange}
-        onDelete={handleDeleteFromEdit}
-        onClose={closeModal}
-        onSubmit={handleSave}
-      />
+      {/* Botón Flotante (FAB) */}
+      <button 
+        type="button" 
+        className="agenda-fab-button" 
+        onClick={openCreateModal}
+        disabled={saving || !user?.uid}
+        title={header.addButton}
+      >
+        <FaPlus />
+      </button>
 
+      <ModalCrearAgenda open={modalOpen} editing={Boolean(editingAgendaId)} form={agendaForm} saving={saving} error={error} onChange={handleFieldChange} onDelete={handleDeleteFromEdit} onClose={closeModal} onSubmit={handleSave} />
       <ModalConfirmarAgenda open={Boolean(deletingItem)} item={deletingItem} saving={saving} onClose={closeDeleteModal} onConfirm={confirmDelete} />
     </section>
   );

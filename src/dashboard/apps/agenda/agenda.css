@@ -1,299 +1,71 @@
-/* --- Estilos de Tarjetas (General) --- */
+/* --- RESET TOTAL DE ESPACIOS PARA LA AGENDA --- */
+.agenda-app, 
+.agenda-app *, 
+.agenda-section, 
+.agenda-section-title,
+.app-section-header,
+.app-section-header-title {
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+}
+
+/* --- Contenedor Principal --- */
+.agenda-app {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important; /* Espacio mínimo entre el título principal y las listas */
+  padding: 8px 4px 110px 4px !important; /* Margen para el botón flotante */
+  min-height: 100vh;
+  background: transparent;
+}
+
+/* --- Secciones (PROXIMAS, PASADAS) --- */
+.agenda-section {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important; /* Espacio entre el texto "PROXIMAS" y las tarjetas */
+  margin-top: 6px !important;
+}
+
+.agenda-section-title {
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  color: rgba(255, 255, 255, 0.3) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-left: 4px !important;
+}
+
+/* --- Lista de Tarjetas --- */
 .agenda-list {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.75rem;
+  display: grid !important;
+  grid-template-columns: 1fr; /* Una columna en móvil */
+  gap: 6px !important; /* Espacio entre una tarjeta y otra */
 }
 
-.agenda-card {
-  display: grid;
-  container-type: inline-size;
-  gap: 0.6rem;
-  padding: 0.8rem 0.9rem;
-  border-radius: 1rem;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  position: relative;
-}
-
-.agenda-card-subdued {
-  background: rgba(255, 255, 255, 0.035);
-  border-color: rgba(255, 255, 255, 0.05);
-}
-
-.agenda-card-header {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: flex-start;
-  gap: 0.65rem;
-}
-
-.agenda-card-title-row {
-  display: flex;
-  align-items: baseline;
-  gap: 0.45rem;
-  flex-wrap: wrap;
-}
-
-.agenda-card-date-badge {
-  font-size: 0.68rem;
-  line-height: 1.2;
-  color: rgba(255, 255, 255, 0.58);
-  white-space: nowrap;
-}
-
-/* Cambio solicitado: Color verde para el texto "Pendiente" */
-.agenda-card-date-pendiente {
-  color: #52e0a0 !important;
-  font-weight: 600;
-}
-
-.agenda-details-preview {
-  display: -webkit-box;
-  margin-top: 0.3rem;
-  font-size: 0.73rem;
-  line-height: 1.28;
-  color: rgba(255, 255, 255, 0.56);
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  overflow-wrap: anywhere;
-}
-
-/* --- Paneles Expandidos de la Tarjeta --- */
-.agenda-card-panel-horizontal-row {
-  display: flex;
-  flex-direction: row;
-  gap: 1.2rem;
-  margin-bottom: 0.7rem;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-}
-
-.agenda-card-panel-horizontal-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: rgba(0,0,0,0.13);
-  border-radius: 0.7em;
-  padding: 0.5em 0.8em;
-  min-width: 90px;
-  flex: 1 1 0;
-}
-
-.agenda-card-panel-titulo-peq {
-  font-weight: 700;
-  font-size: 0.72rem;
-  color: #fff;
-  margin-bottom: 0.13em;
-  text-align: center;
-}
-
-.agenda-card-panel-valor-peq {
-  font-size: 0.74rem;
-  color: #e9fff5;
-  word-break: break-word;
-  text-align: center;
-}
-
-.agenda-card-panel {
-  display: grid;
-  gap: 0.22rem;
-  padding: 0.55rem 0.6rem;
-  border-radius: 0.8rem;
-  background: rgba(0, 0, 0, 0.18);
-}
-
-.agenda-card-panel-row {
-  display: grid;
-  grid-template-columns: 86px minmax(0, 1fr);
-  align-items: start;
-  column-gap: 0.55rem;
-}
-
-.agenda-card-panel strong {
-  font-size: 0.8rem;
-  line-height: 1.35;
-}
-
-.agenda-card-panel p {
-  font-size: 0.82rem;
-  line-height: 1.35;
-  margin: 0;
-  color: rgba(255, 255, 255, 0.72);
-  word-break: break-word;
-}
-
-/* --- Modal y Formularios --- */
-.agenda-modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 30;
-  display: grid;
-  place-items: center;
-  padding: 1.25rem;
-  background: rgba(5, 10, 16, 0.72);
-  backdrop-filter: blur(8px);
-}
-
-.agenda-modal {
-  width: min(760px, 100%);
-  max-height: calc(100vh - 2.5rem);
-  overflow: auto;
-  padding: 1.2rem;
-  border-radius: 1.1rem;
-  background: #15202a;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.agenda-form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.agenda-form-full {
-  grid-column: 1 / -1;
-}
-
-/* Cambio solicitado: Depósito, Fecha y Toggle en una fila */
-.agenda-deposit-fecha-toggle-row {
-  display: flex;
-  flex-direction: row;
-  gap: 1.2rem;
-  align-items: flex-end; /* Alinea los inputs a la base */
-  width: 100%;
-}
-
-.agenda-deposit-inline {
-  flex: 0 0 120px;
-}
-
-.agenda-date-inline {
-  flex: 1;
-}
-
-.agenda-toggle-inline {
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  padding-bottom: 2px;
-}
-
-.agenda-toggle-label-inline {
-  margin-bottom: 6px;
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-/* --- Inputs y Controles --- */
-.agenda-inline-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(220px, 0.95fr);
-  gap: 0.8rem;
-}
-
-.agenda-contact-type-row {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.6rem;
-}
-
-.agenda-contact-type-button, .agenda-period-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.55rem;
-  border-radius: 0.8rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.2);
-  color: #f8fafc;
-  cursor: pointer;
-}
-
-.agenda-contact-type-button.active, .agenda-period-button.active {
-  background: rgba(31, 143, 106, 0.22);
-  border-color: rgba(82, 224, 160, 0.7);
-  color: #e9fff5;
-}
-
-.agenda-time-row {
-  display: grid;
-  grid-template-columns: 110px 110px auto;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-.agenda-time-field {
-  display: grid;
-  gap: 0.35rem;
-}
-
-.agenda-time-field-label {
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 0.84rem;
-}
-
-.agenda-dark-select {
-  background-color: rgba(0, 0, 0, 0.2);
-  color: #f8fafc;
-  padding: 0.6rem;
-  border-radius: 0.6rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.agenda-period-toggle {
-  display: inline-flex;
-  gap: 0.55rem;
-  align-self: end;
-}
-
-/* --- Acciones --- */
-.agenda-modal-actions {
-  display: flex;
-  gap: 0.75rem;
-  justify-content: flex-end;
-  margin-top: 1.5rem;
-}
-
-.agenda-card-actions {
-  display: flex;
-  gap: 0.35rem;
-  justify-content: flex-end;
-}
-
-/* --- Responsive --- */
-@media (max-width: 900px) {
-  .agenda-list, .agenda-form-grid {
-    grid-template-columns: 1fr;
+@media (min-width: 768px) {
+  .agenda-list {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)) !important;
   }
 }
 
-@media (max-width: 640px) {
-  .agenda-deposit-fecha-toggle-row {
-    gap: 0.5rem;
-  }
-
-  .agenda-deposit-inline {
-    flex: 0 0 90px;
-  }
-
-  .agenda-time-row {
-    grid-template-columns: 1fr 1fr auto;
-  }
-
-  .agenda-card-panel-horizontal-block {
-    min-width: 70px;
-    padding: 0.4em 0.3em;
-  }
-
-  .agenda-card-panel-titulo-peq {
-    font-size: 0.68rem;
-  }
-
-  .agenda-card-panel-valor-peq {
-    font-size: 0.7rem;
-  }
+/* --- Botón Flotante (FAB) --- */
+.agenda-fab-button {
+  position: fixed !important;
+  bottom: 25px !important;
+  right: 20px !important;
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 50% !important;
+  background: #4f46e5 !important;
+  color: white !important;
+  border: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.5rem !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+  z-index: 100 !important;
+  cursor: pointer !important;
 }
