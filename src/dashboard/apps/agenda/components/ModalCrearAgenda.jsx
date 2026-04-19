@@ -2,7 +2,6 @@ import { FaTelegramPlane, FaTrash, FaWhatsapp } from 'react-icons/fa';
 import ToggleSwitch from '../../agenda-tours/components/ToggleSwitch.jsx';
 import agendaConfig from '../agenda.config.js';
 import { createHourOptions, createMinuteOptions, sanitizeAgendaContact } from '../agenda.utils.js';
-// Importamos el nuevo CSS modular
 import './ModalCrearAgenda.css';
 
 function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClose, onDelete, onSubmit }) {
@@ -11,7 +10,6 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
   const { modal } = agendaConfig;
   const hourOptions = createHourOptions();
   const minuteOptions = createMinuteOptions();
-
   const fechaActiva = form.fecha_activa !== undefined ? form.fecha_activa : true;
   
   const handleToggleFecha = (checked) => {
@@ -25,37 +23,34 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
   };
 
   return (
-    <div className="agenda-modal-overlay" role="dialog" aria-modal="true">
-      <div className="agenda-modal">
-        <div className="agenda-modal-header">
-          <h4>{editing ? modal.editTitle : modal.title}</h4>
+    <div className="modern-center-overlay">
+      <div className="modern-card-modal">
+        <div className="modern-card-header">
+          <h4>{editing ? 'Editar Registro' : 'Nueva Agenda'}</h4>
         </div>
 
-        {error && <div className="agenda-error">{error}</div>}
+        {error && <div className="modern-error-msg">{error}</div>}
 
-        <div className="agenda-form-grid">
-          <div className="agenda-inline-row agenda-form-full">
-            <div className="form-group">
-              <label htmlFor="agenda_contacto">{modal.fields.contact}</label>
+        <div className="modern-stack">
+          {/* CAMPO: NÚMERO O USUARIO */}
+          <div className="modern-group">
+            <label className="modern-label">Número o usuario</label>
+            <div className="modern-input-with-actions">
               <input 
-                id="agenda_contacto" 
                 type="text" 
+                placeholder="Ej. 5555-1234 o @nick"
                 value={form.contacto} 
                 onChange={(e) => onChange('contacto', sanitizeAgendaContact(e.target.value))} 
                 disabled={saving} 
               />
-            </div>
-
-            <div className="form-group">
-              <label>{modal.fields.type}</label>
-              <div className="agenda-contact-type-row">
+              <div className="modern-social-box">
                 {modal.contactTypes.map((option) => {
                   const Icon = option.value === 'telegram' ? FaTelegramPlane : FaWhatsapp;
                   return (
                     <button
                       key={option.value}
                       type="button"
-                      className={`agenda-contact-type-button ${form.tipo_contacto === option.value ? 'active' : ''}`}
+                      className={`social-circle ${form.tipo_contacto === option.value ? 'is-active' : ''}`}
                       onClick={() => onChange('tipo_contacto', option.value)}
                       disabled={saving}
                     >
@@ -67,23 +62,25 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
             </div>
           </div>
 
-          {/* Fila compacta de Depósito, Fecha y Toggle */}
-          <div className="agenda-deposit-fecha-toggle-row agenda-form-full">
-            <div className="form-group agenda-deposit-inline">
-              <label htmlFor="agenda_deposito">{modal.fields.deposit}</label>
-              <input
-                id="agenda_deposito"
-                type="number"
-                value={form.deposito}
-                onChange={(e) => onChange('deposito', e.target.value.replace(/\D/g, ''))}
-                disabled={saving}
-              />
+          {/* FILA TRIPLE: DEPÓSITO | FECHA | TOGGLE */}
+          <div className="modern-triple-grid">
+            <div className="modern-unit deposit">
+              <label className="modern-label">Depósito</label>
+              <div className="modern-currency-wrapper">
+                <span>Q</span>
+                <input
+                  type="number"
+                  placeholder="0"
+                  value={form.deposito}
+                  onChange={(e) => onChange('deposito', e.target.value.replace(/\D/g, ''))}
+                  disabled={saving}
+                />
+              </div>
             </div>
             
-            <div className="form-group agenda-date-inline">
-              <label htmlFor="agenda_fecha_dia">{modal.fields.date}</label>
+            <div className="modern-unit date">
+              <label className="modern-label">Fecha</label>
               <input
-                id="agenda_fecha_dia"
                 type="date"
                 value={form.fecha_dia}
                 onChange={(e) => onChange('fecha_dia', e.target.value)}
@@ -91,10 +88,9 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
               />
             </div>
 
-            <div className="agenda-toggle-inline">
-              <span className="agenda-toggle-label-inline">Activa</span>
+            <div className="modern-unit switch">
+              <label className="modern-label">{fechaActiva ? 'Activa' : 'Off'}</label>
               <ToggleSwitch
-                id="agenda_fecha_toggle"
                 checked={fechaActiva}
                 onChange={handleToggleFecha}
                 disabled={saving}
@@ -102,29 +98,22 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
             </div>
           </div>
 
-          <div className="form-group agenda-form-full">
-            <label>{modal.fields.hour}</label>
-            <div className="agenda-time-row">
-              <div className="agenda-time-field">
-                <span className="agenda-time-field-label">Hora</span>
-                <select className="agenda-dark-select" value={form.fecha_hora} onChange={(e) => onChange('fecha_hora', e.target.value)} disabled={saving || !fechaActiva}>
-                  {hourOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                </select>
-              </div>
-
-              <div className="agenda-time-field">
-                <span className="agenda-time-field-label">Minutos</span>
-                <select className="agenda-dark-select" value={form.fecha_minutos} onChange={(e) => onChange('fecha_minutos', e.target.value)} disabled={saving || !fechaActiva}>
-                  {minuteOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-                </select>
-              </div>
-
-              <div className="agenda-period-toggle">
+          {/* SECCIÓN HORA */}
+          <div className={`modern-time-box ${!fechaActiva ? 'is-off' : ''}`}>
+            <label className="modern-label">Hora del servicio</label>
+            <div className="modern-time-grid">
+              <select value={form.fecha_hora} onChange={(e) => onChange('fecha_hora', e.target.value)} disabled={saving || !fechaActiva}>
+                {hourOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label} h</option>)}
+              </select>
+              <select value={form.fecha_minutos} onChange={(e) => onChange('fecha_minutos', e.target.value)} disabled={saving || !fechaActiva}>
+                {minuteOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label} m</option>)}
+              </select>
+              <div className="modern-period-toggle">
                 {modal.periods.map((opt) => (
                   <button
                     key={opt.value}
                     type="button"
-                    className={`agenda-period-button ${form.fecha_periodo === opt.value ? 'active' : ''}`}
+                    className={form.fecha_periodo === opt.value ? 'is-active' : ''}
                     onClick={() => onChange('fecha_periodo', opt.value)}
                     disabled={saving || !fechaActiva}
                   >
@@ -135,11 +124,12 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
             </div>
           </div>
 
-          <div className="form-group agenda-form-full">
-            <label htmlFor="agenda_detalles">{modal.fields.details}</label>
+          {/* NOTAS */}
+          <div className="modern-group">
+            <label className="modern-label">Notas</label>
             <textarea 
-              id="agenda_detalles" 
-              rows="3" 
+              rows="2" 
+              placeholder="Detalles extra..."
               value={form.detalles} 
               onChange={(e) => onChange('detalles', e.target.value)} 
               disabled={saving} 
@@ -147,17 +137,18 @@ function ModalCrearAgenda({ open, editing, form, saving, error, onChange, onClos
           </div>
         </div>
 
-        <div className="agenda-modal-actions">
+        {/* ACCIONES */}
+        <div className="modern-actions">
           {editing && (
-            <button type="button" className="secondary-button agenda-delete-button" onClick={onDelete} disabled={saving}>
-              <FaTrash /> {modal.delete}
+            <button type="button" className="modern-btn-trash" onClick={onDelete} disabled={saving}>
+              <FaTrash />
             </button>
           )}
-          <button type="button" className="primary-button" onClick={onSubmit} disabled={saving}>
-            {saving ? modal.saving : editing ? modal.saveEdit : modal.save}
+          <button type="button" className="modern-btn-off" onClick={onClose} disabled={saving}>
+            Cancelar
           </button>
-          <button type="button" className="secondary-button" onClick={onClose} disabled={saving}>
-            {modal.cancel}
+          <button type="button" className="modern-btn-on" onClick={onSubmit} disabled={saving}>
+            {saving ? '...' : editing ? 'Actualizar' : 'Guardar'}
           </button>
         </div>
       </div>

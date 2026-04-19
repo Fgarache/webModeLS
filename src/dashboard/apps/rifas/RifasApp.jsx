@@ -287,7 +287,10 @@ function RifasApp() {
                 onOpenCompra={openCompraModal}
                 onOpenOccupiedActions={openOccupiedActions}
                 onToggleViewRifa={toggleViewRifa}
-                onEditGanador={openGanadorModal}
+                /* COMENTARIO: Se cambió openGanadorModal por openEditRifaModal 
+                  porque los ganadores se editan en el formulario principal de la rifa.
+                */
+                onEditGanador={openEditRifaModal} 
               />
             ))}
           </div>
@@ -309,6 +312,10 @@ function RifasApp() {
                 onOpenCompra={openCompraModal}
                 onOpenOccupiedActions={openOccupiedActions}
                 onToggleViewRifa={toggleViewRifa}
+                /* COMENTARIO: Agregado onEditGanador también aquí para que funcione 
+                  el botón en las rifas archivadas.
+                */
+                onEditGanador={openEditRifaModal}
               />
             ))}
           </div>

@@ -5,8 +5,8 @@
 .agenda-section-title,
 .app-section-header,
 .app-section-header-title {
-  margin: 0 !important;
-  padding: 0 !important;
+  margin: 0.3px !important;
+  padding: 1px !important;
   box-sizing: border-box;
 }
 
