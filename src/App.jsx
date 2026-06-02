@@ -115,6 +115,22 @@ function AppInner() {
               <h1>{config.app.title}</h1>
             </div>
             <div className="auth-navbar-side right">
+              
+              {/* BOTÓN: Ver Perfil - Apunta directamente a la URL de producción */}
+              {profile?.nombre_usuario && (
+                <button 
+                  type="button" 
+                  className="auth-nav-text-button" 
+                  onClick={() => {
+                    const cleanUsername = profile.nombre_usuario.replace(/^@/, '');
+                    window.open(`https://lindasgt.com/${cleanUsername}`, '_blank');
+                  }}
+                >
+                  Ver perfil
+                </button>
+              )}
+
+              {/* BOTÓN: Volver */}
               {routeState.app && (
                 <button type="button" className="auth-nav-text-button" onClick={handleAuthenticatedBack}>
                   Volver
