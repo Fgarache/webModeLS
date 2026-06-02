@@ -6,17 +6,17 @@
   background: rgba(0, 0, 0, 0.85);
   backdrop-filter: blur(12px);
   display: flex;
-  align-items: center; /* CENTRADO VERTICAL */
+  align-items: center;
   justify-content: center;
   padding: 15px;
 }
 
 .modern-card-modal {
   width: 100%;
-  max-width: 420px;
+  max-width: 460px;
   background: #1a222e;
   border-radius: 24px;
-  padding: 24px;
+  padding: 20px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 30px 60px rgba(0,0,0,0.5);
   animation: modalIn 0.25s ease-out;
@@ -28,7 +28,7 @@
 }
 
 .modern-card-header h4 {
-  margin: 0 0 20px;
+  margin: 0 0 14px;
   text-align: center;
   font-size: 1.1rem;
   font-weight: 800;
@@ -36,9 +36,15 @@
 }
 
 .modern-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.modern-group,
+.modern-unit,
+.modern-time-box {
+  display: grid;
+  gap: 5px;
 }
 
 .modern-label {
@@ -48,7 +54,7 @@
   color: rgba(255,255,255,0.4);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: 6px;
+  margin: 0;
 }
 
 .modern-card-modal input, 
@@ -58,7 +64,7 @@
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
   color: #fff;
-  padding: 10px 12px;
+  padding: 9px 11px;
   font-size: 0.9rem;
   outline: none;
   width: 100%;
@@ -102,8 +108,8 @@
 /* --- Selectores de Hora --- */
 .modern-time-box {
   background: rgba(255, 255, 255, 0.02);
-  padding: 12px;
-  border-radius: 16px;
+  padding: 10px;
+  border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -111,8 +117,8 @@
 
 .modern-time-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 100px;
-  gap: 8px;
+  grid-template-columns: 1fr 1fr 92px;
+  gap: 7px;
 }
 
 .modern-period-toggle {
@@ -140,12 +146,132 @@
 
 /* --- Red Social --- */
 .modern-input-with-actions { display: flex; gap: 8px; }
+.modern-input-with-actions input {
+  min-width: 0;
+}
+
 .modern-social-box { display: flex; background: #0f172a; padding: 3px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
 .social-circle { width: 36px; height: 36px; border-radius: 8px; border: none; background: transparent; color: rgba(255,255,255,0.3); font-size: 1rem; cursor: pointer; }
 .social-circle.is-active { background: #4f46e5; color: #fff; }
 
 /* --- Footer --- */
-.modern-actions { display: flex; gap: 8px; margin-top: 20px; }
-.modern-btn-on { flex: 2; background: #4f46e5; color: #fff; border: none; padding: 14px; border-radius: 14px; font-weight: 800; font-size: 0.9rem; }
-.modern-btn-off { flex: 1; background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; font-weight: 700; font-size: 0.85rem; }
-.modern-btn-trash { width: 50px; background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 14px; display: grid; place-items: center; }
+.modern-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.modern-btn-on,
+.modern-btn-off,
+.modern-btn-trash {
+  min-height: 3.05rem;
+  border-radius: 14px;
+  font-weight: 800;
+}
+
+.modern-btn-on {
+  background: #4f46e5;
+  color: #fff;
+  border: none;
+  padding: 0.95rem 1rem;
+  font-size: 0.96rem;
+}
+
+.modern-btn-off {
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.62);
+  border: 1px solid rgba(255,255,255,0.1);
+  font-size: 0.92rem;
+}
+
+.modern-btn-trash {
+  grid-column: 1 / -1;
+  width: 100%;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  display: grid;
+  place-items: center;
+  font-size: 0.92rem;
+}
+
+@media (max-width: 560px) {
+  .modern-center-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .modern-card-modal {
+    max-width: none;
+    width: 100%;
+    max-height: calc(100vh - env(safe-area-inset-top, 0px));
+    overflow: auto;
+    padding: 14px 14px calc(12px + env(safe-area-inset-bottom, 0px));
+    border-radius: 22px 22px 0 0;
+  }
+
+  .modern-card-header h4 {
+    margin-bottom: 12px;
+    font-size: 1.02rem;
+  }
+
+  .modern-stack {
+    gap: 10px;
+  }
+
+  .modern-input-with-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .modern-social-box {
+    align-self: stretch;
+  }
+
+  .modern-triple-grid {
+    grid-template-columns: 0.9fr 1.25fr auto;
+    gap: 8px;
+  }
+
+  .modern-unit.switch {
+    align-items: flex-start;
+    justify-content: flex-end;
+    padding-top: 1.25rem;
+  }
+
+  .modern-time-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 92px;
+  }
+
+  .modern-period-toggle {
+    grid-column: auto;
+  }
+
+  .modern-actions {
+    position: sticky;
+    bottom: 0;
+    margin-top: 12px;
+    padding-top: 10px;
+    background: linear-gradient(180deg, rgba(26, 34, 46, 0.08), rgba(26, 34, 46, 0.94) 35%);
+  }
+}
+
+@media (max-width: 390px) {
+  .modern-triple-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modern-unit.switch {
+    padding-top: 0;
+    align-items: stretch;
+  }
+
+  .modern-time-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .modern-period-toggle {
+    grid-column: 1 / -1;
+  }
+}

@@ -9,16 +9,16 @@ const appsConfig = {
       rolesPermitidos: getAppRoles('perfil'),
     },
     {
-      id: 'agenda-tours',
-      icon: 'FaSuitcaseRolling',
-      titulo: 'Agenda Tours',
-      rolesPermitidos: getAppRoles('agenda-tours'),
+      id: 'servicios',
+      icon: 'FaTools',
+      titulo: 'Servicios',
+      rolesPermitidos: getAppRoles('servicios'),
     },
     {
-      id: 'agenda',
-      icon: 'FaAddressBook',
-      titulo: 'Agenda',
-      rolesPermitidos: getAppRoles('agenda'),
+      id: 'ubicaciones',
+      icon: 'FaMapMarkerAlt',
+      titulo: 'Ubicaciones',
+      rolesPermitidos: getAppRoles('ubicaciones'),
     },
     {
       id: 'media',
@@ -31,12 +31,6 @@ const appsConfig = {
       icon: 'FaShareAlt',
       titulo: 'Redes',
       rolesPermitidos: getAppRoles('redes'),
-    },
-    {
-      id: 'rifas',
-      icon: 'FaTicketAlt',
-      titulo: 'Rifas',
-      rolesPermitidos: getAppRoles('rifas'),
     },
   ],
 };

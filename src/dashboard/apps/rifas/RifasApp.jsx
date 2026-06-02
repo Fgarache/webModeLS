@@ -11,6 +11,7 @@ import './rifas.css';
 import useRifas from './hooks/useRifas.js';
 import { buildContactLink, createEmptyCompraForm, createEmptyRifaForm, mapToMultilineText, splitRifasByVisibility } from './rifas.utils.js';
 import AppSectionHeader from '../../components/AppSectionHeader.jsx';
+import FloatingActionButton from '../../components/FloatingActionButton.jsx';
 
 function RifasApp() {
   const { user } = useAuth();
@@ -323,6 +324,8 @@ function RifasApp() {
       )}
 
       {!loading && !archivedRifas.length && !!activeRifas.length && <div className="rifas-status">{header.archivedEmptyText}</div>}
+
+      <FloatingActionButton ariaLabel={header.addButton} title={header.addButton} onClick={openRifaModal} disabled={saving || !user?.uid} />
 
       <ModalCrearRifa
         open={rifaModalOpen}

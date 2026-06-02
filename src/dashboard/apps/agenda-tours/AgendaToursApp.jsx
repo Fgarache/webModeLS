@@ -13,6 +13,7 @@ import {
   splitToursByStatus,
 } from './agendaTours.utils.js';
 import AppSectionHeader from '../../components/AppSectionHeader.jsx';
+import FloatingActionButton from '../../components/FloatingActionButton.jsx';
 
 function AgendaToursApp() {
   const { user } = useAuth();
@@ -318,6 +319,8 @@ function AgendaToursApp() {
           </div>
         </div>
       )}
+
+      <FloatingActionButton ariaLabel={header.addTourButton} title={header.addTourButton} onClick={openCreateTourModal} disabled={saving || !user?.uid} />
 
       <ModalAgregarTour
         open={tourModalOpen}

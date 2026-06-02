@@ -3,7 +3,7 @@ import './BottomNavBar.css';
 
 const NAV_ITEMS = [
   { id: 'agenda', label: 'Agenda', Icon: FaCalendarAlt },
-  { id: 'agenda-tours', label: 'Tours', Icon: FaSuitcaseRolling },
+  { id: 'agenda-tours', label: 'Agenda Tours', Icon: FaSuitcaseRolling },
   { id: 'rifas', label: 'Rifas', Icon: FaTicketAlt },
   { id: 'perfil', label: 'Perfil', Icon: FaUserCircle },
 ];

@@ -5,6 +5,7 @@ import useRedes from './hooks/useRedes.js';
 import ModalRed from './components/ModalRed.jsx';
 import RedCard from './components/RedCard.jsx';
 import AppSectionHeader from '../../components/AppSectionHeader.jsx';
+import FloatingActionButton from '../../components/FloatingActionButton.jsx';
 
 function RedesApp({ user, profile, onUpdateProfile }) {
   const { error, redes, saving, addRed, updateRed, deleteRed } = useRedes(user, profile, onUpdateProfile);
@@ -97,6 +98,14 @@ function RedesApp({ user, profile, onUpdateProfile }) {
         onClose={closeEditModal}
         onDelete={() => handleDeleteRed(editingRed?.id)}
         onSave={handleUpdateRed}
+      />
+
+      <FloatingActionButton
+        ariaLabel={redesConfig.labels.add}
+        title={redesConfig.labels.add}
+        onClick={() => setAddModalOpen(true)}
+        disabled={saving}
+        className="redes-fab"
       />
     </section>
   );

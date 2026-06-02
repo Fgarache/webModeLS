@@ -1,14 +1,165 @@
 .welcome-screen {
-  max-width: 1200px;
-  margin: 0 auto;
-  background: #111827;
-  padding: 2rem;
-  border-radius: 1rem;
-  border: 1px solid #334155;
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.08), transparent 24%),
+    #0b1220;
+  color: #f8fafc;
+}
+
+.dashboard-shell {
+  --dashboard-topbar-height: 4.5rem;
+  --dashboard-bottombar-height: 5rem;
+  padding-top: calc(var(--dashboard-topbar-height) + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(var(--dashboard-bottombar-height) + env(safe-area-inset-bottom, 0px));
+}
+
+.dashboard-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 110;
+  min-height: var(--dashboard-topbar-height);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.85rem;
+  background: rgba(11, 18, 32, 0.94);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+  backdrop-filter: blur(16px);
+}
+
+.dashboard-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.dashboard-topbar-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #f8fafc;
+  flex: 0 0 auto;
+}
+
+.dashboard-topbar-avatar {
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #2563eb 0%, #14b8a6 100%);
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.dashboard-topbar-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dashboard-topbar-copy {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.dashboard-topbar-copy strong,
+.dashboard-topbar-copy span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dashboard-topbar-copy strong {
+  color: #f8fafc;
+  font-size: 1rem;
+}
+
+.dashboard-topbar-copy span {
+  color: rgba(203, 213, 225, 0.75);
+  font-size: 0.84rem;
+}
+
+.dashboard-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex: 0 0 auto;
+}
+
+.dashboard-topbar-link,
+.dashboard-topbar-pill,
+.dashboard-topbar-logout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.35rem;
+  padding: 0 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: #e2e8f0;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.dashboard-topbar-link:hover,
+.dashboard-topbar-pill:hover,
+.dashboard-topbar-logout:hover {
+  background: rgba(37, 99, 235, 0.14);
+  border-color: rgba(96, 165, 250, 0.35);
+}
+
+.dashboard-body {
+  width: 100%;
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.dashboard-app-stage {
+  width: 100%;
+}
+
+.dashboard-launcher-actions {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dashboard-launcher-actions .support-link {
+  color: #8cc9ff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.dashboard-launcher-actions .support-link:hover {
+  text-decoration: underline;
+}
+
+.dashboard-shell .bottom-app-nav {
+  position: fixed;
 }
 
 .welcome-header {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .header-content {
@@ -347,13 +498,52 @@
 
 @media (max-width: 720px) {
   .welcome-screen {
-    /* Ajuste para mayor amplitud en móviles */
-    padding: 1rem 0.3rem;
-    border-radius: 0.6rem;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .dashboard-shell {
+    --dashboard-topbar-height: 4.1rem;
+    --dashboard-bottombar-height: 4.9rem;
+  }
+
+  .dashboard-topbar {
+    padding: 0.65rem 0.75rem;
+    gap: 0.65rem;
+  }
+
+  .dashboard-topbar-copy strong {
+    font-size: 0.95rem;
+  }
+
+  .dashboard-topbar-copy span {
+    font-size: 0.76rem;
+  }
+
+  .dashboard-topbar-link,
+  .dashboard-topbar-pill,
+  .dashboard-topbar-logout {
+    min-height: 2.1rem;
+    padding: 0 0.75rem;
+    font-size: 0.86rem;
+  }
+
+  .dashboard-topbar-avatar {
+    width: 2.45rem;
+    height: 2.45rem;
+  }
+
+  .dashboard-topbar-back {
+    width: 2.15rem;
+    height: 2.15rem;
+  }
+
+  .dashboard-body {
+    padding: 0.75rem 0.65rem;
   }
 
   .welcome-header {
-    margin-bottom: 1.1rem;
+    margin-bottom: 0.9rem;
   }
 
   .header-content {
@@ -413,6 +603,10 @@
 }
 
 @media (max-width: 520px) {
+  .dashboard-body {
+    padding: 0.65rem 0.5rem;
+  }
+
   .profile-header-block {
     grid-template-columns: 72px minmax(0, 1fr);
     gap: 0.75rem;

@@ -3,6 +3,12 @@
   gap: 1rem;
 }
 
+@media (max-width: 768px) {
+  .media-app {
+    padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 .media-header,
 .media-upload-card,
 .media-photo-card,

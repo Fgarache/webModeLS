@@ -7,6 +7,7 @@ import ModalSubirFoto from './components/ModalSubirFoto.jsx';
 import PhotoCard from './components/PhotoCard.jsx';
 import ModalVistaFoto from './components/ModalVistaFoto.jsx';
 import AppSectionHeader from '../../components/AppSectionHeader.jsx';
+import FloatingActionButton from '../../components/FloatingActionButton.jsx';
 
 function MediaApp({ user, profile, onUpdateProfile }) {
   const { error, maxPhotosReached, photos, saving, uploadPhoto, updatePhotoTitle, deletePhoto, setProfilePhoto } = useMediaLibrary(user, profile, onUpdateProfile);
@@ -117,6 +118,8 @@ function MediaApp({ user, profile, onUpdateProfile }) {
           ))}
         </div>
       )}
+
+      <FloatingActionButton ariaLabel={mediaConfig.labels.uploadPhoto} title={mediaConfig.labels.uploadPhoto} onClick={openUploadModal} disabled={saving || maxPhotosReached} />
 
       <ModalEditarFoto
         open={Boolean(editingPhoto)}

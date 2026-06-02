@@ -1,0 +1,29 @@
+.floating-action-button {
+  position: fixed;
+  right: 1rem;
+  bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));
+  z-index: 120;
+  width: 3.45rem;
+  height: 3.45rem;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  color: #ffffff;
+  box-shadow: 0 14px 28px rgba(79, 70, 229, 0.35);
+}
+
+.floating-action-button svg {
+  font-size: 1.15rem;
+}
+
+.floating-action-button:disabled {
+  opacity: 0.5;
+}
+
+@media (min-width: 769px) {
+  .floating-action-button {
+    display: none;
+  }
+}

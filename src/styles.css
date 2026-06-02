@@ -119,6 +119,10 @@ button {
   padding: 2rem;
 }
 
+.app-main-dashboard {
+  padding: 0;
+}
+
 .app-main-loading {
   display: grid;
   place-items: center;
@@ -262,6 +266,10 @@ button {
 
   .app-main {
     padding: 1rem 0.25rem;
+  }
+
+  .app-main-dashboard {
+    padding: 0;
   }
 
   .app-loader {

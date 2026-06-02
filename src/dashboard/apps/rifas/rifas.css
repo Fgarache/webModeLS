@@ -3,6 +3,12 @@
   gap: 1rem;
 }
 
+@media (max-width: 768px) {
+  .rifas-app {
+    padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 .rifas-header-row {
   display: flex;
   align-items: flex-start;

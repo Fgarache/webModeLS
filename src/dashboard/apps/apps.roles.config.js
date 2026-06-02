@@ -1,5 +1,7 @@
 const appRolesConfig = {
   perfil: ['user', 'model'],
+  servicios: ['user', 'model'],
+  ubicaciones: ['user', 'model'],
   'agenda-tours': ['model', 'user'],
   agenda: ['model', 'prestador', 'user', 'admin'],
   media: ['model', 'prestador', 'user', 'admin'],

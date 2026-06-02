@@ -1,21 +1,37 @@
 import { useEffect, useMemo, useState } from 'react';
-import { FaCheckCircle, FaPen } from 'react-icons/fa';
+import { FaCheckCircle, FaChevronLeft, FaPen } from 'react-icons/fa';
 import { ref, update } from 'firebase/database';
 import { db } from '../auth/firebaseConfig.js';
+import BottomNavBar from '../components/BottomNavBar.jsx';
 import AppsLauncher from './AppsLauncher.jsx';
 import AgendaApp from './apps/agenda/AgendaApp.jsx';
 import PerfilApp from './apps/perfil/PerfilApp.jsx';
+import ProfileCollectionApp from './apps/perfil/PerfilCollectionApp.jsx';
 import AgendaToursApp from './apps/agenda-tours/AgendaToursApp.jsx';
 import MediaApp from './apps/media/MediaApp.jsx';
 import RedesApp from './apps/redes/RedesApp.jsx';
 import RifasApp from './apps/rifas/RifasApp.jsx';
 import AppLoader from '../components/AppLoader.jsx';
+import { canUseApp } from './apps/apps.roles.config.js';
 import './dashboard.css';
 
 const DESCRIPTION_PREVIEW_LIMIT = 180;
 const SUPPORT_WHATSAPP_NUMBER = '50248037777';
 const SUPPORT_REFERENCE_EMAIL = 'velaxmia@gail.com';
 const STATUS_MAX_AGE = 24 * 60 * 60 * 1000;
+
+const SECTION_LABELS = {
+  agenda: 'Agenda',
+  'agenda-tours': 'Agenda tours',
+  rifas: 'Rifas',
+  perfil: 'Perfil',
+  servicios: 'Servicios',
+  ubicaciones: 'Ubicaciones',
+};
+
+function getSectionLabel(appId) {
+  return SECTION_LABELS[appId] || 'Panel de apps';
+}
 
 function getVisibleStatusText(profile) {
   const statusText = String(profile?.estado_texto || '').trim();
@@ -61,7 +77,8 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
   const [savingHeader, setSavingHeader] = useState(false);
   const [headerDraft, setHeaderDraft] = useState({ estado_texto: '', disponible_hoy_en: '' });
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
-  const isFullAppView = activeApp === 'perfil' || activeApp === 'agenda' || activeApp === 'agenda-tours' || activeApp === 'media' || activeApp === 'redes' || activeApp === 'rifas';
+  const isLauncherView = !activeApp;
+  const activeNavTab = activeApp === 'agenda' || activeApp === 'agenda-tours' || activeApp === 'rifas' ? activeApp : 'perfil';
 
   useEffect(() => {
     setCurrentProfile(profile);
@@ -114,6 +131,16 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
   const handleSelectApp = (appId) => {
     setActiveApp(appId);
     onAppRouteChange?.(appId);
+  };
+
+  const handleBottomTabChange = (tabId) => {
+    if (tabId === 'perfil') {
+      setActiveApp(null);
+      onAppRouteChange?.(null);
+      return;
+    }
+
+    handleSelectApp(tabId);
   };
 
   const handleBack = () => {
@@ -219,6 +246,49 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
             <PerfilApp user={user} profile={currentProfile} onUpdate={handleProfileUpdate} />
           </div>
         );
+      case 'servicios':
+        return (
+          <div className="app-content-wrapper">
+            <ProfileCollectionApp
+              user={user}
+              profile={currentProfile}
+              onUpdate={handleProfileUpdate}
+              collectionKey="servicios"
+              title="Servicios"
+              addLabel="Agregar servicio"
+              helpTitle="Como funcionan tus servicios"
+              helpText={[
+                'Cada servicio se guarda como una lista editable dentro de tu perfil.',
+                'Agrega, cambia o elimina tus servicios sin tocar el resto de tu perfil.',
+              ]}
+              emptyText="Todavia no has agregado servicios."
+              itemLabel="Servicio"
+              prefix="s"
+            />
+          </div>
+        );
+      case 'ubicaciones':
+        return (
+          <div className="app-content-wrapper">
+            <ProfileCollectionApp
+              user={user}
+              profile={currentProfile}
+              onUpdate={handleProfileUpdate}
+              collectionKey="ubicaciones"
+              title="Ubicaciones"
+              addLabel="Agregar ubicacion"
+              helpTitle="Como funcionan tus ubicaciones"
+              helpText={[
+                'Cada ubicacion se guarda como una lista editable dentro de tu perfil.',
+                'Desde aqui tambien eliges la ubicacion donde estas disponible hoy.',
+              ]}
+              emptyText="Todavia no has agregado ubicaciones."
+              itemLabel="Ubicacion"
+              prefix="u"
+              includeAvailableToday
+            />
+          </div>
+        );
       case 'agenda':
         return (
           <div className="app-content-wrapper">
@@ -255,144 +325,190 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
   };
 
   return (
-    <section className="welcome-screen">
-      {!isFullAppView && (
-        <div className="welcome-header">
-          <div className="header-content">
-            <div className="profile-header-block">
-              {currentProfile.foto_perfil && (
-                <img src={currentProfile.foto_perfil} alt="Foto de perfil" className="profile-header-photo" />
-              )}
-              <div className="profile-header-identity">
-                <div className="header-profile-name-row">
-                  <strong className="header-profile-name">{currentProfile.nombre_completo}</strong>
-                  <span className={`header-verified ${currentProfile.verificado ? 'verified' : 'unverified'}`}>
-                    <FaCheckCircle />
-                  </span>
-                </div>
-                <div className="header-profile-meta">
-                  <span className="header-role inline">{currentProfile.rol}</span>
-                  <span className="header-username">@{currentProfile.nombre_usuario || 'usuario'}</span>
-                </div>
-              </div>
-            </div>
-            <div className="header-info">
-              <div className="header-summary-row">
-                <div className="header-status-row">
-                  <span className="header-status-bubble">{visibleStatusText || 'Sin estado activo'}</span>
-                  <button
-                    type="button"
-                    className="header-edit-icon"
-                    onClick={openHeaderModal}
-                    aria-label="Editar estado"
-                    title="Editar estado"
-                  >
-                    <FaPen />
-                  </button>
-                </div>
-                <div className="header-availability">
-                  <div className="header-availability-grid">
-                    <div>
-                      <label htmlFor="header_disponible_hoy_inline">Disponible en</label>
-                      <select
-                        id="header_disponible_hoy_inline"
-                        value={currentProfile.disponible_hoy_en || ''}
-                        onChange={(event) => handleAvailabilityChange(event.target.value)}
-                      >
-                        <option value="">Sin ubicacion</option>
-                        {availableLocations.map((location) => (
-                          <option key={location} value={location}>
-                            {location}
-                          </option>
-                        ))}
-                      </select>
+    <section className="welcome-screen dashboard-shell">
+      <header className="dashboard-topbar">
+        <div className="dashboard-topbar-left">
+          {!isLauncherView && (
+            <button
+              type="button"
+              className="dashboard-topbar-back"
+              onClick={handleBack}
+              aria-label="Volver al panel principal"
+              title="Volver al panel principal"
+            >
+              <FaChevronLeft />
+            </button>
+          )}
+          <div className="dashboard-topbar-avatar">
+            {currentProfile.foto_perfil ? (
+              <img src={currentProfile.foto_perfil} alt={currentProfile.nombre_completo || 'Perfil'} />
+            ) : (
+              <span>{String(currentProfile.nombre_completo || currentProfile.nombre_usuario || 'P').charAt(0).toUpperCase()}</span>
+            )}
+          </div>
+          <div className="dashboard-topbar-copy">
+            <strong>{currentProfile.nombre_completo || 'Mi panel'}</strong>
+            <span>{isLauncherView ? `@${currentProfile.nombre_usuario || 'usuario'} · ${currentProfile.rol}` : getSectionLabel(activeApp)}</span>
+          </div>
+        </div>
+
+        <div className="dashboard-topbar-actions">
+          {isLauncherView ? (
+            <>
+              <a className="dashboard-topbar-link" href={supportWhatsappLink} target="_blank" rel="noreferrer">
+                Soporte
+              </a>
+              <button type="button" className="dashboard-topbar-logout" onClick={onLogout}>
+                {config.logoutButtonText}
+              </button>
+            </>
+          ) : (
+            <button type="button" className="dashboard-topbar-pill" onClick={handleBack}>
+              Ver perfil
+            </button>
+          )}
+        </div>
+      </header>
+
+      <main className="dashboard-body">
+        {isLauncherView ? (
+          <>
+            <div className="welcome-header">
+              <div className="header-content">
+                <div className="profile-header-block">
+                  {currentProfile.foto_perfil && (
+                    <img src={currentProfile.foto_perfil} alt="Foto de perfil" className="profile-header-photo" />
+                  )}
+                  <div className="profile-header-identity">
+                    <div className="header-profile-name-row">
+                      <strong className="header-profile-name">{currentProfile.nombre_completo}</strong>
+                      <span className={`header-verified ${currentProfile.verificado ? 'verified' : 'unverified'}`}>
+                        <FaCheckCircle />
+                      </span>
                     </div>
-                    <div className="header-availability-toggle-wrap">
-                      <label htmlFor="header_disponible_toggle">Disponible</label>
-                      <button
-                        id="header_disponible_toggle"
-                        type="button"
-                        className={`header-availability-toggle ${currentProfile.disponible ? 'active' : 'inactive'}`}
-                        onClick={() => handleDisponibilidadToggle(currentProfile.disponible ? 'false' : 'true')}
-                        aria-pressed={currentProfile.disponible}
-                      >
-                        <span className="header-availability-toggle-track">
-                          <span className="header-availability-toggle-thumb" />
-                        </span>
-                        <span className="header-availability-toggle-label">
-                          {currentProfile.disponible ? 'Si' : 'No'}
-                        </span>
-                      </button>
+                    <div className="header-profile-meta">
+                      <span className="header-role inline">{currentProfile.rol}</span>
+                      <span className="header-username">@{currentProfile.nombre_usuario || 'usuario'}</span>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="header-description-block">
-                <div className={`header-description-copy ${descriptionExpanded ? 'expanded' : 'collapsed'}`.trim()}>
-                  {renderFormattedText(descriptionText)}
+                <div className="header-info">
+                  <div className="header-summary-row">
+                    <div className="header-status-row">
+                      <span className="header-status-bubble">{visibleStatusText || 'Sin estado activo'}</span>
+                      <button
+                        type="button"
+                        className="header-edit-icon"
+                        onClick={openHeaderModal}
+                        aria-label="Editar estado"
+                        title="Editar estado"
+                      >
+                        <FaPen />
+                      </button>
+                    </div>
+                    <div className="header-availability">
+                      <div className="header-availability-grid">
+                        <div>
+                          <label htmlFor="header_disponible_hoy_inline">Disponible en</label>
+                          <select
+                            id="header_disponible_hoy_inline"
+                            value={currentProfile.disponible_hoy_en || ''}
+                            onChange={(event) => handleAvailabilityChange(event.target.value)}
+                          >
+                            <option value="">Sin ubicacion</option>
+                            {availableLocations.map((location) => (
+                              <option key={location} value={location}>
+                                {location}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="header-availability-toggle-wrap">
+                          <label htmlFor="header_disponible_toggle">Disponible</label>
+                          <button
+                            id="header_disponible_toggle"
+                            type="button"
+                            className={`header-availability-toggle ${currentProfile.disponible ? 'active' : 'inactive'}`}
+                            onClick={() => handleDisponibilidadToggle(currentProfile.disponible ? 'false' : 'true')}
+                            aria-pressed={currentProfile.disponible}
+                          >
+                            <span className="header-availability-toggle-track">
+                              <span className="header-availability-toggle-thumb" />
+                            </span>
+                            <span className="header-availability-toggle-label">
+                              {currentProfile.disponible ? 'Si' : 'No'}
+                            </span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="header-description-block">
+                    <div className={`header-description-copy ${descriptionExpanded ? 'expanded' : 'collapsed'}`.trim()}>
+                      {renderFormattedText(descriptionText)}
+                    </div>
+                    {shouldCollapseDescription && (
+                      <button
+                        type="button"
+                        className="header-description-toggle"
+                        onClick={() => setDescriptionExpanded((current) => !current)}
+                      >
+                        {descriptionExpanded ? 'Ver menos' : 'Ver mas'}
+                      </button>
+                    )}
+                  </div>
+                  <div className="dashboard-launcher-actions">
+                    <a className="support-link" href={supportWhatsappLink} target="_blank" rel="noreferrer">
+                      Sugerir cambios o reportar error
+                    </a>
+                  </div>
                 </div>
-                {shouldCollapseDescription && (
-                  <button
-                    type="button"
-                    className="header-description-toggle"
-                    onClick={() => setDescriptionExpanded((current) => !current)}
-                  >
-                    {descriptionExpanded ? 'Ver menos' : 'Ver mas'}
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {headerModalOpen && (
-        <div className="header-modal-overlay" role="dialog" aria-modal="true">
-          <div className="header-modal-card">
-            <div className="header-modal-top">
-              <div>
-                <h3>Editar estado</h3>
-                <p>Actualiza tu estado visible y donde estas disponible hoy.</p>
               </div>
             </div>
 
-            <div className="header-modal-form">
-              <div className="form-group">
-                <label htmlFor="header_estado_texto">Estado</label>
-                <textarea
-                  id="header_estado_texto"
-                  rows="3"
-                  value={headerDraft.estado_texto}
-                  onChange={(event) => handleHeaderDraftChange('estado_texto', event.target.value)}
-                  disabled={savingHeader}
-                />
+            {headerModalOpen && (
+              <div className="header-modal-overlay" role="dialog" aria-modal="true">
+                <div className="header-modal-card">
+                  <div className="header-modal-top">
+                    <div>
+                      <h3>Editar estado</h3>
+                      <p>Actualiza tu estado visible y donde estas disponible hoy.</p>
+                    </div>
+                  </div>
+
+                  <div className="header-modal-form">
+                    <div className="form-group">
+                      <label htmlFor="header_estado_texto">Estado</label>
+                      <textarea
+                        id="header_estado_texto"
+                        rows="3"
+                        value={headerDraft.estado_texto}
+                        onChange={(event) => handleHeaderDraftChange('estado_texto', event.target.value)}
+                        disabled={savingHeader}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="header-modal-actions">
+                    <button type="button" className="primary-button" onClick={saveHeaderProfile} disabled={savingHeader}>
+                      {savingHeader ? 'Guardando...' : 'Guardar'}
+                    </button>
+                    <button type="button" className="secondary-button" onClick={closeHeaderModal} disabled={savingHeader}>
+                      Cancelar
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
 
-            <div className="header-modal-actions">
-              <button type="button" className="primary-button" onClick={saveHeaderProfile} disabled={savingHeader}>
-                {savingHeader ? 'Guardando...' : 'Guardar'}
-              </button>
-              <button type="button" className="secondary-button" onClick={closeHeaderModal} disabled={savingHeader}>
-                Cancelar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+            {renderApp()}
+          </>
+        ) : (
+          <div className="dashboard-app-stage">{renderApp()}</div>
+        )}
+      </main>
 
-      {renderApp()}
-
-      {!isFullAppView && (
-        <div className="logout-section">
-          <a className="support-link" href={supportWhatsappLink} target="_blank" rel="noreferrer">
-            Sugerir cambios o reportar error
-          </a>
-          <button className="secondary-button" onClick={onLogout}>
-            {config.logoutButtonText}
-          </button>
-        </div>
-      )}
+      <BottomNavBar active={activeNavTab} onTab={handleBottomTabChange} canUseApp={(appId) => canUseApp(appId, currentProfile.rol)} />
     </section>
   );
 }

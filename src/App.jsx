@@ -8,16 +8,16 @@ import { AuthProvider, useAuth } from './auth/AuthContext.jsx';
 import AppLoader from './components/AppLoader.jsx';
 
 const PATH_TO_APP = {
-  '/perfil': 'perfil',
   '/agenda': 'agenda',
   '/tours': 'agenda-tours',
   '/rifas': 'rifas',
   '/fotos': 'media',
   '/redes': 'redes',
+  '/editar-perfil': 'perfil',
 };
 
 const APP_TO_PATH = {
-  perfil: '/perfil',
+  perfil: '/editar-perfil',
   agenda: '/agenda',
   'agenda-tours': '/tours',
   rifas: '/rifas',
@@ -27,6 +27,10 @@ const APP_TO_PATH = {
 
 function getRouteState(pathname) {
   if (pathname === '/login') {
+    return { page: 'login', app: null, username: '' };
+  }
+
+  if (pathname === '/perfil') {
     return { page: 'login', app: null, username: '' };
   }
 
@@ -89,7 +93,7 @@ function AppInner() {
   if (loading) {
     return (
       <div className="app-shell app-shell-loading">
-        <main className="app-main app-main-loading">
+        <main className="app-main app-main-loading app-main-dashboard">
           <AppLoader message="Cargando" detail="Conectando tu perfil y configuracion..." />
         </main>
       </div>
@@ -139,13 +143,13 @@ function AppInner() {
             </div>
           </div>
         </header>
-        <main className="app-main">
+        <main className="app-main app-main-dashboard">
           <Welcome
             config={config.welcome}
             user={user}
             profile={profile}
             initialApp={routeState.app}
-            onAppRouteChange={(appId) => navigateTo(appId ? APP_TO_PATH[appId] || '/' : '/')}
+            onAppRouteChange={(appId) => navigateTo(appId ? APP_TO_PATH[appId] || '/' : '/perfil')}
             onLogout={() => {
               logout();
               navigateTo('/');

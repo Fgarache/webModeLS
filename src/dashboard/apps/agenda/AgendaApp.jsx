@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import { FaPlus } from 'react-icons/fa';
 import { useAuth } from '../../../auth/AuthContext.jsx';
 import agendaConfig from './agenda.config.js';
 import './agenda.css';
@@ -9,6 +8,7 @@ import AgendaCard from './components/AgendaCard.jsx';
 import ModalConfirmarAgenda from './components/ModalConfirmarAgenda.jsx';
 import { createEmptyAgendaForm, splitAgendaByTime, splitAgendaDateTime } from './agenda.utils.js';
 import AppSectionHeader from '../../components/AppSectionHeader.jsx';
+import FloatingActionButton from '../../components/FloatingActionButton.jsx';
 
 function AgendaApp() {
   const { user } = useAuth();
@@ -96,8 +96,10 @@ function AgendaApp() {
       {/* Quitamos onAdd para que el encabezado no muestre el botón superior */}
       <AppSectionHeader 
         title={header.title} 
+        addLabel={header.addButton}
         helpTitle={header.helpTitle} 
         helpText={header.helpText} 
+        onAdd={openCreateModal}
         addDisabled={saving || !user?.uid} 
       />
 
@@ -127,16 +129,7 @@ function AgendaApp() {
         </section>
       )}
 
-      {/* Botón Flotante (FAB) */}
-      <button 
-        type="button" 
-        className="agenda-fab-button" 
-        onClick={openCreateModal}
-        disabled={saving || !user?.uid}
-        title={header.addButton}
-      >
-        <FaPlus />
-      </button>
+      <FloatingActionButton ariaLabel={header.addButton} title={header.addButton} onClick={openCreateModal} disabled={saving || !user?.uid} />
 
       <ModalCrearAgenda open={modalOpen} editing={Boolean(editingAgendaId)} form={agendaForm} saving={saving} error={error} onChange={handleFieldChange} onDelete={handleDeleteFromEdit} onClose={closeModal} onSubmit={handleSave} />
       <ModalConfirmarAgenda open={Boolean(deletingItem)} item={deletingItem} saving={saving} onClose={closeDeleteModal} onConfirm={confirmDelete} />

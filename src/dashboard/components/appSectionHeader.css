@@ -21,3 +21,9 @@
 .app-section-header .info-trigger-group {
   margin: 0 !important;
 }
+
+@media (max-width: 768px) {
+  .app-section-header-add {
+    display: none !important;
+  }
+}
