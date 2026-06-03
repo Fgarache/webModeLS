@@ -187,6 +187,34 @@
   flex-wrap: wrap;
 }
 
+.perfil-public-link {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.95rem 1rem;
+  border-radius: 1rem;
+  background: rgba(82, 224, 160, 0.08);
+  border: 1px solid rgba(82, 224, 160, 0.18);
+  text-decoration: none;
+  color: #eafff5;
+}
+
+.perfil-public-link span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.perfil-public-link strong {
+  font-size: 0.9rem;
+  color: #8df3bd;
+  overflow-wrap: anywhere;
+}
+
+.perfil-public-link:hover {
+  background: rgba(82, 224, 160, 0.12);
+  border-color: rgba(82, 224, 160, 0.32);
+}
+
 .perfil-description-block {
   display: grid;
   gap: 0.35rem;

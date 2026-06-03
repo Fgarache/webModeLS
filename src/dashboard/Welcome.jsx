@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { FaCheckCircle, FaChevronLeft, FaPen } from 'react-icons/fa';
 import { ref, update } from 'firebase/database';
 import { db } from '../auth/firebaseConfig.js';
@@ -75,8 +75,10 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
   const [activeApp, setActiveApp] = useState(initialApp);
   const [headerModalOpen, setHeaderModalOpen] = useState(false);
   const [savingHeader, setSavingHeader] = useState(false);
+  const [copyStatus, setCopyStatus] = useState('idle');
   const [headerDraft, setHeaderDraft] = useState({ estado_texto: '', disponible_hoy_en: '' });
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
+  const copyStatusTimeoutRef = useRef(null);
   const isLauncherView = !activeApp;
   const activeNavTab = activeApp === 'agenda' || activeApp === 'agenda-tours' || activeApp === 'rifas' ? activeApp : 'perfil';
 
@@ -92,6 +94,14 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
   useEffect(() => {
     setActiveApp(initialApp);
   }, [initialApp]);
+
+  useEffect(() => {
+    return () => {
+      if (copyStatusTimeoutRef.current) {
+        window.clearTimeout(copyStatusTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const availableLocations = useMemo(() => {
     const values = Object.values(currentProfile?.ubicaciones || {})
@@ -115,6 +125,8 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
   const descriptionText = String(currentProfile?.descripcion || config.message || '').trim();
   const shouldCollapseDescription = descriptionText.length > DESCRIPTION_PREVIEW_LIMIT || descriptionText.split(/\r?\n/).length > 3;
   const supportWhatsappLink = `https://wa.me/${SUPPORT_WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hola, quiero sugerir cambios o reportar un error. Referencia: ${SUPPORT_REFERENCE_EMAIL}`)}`;
+  const publicProfileUsername = String(currentProfile?.nombre_usuario || '').replace(/^@/, '').trim();
+  const publicProfileUrl = publicProfileUsername ? `https://lindasgt.com/${publicProfileUsername}` : '';
 
   if (!profile || !user) {
     return <AppLoader message="Cargando perfil" detail="Preparando tu panel personal..." />;
@@ -235,6 +247,38 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
       });
     } catch (error) {
       console.error('Error guardando disponibilidad general:', error);
+    }
+  };
+
+  const handleCopyPublicProfileLink = async () => {
+    if (!publicProfileUrl) {
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(publicProfileUrl);
+      setCopyStatus('copied');
+
+      if (copyStatusTimeoutRef.current) {
+        window.clearTimeout(copyStatusTimeoutRef.current);
+      }
+
+      copyStatusTimeoutRef.current = window.setTimeout(() => {
+        setCopyStatus('idle');
+        copyStatusTimeoutRef.current = null;
+      }, 1800);
+    } catch (error) {
+      console.error('Error copiando enlace del perfil:', error);
+      setCopyStatus('error');
+
+      if (copyStatusTimeoutRef.current) {
+        window.clearTimeout(copyStatusTimeoutRef.current);
+      }
+
+      copyStatusTimeoutRef.current = window.setTimeout(() => {
+        setCopyStatus('idle');
+        copyStatusTimeoutRef.current = null;
+      }, 1800);
     }
   };
 
@@ -363,9 +407,15 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
               </button>
             </>
           ) : (
-            <button type="button" className="dashboard-topbar-pill" onClick={handleBack}>
-              Ver perfil
-            </button>
+                  publicProfileUrl ? (
+                    <a className="dashboard-topbar-pill" href={publicProfileUrl} target="_blank" rel="noreferrer">
+                      Ver perfil
+                    </a>
+                  ) : (
+                    <button type="button" className="dashboard-topbar-pill" onClick={handleBack}>
+                      Ver perfil
+                    </button>
+                  )
           )}
         </div>
       </header>
@@ -502,6 +552,18 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
             )}
 
             {renderApp()}
+
+            {publicProfileUrl && (
+              <div className="launcher-public-link-wrap">
+                <a className="profile-public-link-launcher" href={publicProfileUrl} target="_blank" rel="noreferrer">
+                  <span>Ver mi perfil en linea</span>
+                  <strong>{publicProfileUrl}</strong>
+                </a>
+                <button type="button" className="profile-public-copy-button" onClick={handleCopyPublicProfileLink}>
+                  {copyStatus === 'copied' ? 'Copiado' : copyStatus === 'error' ? 'Error' : 'Copiar'}
+                </button>
+              </div>
+            )}
           </>
         ) : (
           <div className="dashboard-app-stage">{renderApp()}</div>

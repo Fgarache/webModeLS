@@ -7,7 +7,7 @@ const channelIcons = {
   telegram: FaTelegramPlane,
 };
 
-function ModalCompraRifa({ open, editing, rifa, selectedNumber, form, saving, onChange, onClose, onDelete, onSubmit }) {
+function ModalCompraRifa({ open, editing, rifa, selectedNumber, form, saving, error, onChange, onClose, onDelete, onSubmit }) {
   if (!open || !rifa || !selectedNumber) {
     return null;
   }
@@ -25,6 +25,8 @@ function ModalCompraRifa({ open, editing, rifa, selectedNumber, form, saving, on
         </div>
 
         <div className="rifa-form-grid">
+          {error && <div className="rifas-error">{error}</div>}
+
           <div className="form-group rifa-contact-group">
             <label htmlFor="compra_contacto">{purchaseModal.fields.contact}</label>
             <div className="rifa-contact-inline-row">

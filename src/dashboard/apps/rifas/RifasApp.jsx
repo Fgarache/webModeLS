@@ -4,7 +4,7 @@ import ModalConfirmarRifa from './components/ModalConfirmarRifa.jsx';
 import ModalCompraRifa from './components/ModalCompraRifa.jsx';
 import ModalCrearRifa from './components/ModalCrearRifa.jsx';
 import ModalDetalleNumero from './components/ModalDetalleNumero.jsx';
-import ModalNumeroOcupado from './components/ModalNumeroOcupado.jsx';
+import ModalGanadoresRifa from './components/ModalGanadoresRifa.jsx';
 import RifaCard from './components/RifaCard.jsx';
 import rifasConfig from './rifas.config.js';
 import './rifas.css';
@@ -25,7 +25,9 @@ function RifasApp() {
   const [rifaForm, setRifaForm] = useState(() => createEmptyRifaForm());
   const [compraForm, setCompraForm] = useState(() => createEmptyCompraForm());
   const [selectedNumber, setSelectedNumber] = useState(null);
-  const [occupiedActionData, setOccupiedActionData] = useState(null);
+  const [winnerModalOpen, setWinnerModalOpen] = useState(false);
+  const [winnerModalData, setWinnerModalData] = useState(null);
+  const [winnerText, setWinnerText] = useState('');
   const [occupiedViewData, setOccupiedViewData] = useState(null);
   const [expandedRifaId, setExpandedRifaId] = useState(null);
   const [confirmState, setConfirmState] = useState(null);
@@ -87,8 +89,61 @@ function RifasApp() {
     }
   };
 
+  const openWinnerModal = (rifa) => {
+    setWinnerModalData({
+      rifaId: rifa.id,
+      title: rifa.titulo || 'Sin titulo',
+    });
+    setWinnerText(mapToMultilineText(rifa.ganadores));
+    setWinnerModalOpen(true);
+  };
+
+  const closeWinnerModal = () => {
+    if (saving) {
+      return;
+    }
+
+    setWinnerModalOpen(false);
+    setWinnerModalData(null);
+    setWinnerText('');
+  };
+
+  const handleWinnerTextChange = (value) => {
+    setWinnerText(value);
+  };
+
+  const handleSaveWinners = async () => {
+    if (!winnerModalData?.rifaId) {
+      return;
+    }
+
+    const currentRifa = rifas.find((rifa) => rifa.id === winnerModalData.rifaId);
+    if (!currentRifa) {
+      return;
+    }
+
+    const success = await saveRifa({
+      editingRifaId: winnerModalData.rifaId,
+      form: {
+        titulo: currentRifa.titulo || '',
+        detalles: currentRifa.detalles || '',
+        fecha_sorteo: currentRifa.fecha_sorteo || createEmptyRifaForm().fecha_sorteo,
+        hora_sorteo: currentRifa.hora_sorteo || '20:00',
+        activa: currentRifa.activa !== false,
+        terminos_condiciones: currentRifa.terminos_condiciones || '',
+        premios_texto: mapToMultilineText(currentRifa.premios),
+        ganadores_texto: winnerText,
+        precio: String(currentRifa.precio ?? '0'),
+        total_numeros: String(currentRifa.total_numeros ?? '100'),
+      },
+    });
+
+    if (success) {
+      closeWinnerModal();
+    }
+  };
+
   const openCompraModal = (rifaId, numberKey, numberLabel, purchase = null) => {
-    setOccupiedActionData(null);
     setSelectedNumber({ rifaId, numberKey, numberLabel });
     setEditingCompra(Boolean(purchase));
     setCompraForm(
@@ -115,23 +170,14 @@ function RifasApp() {
     setCompraForm(createEmptyCompraForm());
   };
 
-  const openOccupiedActions = (rifa, numberKey, numberLabel, purchase) => {
-    setOccupiedViewData(null);
-    setOccupiedActionData({
+  const openOccupiedView = (rifa, numberKey, numberLabel, purchase) => {
+    setOccupiedViewData({
       rifaId: rifa.id,
       rifaTitle: rifa.titulo || 'Sin titulo',
       numberKey,
       numberLabel,
       purchase,
     });
-  };
-
-  const closeOccupiedActions = () => {
-    if (saving) {
-      return;
-    }
-
-    setOccupiedActionData(null);
   };
 
   const closeOccupiedView = () => {
@@ -151,6 +197,9 @@ function RifasApp() {
 
   const handleSaveCompra = async () => {
     if (!selectedNumber) {
+      if (typeof window !== 'undefined') {
+        console.error('No se pudo guardar la compra: no hay numero seleccionado.');
+      }
       return;
     }
 
@@ -187,53 +236,42 @@ function RifasApp() {
     }
   };
 
-  const handleContactOccupied = () => {
-    const link = buildContactLink(occupiedActionData?.purchase?.canal, occupiedActionData?.purchase?.contacto);
+  const handleContactOccupied = (data) => {
+    const link = buildContactLink(data?.purchase?.canal, data?.purchase?.contacto);
 
     if (link) {
       window.open(link, '_blank', 'noopener,noreferrer');
     }
   };
 
-  const handleEditOccupied = () => {
-    if (!occupiedActionData) {
+  const handleEditOccupied = (data) => {
+    if (!data) {
       return;
     }
 
-    openCompraModal(
-      occupiedActionData.rifaId,
-      occupiedActionData.numberKey,
-      occupiedActionData.numberLabel,
-      occupiedActionData.purchase
-    );
+    setOccupiedViewData(null);
+    openCompraModal(data.rifaId, data.numberKey, data.numberLabel, data.purchase);
   };
 
-  const handleViewOccupied = () => {
-    if (!occupiedActionData) {
+  const handleDeleteOccupied = (data) => {
+    if (!data) {
       return;
     }
 
-    setOccupiedViewData(occupiedActionData);
-  };
-
-  const handleDeleteOccupied = () => {
-    if (!occupiedActionData) {
-      return;
-    }
-
+    setOccupiedViewData(null);
     setConfirmState({
       title: confirm.deleteCompraTitle,
-      message: `Se eliminara la compra del numero #${occupiedActionData.numberLabel}.`,
+      message: `Se eliminara la compra del numero #${data.numberLabel}.`,
       confirmLabel: confirm.deleteCompraLabel,
       onConfirm: async () => {
         const success = await deleteCompra({
-          rifaId: occupiedActionData.rifaId,
-          numberKey: occupiedActionData.numberKey,
+          rifaId: data.rifaId,
+          numberKey: data.numberKey,
         });
 
         if (success) {
           setConfirmState(null);
-          setOccupiedActionData(null);
+          setOccupiedViewData(null);
         }
       },
     });
@@ -286,12 +324,9 @@ function RifasApp() {
                 onDeleteRifa={requestDeleteRifa}
                 onEditRifa={openEditRifaModal}
                 onOpenCompra={openCompraModal}
-                onOpenOccupiedActions={openOccupiedActions}
+                onOpenOccupiedDetail={openOccupiedView}
                 onToggleViewRifa={toggleViewRifa}
-                /* COMENTARIO: Se cambió openGanadorModal por openEditRifaModal 
-                  porque los ganadores se editan en el formulario principal de la rifa.
-                */
-                onEditGanador={openEditRifaModal} 
+                onEditGanador={openWinnerModal}
               />
             ))}
           </div>
@@ -311,12 +346,9 @@ function RifasApp() {
                 onDeleteRifa={requestDeleteRifa}
                 onEditRifa={openEditRifaModal}
                 onOpenCompra={openCompraModal}
-                onOpenOccupiedActions={openOccupiedActions}
+                onOpenOccupiedDetail={openOccupiedView}
                 onToggleViewRifa={toggleViewRifa}
-                /* COMENTARIO: Agregado onEditGanador también aquí para que funcione 
-                  el botón en las rifas archivadas.
-                */
-                onEditGanador={openEditRifaModal}
+                onEditGanador={openWinnerModal}
               />
             ))}
           </div>
@@ -338,6 +370,16 @@ function RifasApp() {
         onSubmit={handleSaveRifa}
       />
 
+      <ModalGanadoresRifa
+        open={winnerModalOpen}
+        title={winnerModalData?.title}
+        form={winnerText}
+        saving={saving}
+        onChange={handleWinnerTextChange}
+        onClose={closeWinnerModal}
+        onSubmit={handleSaveWinners}
+      />
+
       <ModalCompraRifa
         open={compraModalOpen}
         editing={editingCompra}
@@ -345,6 +387,7 @@ function RifasApp() {
         selectedNumber={selectedNumber}
         form={compraForm}
         saving={saving}
+        error={error}
         onChange={handleCompraFieldChange}
         onClose={closeCompraModal}
         onDelete={handleDeleteCompra}
@@ -361,22 +404,14 @@ function RifasApp() {
         onConfirm={confirmState?.onConfirm}
       />
 
-      <ModalNumeroOcupado
-        open={Boolean(occupiedActionData)}
-        data={occupiedActionData}
-        saving={saving}
-        onClose={closeOccupiedActions}
-        onContact={handleContactOccupied}
-        onView={handleViewOccupied}
-        onEdit={handleEditOccupied}
-        onDelete={handleDeleteOccupied}
-      />
-
       <ModalDetalleNumero
         open={Boolean(occupiedViewData)}
         data={occupiedViewData}
         saving={saving}
         onClose={closeOccupiedView}
+        onContact={handleContactOccupied}
+        onEdit={handleEditOccupied}
+        onDelete={handleDeleteOccupied}
       />
     </section>
   );

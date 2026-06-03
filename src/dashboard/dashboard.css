@@ -154,6 +154,66 @@
   text-decoration: underline;
 }
 
+.profile-public-link-launcher {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.95rem 1rem;
+  border-radius: 1rem;
+  background: rgba(82, 224, 160, 0.08);
+  border: 1px solid rgba(82, 224, 160, 0.18);
+  text-decoration: none;
+  color: #eafff5;
+}
+
+.profile-public-link-launcher span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.profile-public-link-launcher strong {
+  font-size: 0.9rem;
+  color: #8df3bd;
+  overflow-wrap: anywhere;
+}
+
+.profile-public-link-launcher:hover {
+  background: rgba(82, 224, 160, 0.12);
+  border-color: rgba(82, 224, 160, 0.32);
+}
+
+.launcher-public-link-wrap {
+  display: flex;
+  align-items: stretch;
+  gap: 0.65rem;
+  margin-top: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.launcher-public-link-wrap .profile-public-link-launcher {
+  flex: 1 1 18rem;
+}
+
+.profile-public-copy-button {
+  flex: 0 0 auto;
+  min-height: 3.25rem;
+  padding: 0 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(255, 255, 255, 0.07);
+  color: #f8fafc;
+  font-weight: 700;
+}
+
+.profile-public-copy-button:hover {
+  background: rgba(255, 255, 255, 0.11);
+  border-color: rgba(148, 163, 184, 0.34);
+}
+
+.profile-public-copy-button:active {
+  transform: translateY(1px);
+}
+
 .dashboard-shell .bottom-app-nav {
   position: fixed;
 }
@@ -209,6 +269,7 @@
 
 .header-description-copy.collapsed {
   display: -webkit-box;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;

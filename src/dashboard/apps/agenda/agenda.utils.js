@@ -57,6 +57,28 @@ function getDefaultAgendaTimeParts() {
   };
 }
 
+function parseAgendaDateTimeLocal(value) {
+  if (!value) {
+    return null;
+  }
+
+  const match = String(value).match(/^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2})/);
+
+  if (!match) {
+    const fallback = new Date(value);
+    return Number.isNaN(fallback.getTime()) ? null : fallback;
+  }
+
+  const [, yearText, monthText, dayText, hourText, minuteText] = match;
+  const year = Number(yearText);
+  const month = Number(monthText) - 1;
+  const day = Number(dayText);
+  const hour = Number(hourText);
+  const minute = Number(minuteText);
+
+  return new Date(year, month, day, hour, minute, 0, 0);
+}
+
 export function splitAgendaDateTime(value) {
   const fallback = getDefaultAgendaTimeParts();
 
@@ -128,7 +150,7 @@ export function formatAgendaDate(value) {
     return 'Pendiente';
   }
 
-  const date = new Date(value);
+  const date = parseAgendaDateTimeLocal(value);
   if (Number.isNaN(date.getTime())) {
     return value;
   }
@@ -179,7 +201,7 @@ export function normalizeAgenda(agendaId, agendaData) {
 }
 
 export function getAgendaTimestamp(item) {
-  const timestamp = Date.parse(item?.fecha || '');
+  const timestamp = parseAgendaDateTimeLocal(item?.fecha || '')?.getTime() || 0;
   return Number.isNaN(timestamp) ? 0 : timestamp;
 }
 
@@ -187,8 +209,8 @@ export function sortAgenda(list) {
   const now = Date.now();
 
   return [...list].sort((left, right) => {
-    const leftTime = Date.parse(left.fecha || '');
-    const rightTime = Date.parse(right.fecha || '');
+    const leftTime = getAgendaTimestamp(left);
+    const rightTime = getAgendaTimestamp(right);
     const leftFuture = !Number.isNaN(leftTime) && leftTime >= now;
     const rightFuture = !Number.isNaN(rightTime) && rightTime >= now;
 
@@ -207,6 +229,8 @@ export function sortAgenda(list) {
 export function splitAgendaByTime(list) {
   const now = new Date();
   const nowTime = now.getTime();
+  const currentDayKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+  const currentHour = now.getHours();
   const tomorrowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1).getTime();
   const dayAfterTomorrowStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2).getTime();
 
@@ -218,9 +242,22 @@ export function splitAgendaByTime(list) {
         pending.push(item);
         return accumulator;
       }
-      const itemTime = getAgendaTimestamp(item);
-      if (itemTime < nowTime) {
+      const itemDate = parseAgendaDateTimeLocal(item.fecha);
+      const itemTime = itemDate?.getTime() || 0;
+      const itemDayKey = itemDate
+        ? `${itemDate.getFullYear()}-${String(itemDate.getMonth() + 1).padStart(2, '0')}-${String(itemDate.getDate()).padStart(2, '0')}`
+        : '';
+
+      if (itemTime < nowTime && itemDayKey !== currentDayKey) {
         accumulator.past.push(item);
+      } else if (itemDayKey === currentDayKey) {
+        const itemHour = itemDate.getHours();
+
+        if (itemHour < currentHour) {
+          accumulator.past.push(item);
+        } else {
+          accumulator.today.push(item);
+        }
       } else if (itemTime < tomorrowStart) {
         accumulator.today.push(item);
       } else if (itemTime < dayAfterTomorrowStart) {

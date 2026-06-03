@@ -28,6 +28,7 @@ function TourCard({
   const reservations = getSortedReservations(tour.privado?.reservados);
   const locations = getTourLocations(tour.publico?.ubicacion_maps);
   const isTourExpanded = expandedTourId === tour.id;
+  const reservationCount = reservations.length;
   const timeline = [
     ...availableSlots.map(([slotKey, hourValue]) => ({
       type: 'available',
@@ -51,10 +52,11 @@ function TourCard({
 
         <div className="tour-meta">
           <span>{formatDateLabel(tour.publico?.fecha)}</span>
+          {isArchived && <span className="tour-archive-count">{reservationCount} agendas</span>}
         </div>
       </div>
 
-      {isTourExpanded && (
+      {isTourExpanded && !isArchived && (
         <section className="tour-panel tour-details-panel">
           <div className="agenda-inline-grid">
             <div className="agenda-inline-full">
@@ -90,6 +92,93 @@ function TourCard({
       {isArchived ? (
         <section className="tour-panel tour-panel-archived">
           <p className="tour-empty">{tourCard.archivedScheduleText}</p>
+
+          {isTourExpanded && (
+            <div className="tour-archive-reservations">
+              {!reservationCount && <p className="tour-empty">{tourCard.emptySchedule}</p>}
+
+              {!!reservationCount && (
+                <div className="slot-board slot-board-archived">
+                  {reservations.map(([slotKey, reservation]) => {
+                    const contactHref = buildContactHref(reservation);
+                    const expandedReservation = expandedAgenda?.tourId === tour.id && expandedAgenda?.slotKey === slotKey;
+
+                    return (
+                      <div key={slotKey} className="slot-stack">
+                        <button type="button" className="slot-card slot-card-reserved slot-row slot-card-clickable" onClick={() => onViewReservation(tour.id, slotKey, reservation)} disabled={saving}>
+                          <div className="slot-row-main">
+                            <strong>{formatHour12(reservation?.hora)}</strong>
+                          </div>
+                          <div className="slot-card-actions">
+                            {contactHref && (
+                              <a
+                                className="icon-button"
+                                title={tourCard.actions.openContact}
+                                href={contactHref}
+                                target="_blank"
+                                rel="noreferrer"
+                                onClick={(event) => event.stopPropagation()}
+                              >
+                                {reservation?.canal_contacto === 'telegram' ? <FaTelegramPlane /> : <FaWhatsapp />}
+                              </a>
+                            )}
+                          </div>
+                        </button>
+
+                        {expandedReservation && (
+                          <div className="agenda-inline-panel">
+                            <div className="agenda-inline-grid">
+                              <div>
+                                <span className="agenda-inline-label">{tourCard.labels.place}</span>
+                                <strong>{reservation?.lugar || reservation?.cliente_nombre || tourCard.noPlace}</strong>
+                              </div>
+                              <div>
+                                <span className="agenda-inline-label">{tourCard.labels.contact}</span>
+                                <strong>{reservation?.contacto || tourCard.noContact}</strong>
+                              </div>
+                              <div>
+                                <span className="agenda-inline-label">{tourCard.labels.channel}</span>
+                                <strong>{reservation?.canal_contacto || 'whatsapp'}</strong>
+                              </div>
+                              <div>
+                                <span className="agenda-inline-label">{tourCard.labels.time}</span>
+                                <strong>{formatHour12(reservation?.hora)}</strong>
+                              </div>
+                              <div className="agenda-inline-full">
+                                <span className="agenda-inline-label">{tourCard.labels.detail}</span>
+                                <strong>{reservation?.detalle || tourCard.noDetail}</strong>
+                              </div>
+                            </div>
+
+                            <div className="agenda-inline-actions">
+                              <button
+                                type="button"
+                                className="icon-button"
+                                title={tourCard.actions.editReservation}
+                                onClick={() => onEditReservation(tour.id, slotKey, reservation)}
+                                disabled={saving}
+                              >
+                                <FaEdit />
+                              </button>
+                              <button
+                                type="button"
+                                className="icon-button icon-button-danger"
+                                title={tourCard.actions.deleteReservation}
+                                onClick={() => onDeleteReservation(tour, slotKey, reservation)}
+                                disabled={saving}
+                              >
+                                <FaTrashAlt />
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          )}
         </section>
       ) : (
         <section className="tour-panel">

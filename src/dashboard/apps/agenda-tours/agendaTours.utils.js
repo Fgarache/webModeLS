@@ -4,7 +4,12 @@ export const AVAILABLE_TIME_OPTIONS = Array.from({ length: 17 }, (_, index) => {
 });
 
 export function getTodayDate() {
-  return new Date().toISOString().split('T')[0];
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
 }
 
 export function isPastTourDate(value, today = getTodayDate()) {
@@ -12,7 +17,7 @@ export function isPastTourDate(value, today = getTodayDate()) {
     return false;
   }
 
-  return value < today;
+  return String(value).slice(0, 10) < today;
 }
 
 export function isTourArchived(tour, today = getTodayDate()) {

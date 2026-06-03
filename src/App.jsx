@@ -56,6 +56,12 @@ function AppInner() {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
+    if (user && profile && currentPath === '/') {
+      navigateTo('/agenda');
+    }
+  }, [currentPath, profile, user]);
+
+  useEffect(() => {
     const handlePopState = () => {
       setCurrentPath(window.location.pathname || '/');
     };
@@ -110,6 +116,10 @@ function AppInner() {
   };
 
   if (user && profile) {
+    const publicProfileUrl = profile?.nombre_usuario
+      ? `https://lindasgt.com/${String(profile.nombre_usuario).replace(/^@/, '').trim()}`
+      : '';
+
     return (
       <div className="app-shell">
         <header className="app-header auth-app-header">
@@ -121,17 +131,15 @@ function AppInner() {
             <div className="auth-navbar-side right">
               
               {/* BOTÓN: Ver Perfil - Apunta directamente a la URL de producción */}
-              {profile?.nombre_usuario && (
-                <button 
-                  type="button" 
-                  className="auth-nav-text-button" 
-                  onClick={() => {
-                    const cleanUsername = profile.nombre_usuario.replace(/^@/, '');
-                    window.open(`https://lindasgt.com/${cleanUsername}`, '_blank');
-                  }}
+              {publicProfileUrl && (
+                <a
+                  className="auth-nav-text-button"
+                  href={publicProfileUrl}
+                  target="_blank"
+                  rel="noreferrer"
                 >
                   Ver perfil
-                </button>
+                </a>
               )}
 
               {/* BOTÓN: Volver */}

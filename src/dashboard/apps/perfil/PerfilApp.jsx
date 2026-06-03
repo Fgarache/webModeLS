@@ -26,6 +26,8 @@ function PerfilApp({ user, profile, onUpdate }) {
   }, [profile]);
 
   const visibleFotos = useMemo(() => normalizeMediaPhotos(currentProfile?.fotos || {}).filter((foto) => foto?.url), [currentProfile?.fotos]);
+  const publicProfileUsername = String(currentProfile?.nombre_usuario || '').replace(/^@/, '').trim();
+  const publicProfileUrl = publicProfileUsername ? `https://lindasgt.com/${publicProfileUsername}` : '';
 
   const hasDraftChanges =
     String(draftProfile.nombre_completo || '').trim() !== String(currentProfile?.nombre_completo || '').trim() ||
@@ -213,6 +215,13 @@ function PerfilApp({ user, profile, onUpdate }) {
 
         </div>
       </section>
+
+      {publicProfileUrl && (
+        <a className="perfil-public-link" href={publicProfileUrl} target="_blank" rel="noreferrer">
+          <span>Ver mi perfil en linea</span>
+          <strong>{publicProfileUrl}</strong>
+        </a>
+      )}
 
       {unsavedPromptOpen && (
         <div className="perfil-modal-overlay" role="dialog" aria-modal="true">

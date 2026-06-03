@@ -22,10 +22,32 @@ function AgendaCard({ item, expanded, saving, subdued = false, onEdit, onToggleV
             gap: 4px !important;
             padding: 12px 14px !important;
             border-radius: 14px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(82, 224, 160, 0.34);
+            box-shadow: 0 0 0 1px rgba(82, 224, 160, 0.12), 0 10px 24px rgba(0, 0, 0, 0.16);
             position: relative;
             transition: all 0.2s ease;
+          }
+
+          .agenda-card-subdued {
+            opacity: 0.72;
+            filter: grayscale(0.08) saturate(0.82);
+            border-color: rgba(255, 255, 255, 0.08) !important;
+            background: rgba(255, 255, 255, 0.055) !important;
+          }
+
+          .agenda-card-subdued .agenda-card-deposit-badge,
+          .agenda-card-subdued .agenda-card-date-badge,
+          .agenda-card-subdued .agenda-details-preview,
+          .agenda-card-subdued .agenda-card-panel p,
+          .agenda-card-subdued .agenda-card-panel strong,
+          .agenda-card-subdued .agenda-card-actions .icon-button {
+            opacity: 0.9;
+          }
+
+          .agenda-card-subdued .agenda-card-actions .icon-button {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.08);
           }
 
           .agenda-card h4, 

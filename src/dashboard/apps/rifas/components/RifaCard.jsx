@@ -3,9 +3,10 @@ import { FaEye, FaPen, FaTrash } from 'react-icons/fa';
 import rifasConfig from '../rifas.config.js';
 import { buildNumbers, formatDateLabel, formatHour12, getRifaStatus } from '../rifas.utils.js';
 
-function RifaCard({ rifa, saving, expanded, onDeleteRifa, onEditRifa, onOpenCompra, onOpenOccupiedActions, onToggleViewRifa, onEditGanador }) {
+function RifaCard({ rifa, saving, expanded, onDeleteRifa, onEditRifa, onOpenCompra, onOpenOccupiedDetail, onToggleViewRifa, onEditGanador }) {
   const { card } = rifasConfig;
   const status = getRifaStatus(rifa);
+  const isArchived = status === 'inactive' || status === 'expired';
   const statusLabel =
     status === 'inactive'
       ? card.inactiveStatus
@@ -22,6 +23,7 @@ function RifaCard({ rifa, saving, expanded, onDeleteRifa, onEditRifa, onOpenComp
 
   const prizes = Object.values(rifa.premios || {});
   const winners = Object.values(rifa.ganadores || {});
+  const soldCount = Object.keys(rifa.numeros_ocupados || {}).length;
 
   return (
     <article className="rifa-card">
@@ -72,94 +74,129 @@ function RifaCard({ rifa, saving, expanded, onDeleteRifa, onEditRifa, onOpenComp
             <div className="rifa-expanded-info">
               <div className="rifa-expanded-section rifa-expanded-hero">
                 <strong>{rifa.titulo || card.untitled}</strong>
-                <p>{rifa.detalles || card.emptyDetails}</p>
+                <p>{formatDateLabel(rifa.fecha_sorteo)}</p>
               </div>
-              <div className="rifa-expanded-grid">
-                <div className="rifa-expanded-section compact">
-                  <strong>{card.drawTime}</strong>
-                  <p>{formatHour12(rifa.hora_sorteo) || card.detailFallback}</p>
-                </div>
-                <div className="rifa-expanded-section compact">
-                  <strong>{card.createdDate}</strong>
-                  <p>{rifa.creado_en ? formatDateLabel(rifa.creado_en.split('T')[0]) : 'Sin fecha'}</p>
-                </div>
-                <div className="rifa-expanded-section compact">
-                  <strong>{card.status}</strong>
-                  <p>{statusLabel}</p>
-                </div>
-                <div className="rifa-expanded-section compact">
-                  <strong>{card.price}</strong>
-                  <p>Q{Number(rifa.precio || 0).toFixed(2)}</p>
-                </div>
-                <div className="rifa-expanded-section compact">
-                  <strong>{card.totalNumbers}</strong>
-                  <p>{rifa.total_numeros}</p>
-                </div>
-              </div>
-              <div className="rifa-expanded-section compact-block">
-                <strong>{card.labels.terms}</strong>
-                <p>{rifa.terminos_condiciones || card.detailFallback}</p>
-              </div>
-              <div className="rifa-expanded-section compact-block">
-                <strong>{card.labels.prizes}</strong>
-                {prizes.length ? (
-                  <ul className="rifa-inline-list">
-                    {prizes.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>{card.detailFallback}</p>
-                )}
-              </div>
-              <div className="rifa-expanded-section compact-block">
-                <strong>{card.labels.winners}</strong>
-                {winners.length ? (
-                  <ul className="rifa-inline-list">
-                    {winners.map((item) => (
-                      <li key={item}>{item}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>{card.detailFallback}</p>
-                )}
-                <button
-                  type="button"
-                  className="primary-button"
-                  style={{marginTop: 8}}
-                  onClick={() => onEditGanador(rifa)}
-                  disabled={saving}
-                >
-                  {winners.length ? 'Editar ganador' : 'Agregar ganador'}
-                </button>
-              </div>
+
+              {isArchived ? (
+                <>
+                  <div className="rifa-expanded-grid">
+                    <div className="rifa-expanded-section compact">
+                      <strong>{card.drawDate}</strong>
+                      <p>{formatDateLabel(rifa.fecha_sorteo)}</p>
+                    </div>
+                    <div className="rifa-expanded-section compact">
+                      <strong>{card.soldNumbers}</strong>
+                      <p>{soldCount} de {Number(rifa.total_numeros || 0)}</p>
+                    </div>
+                  </div>
+
+                  <div className="rifa-expanded-section compact-block">
+                    <strong>{card.labels.winners}</strong>
+                    {winners.length ? (
+                      <ul className="rifa-inline-list">
+                        {winners.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p>{card.detailFallback}</p>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="rifa-expanded-grid">
+                    <div className="rifa-expanded-section compact">
+                      <strong>{card.drawTime}</strong>
+                      <p>{formatHour12(rifa.hora_sorteo) || card.detailFallback}</p>
+                    </div>
+                    <div className="rifa-expanded-section compact">
+                      <strong>{card.createdDate}</strong>
+                      <p>{rifa.creado_en ? formatDateLabel(rifa.creado_en.split('T')[0]) : 'Sin fecha'}</p>
+                    </div>
+                    <div className="rifa-expanded-section compact">
+                      <strong>{card.status}</strong>
+                      <p>{statusLabel}</p>
+                    </div>
+                    <div className="rifa-expanded-section compact">
+                      <strong>{card.price}</strong>
+                      <p>Q{Number(rifa.precio || 0).toFixed(2)}</p>
+                    </div>
+                    <div className="rifa-expanded-section compact">
+                      <strong>{card.totalNumbers}</strong>
+                      <p>{rifa.total_numeros}</p>
+                    </div>
+                  </div>
+                  <div className="rifa-expanded-section compact-block">
+                    <strong>{card.labels.terms}</strong>
+                    <p>{rifa.terminos_condiciones || card.detailFallback}</p>
+                  </div>
+                  <div className="rifa-expanded-section compact-block">
+                    <strong>{card.labels.prizes}</strong>
+                    {prizes.length ? (
+                      <ul className="rifa-inline-list">
+                        {prizes.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p>{card.detailFallback}</p>
+                    )}
+                  </div>
+                  <div className="rifa-expanded-section compact-block">
+                    <strong>{card.labels.winners}</strong>
+                    {winners.length ? (
+                      <ul className="rifa-inline-list">
+                        {winners.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p>{card.detailFallback}</p>
+                    )}
+                    <button
+                      type="button"
+                      className="primary-button"
+                      style={{marginTop: 8}}
+                      onClick={() => onEditGanador(rifa)}
+                      disabled={saving}
+                    >
+                      {winners.length ? 'Editar ganador' : 'Agregar ganador'}
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
 
           </div>
         )}
 
-        <div className="rifa-panel-header">
-          <h5>{card.availableTitle}</h5>
-        </div>
-        <p className="rifa-number-legend">{card.numberLegend}</p>
+        {!isArchived && (
+          <>
+            <div className="rifa-panel-header">
+              <h5>{card.availableTitle}</h5>
+            </div>
+            <p className="rifa-number-legend">{card.numberLegend}</p>
 
-        <div className="rifa-numbers-grid">
-          {numbers.map((numberItem) => (
-            <button
-              key={numberItem.key}
-              type="button"
-              className={`rifa-number-chip ${numberItem.occupied ? 'occupied' : ''}`}
-              onClick={() =>
-                numberItem.occupied
-                  ? onOpenOccupiedActions(rifa, numberItem.key, numberItem.label, rifa.compras?.[numberItem.key] || null)
-                  : onOpenCompra(rifa.id, numberItem.key, numberItem.label, null)
-              }
-              disabled={saving}
-            >
-              {numberItem.occupied ? 'X' : numberItem.label}
-            </button>
-          ))}
-        </div>
+            <div className="rifa-numbers-grid">
+              {numbers.map((numberItem) => (
+                <button
+                  key={numberItem.key}
+                  type="button"
+                  className={`rifa-number-chip ${numberItem.occupied ? 'occupied' : ''}`}
+                  onClick={() =>
+                    numberItem.occupied
+                      ? onOpenOccupiedDetail(rifa, numberItem.key, numberItem.label, rifa.compras?.[numberItem.key] || null)
+                      : onOpenCompra(rifa.id, numberItem.key, numberItem.label, null)
+                  }
+                  disabled={saving}
+                >
+                  {numberItem.label}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
       </section>
     </article>
   );

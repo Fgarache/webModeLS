@@ -206,6 +206,15 @@
   justify-items: end;
 }
 
+.tour-archive-count {
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(82, 224, 160, 0.14);
+  color: #dffef0;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
 .agenda-tours-add-button {
   min-height: 1.48rem;
   padding: 0.12rem 0.5rem;
@@ -229,6 +238,15 @@
 
 .tour-panel-archived {
   align-items: start;
+}
+
+.tour-archive-reservations {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.slot-board-archived {
+  grid-template-columns: 1fr;
 }
 
 .slot-board {
