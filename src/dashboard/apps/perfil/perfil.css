@@ -550,6 +550,54 @@
   padding: 0.55rem;
 }
 
+.perfil-service-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.85rem;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.perfil-service-copy {
+  min-width: 0;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.perfil-service-copy strong,
+.perfil-service-copy span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.perfil-service-copy span {
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.78rem;
+}
+
+.perfil-service-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+}
+
+.perfil-service-link {
+  min-height: 2.75rem;
+  text-decoration: none;
+  gap: 0.35rem;
+}
+
+.perfil-service-edit {
+  min-width: 2.75rem;
+  height: 2.75rem;
+  padding: 0.55rem;
+}
+
 .perfil-modal-actions {
   display: flex;
   gap: 0.75rem;
@@ -752,5 +800,15 @@
 
   .perfil-modal-actions {
     justify-content: stretch;
+  }
+
+  .perfil-service-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .perfil-service-actions {
+    width: 100%;
+    justify-content: flex-end;
   }
 }

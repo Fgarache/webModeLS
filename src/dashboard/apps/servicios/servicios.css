@@ -1,0 +1,212 @@
+.servicios-app {
+  display: grid;
+  gap: 1rem;
+  position: relative;
+}
+
+.servicios-summary-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  padding: 0.9rem;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.servicios-hero {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.servicios-hero-icon {
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 0.65rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #e9fff5;
+  background: rgba(31, 143, 106, 0.2);
+}
+
+.servicios-hero h4,
+.servicios-hero p {
+  margin: 0;
+}
+
+.servicios-hero p {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.82rem;
+}
+
+.servicios-list {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.servicios-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 0.75rem;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.servicios-copy {
+  min-width: 0;
+  display: grid;
+  gap: 0.18rem;
+}
+
+.servicios-copy strong,
+.servicios-copy span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.servicios-copy strong {
+  font-size: 0.85rem;
+  line-height: 1.15;
+}
+
+.servicios-copy span {
+  color: rgba(255, 255, 255, 0.64);
+  font-size: 0.73rem;
+}
+
+.servicios-detalles {
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.69rem;
+  line-height: 1.15;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.servicios-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex: 0 0 auto;
+}
+
+.servicios-icon-button,
+.servicios-link-button {
+  min-width: 2.2rem;
+  height: 2.2rem;
+  padding: 0.45rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.65rem;
+}
+
+.servicios-link-button {
+  text-decoration: none;
+  min-width: auto;
+  padding: 0.45rem 0.6rem;
+  gap: 0.3rem;
+  font-size: 0.8rem;
+}
+
+.servicios-status {
+  margin: 0;
+  font-size: 0.74rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.servicios-fab {
+  right: 1rem;
+}
+
+.servicios-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.56);
+  padding: 1rem;
+}
+
+.servicios-modal-card {
+  width: min(460px, 100%);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(20, 24, 30, 0.98), rgba(12, 16, 22, 0.98));
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+  padding: 1rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.servicios-modal-header h4,
+.servicios-modal-header p {
+  margin: 0;
+}
+
+.servicios-modal-header p {
+  margin-top: 0.25rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.servicios-modal-form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.servicios-modal-full {
+  width: 100%;
+}
+
+.servicios-modal-actions {
+  display: flex;
+  gap: 0.65rem;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+}
+
+@media (max-width: 720px) {
+  .servicios-app {
+    padding-bottom: calc(6rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .servicios-card {
+    padding: 0.48rem 0.55rem;
+  }
+
+  .servicios-copy strong {
+    font-size: 0.8rem;
+  }
+
+  .servicios-copy span {
+    font-size: 0.7rem;
+  }
+
+  .servicios-actions {
+    gap: 0.3rem;
+  }
+
+  .servicios-icon-button,
+  .servicios-link-button {
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0.38rem;
+  }
+
+  .servicios-link-button {
+    padding: 0.38rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .servicios-modal-actions .primary-button,
+  .servicios-modal-actions .secondary-button {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}

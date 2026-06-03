@@ -6,6 +6,7 @@ import { buildNumbers, formatDateLabel, formatHour12, getRifaStatus } from '../r
 function RifaCard({ rifa, saving, expanded, onDeleteRifa, onEditRifa, onOpenCompra, onOpenOccupiedDetail, onToggleViewRifa, onEditGanador }) {
   const { card } = rifasConfig;
   const status = getRifaStatus(rifa);
+  const isInactive = status === 'inactive';
   const isArchived = status === 'inactive' || status === 'expired';
   const statusLabel =
     status === 'inactive'
@@ -24,9 +25,13 @@ function RifaCard({ rifa, saving, expanded, onDeleteRifa, onEditRifa, onOpenComp
   const prizes = Object.values(rifa.premios || {});
   const winners = Object.values(rifa.ganadores || {});
   const soldCount = Object.keys(rifa.numeros_ocupados || {}).length;
+  const totalNumbers = Number(rifa.total_numeros || 0);
+  const ticketPrice = Number(rifa.precio || 0);
+  const soldTotalAmount = soldCount * ticketPrice;
+  const soldTotalDisplay = Number.isInteger(soldTotalAmount) ? soldTotalAmount.toFixed(0) : soldTotalAmount.toFixed(2);
 
   return (
-    <article className="rifa-card">
+    <article className={`rifa-card ${isInactive ? 'rifa-card-inactive' : ''}`}>
       <div className="rifa-card-header">
         <div className="rifa-date-only">
           <span>{card.drawDate}: {formatDateLabel(rifa.fecha_sorteo)}</span>
@@ -69,39 +74,76 @@ function RifaCard({ rifa, saving, expanded, onDeleteRifa, onEditRifa, onOpenComp
       </div>
 
       <section className="rifa-panel">
-        {expanded && (
+        {(isArchived || expanded) && (
           <div className="rifa-purchased-block">
             <div className="rifa-expanded-info">
-              <div className="rifa-expanded-section rifa-expanded-hero">
-                <strong>{rifa.titulo || card.untitled}</strong>
-                <p>{formatDateLabel(rifa.fecha_sorteo)}</p>
-              </div>
+              {expanded && (
+                <div className="rifa-expanded-section rifa-expanded-hero">
+                  <strong>{rifa.titulo || card.untitled}</strong>
+                  <p>{formatDateLabel(rifa.fecha_sorteo)}</p>
+                </div>
+              )}
 
               {isArchived ? (
                 <>
-                  <div className="rifa-expanded-grid">
-                    <div className="rifa-expanded-section compact">
-                      <strong>{card.drawDate}</strong>
-                      <p>{formatDateLabel(rifa.fecha_sorteo)}</p>
-                    </div>
-                    <div className="rifa-expanded-section compact">
-                      <strong>{card.soldNumbers}</strong>
-                      <p>{soldCount} de {Number(rifa.total_numeros || 0)}</p>
+                  <div className="rifa-panel-header">
+                    <h5>{card.availableTitle}</h5>
+                    <div className="rifa-panel-metrics">
+                      <span className="rifa-numbers-count">{soldCount}-{totalNumbers}</span>
+                      <span className="rifa-sales-total-under-count">Q {soldTotalDisplay}</span>
                     </div>
                   </div>
 
-                  <div className="rifa-expanded-section compact-block">
-                    <strong>{card.labels.winners}</strong>
-                    {winners.length ? (
-                      <ul className="rifa-inline-list">
-                        {winners.map((item) => (
-                          <li key={item}>{item}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p>{card.detailFallback}</p>
-                    )}
-                  </div>
+                  {expanded && (
+                    <div className="rifa-expanded-grid">
+                      <div className="rifa-expanded-section compact">
+                        <strong>{card.drawDate}</strong>
+                        <p>{formatDateLabel(rifa.fecha_sorteo)}</p>
+                      </div>
+                      <div className="rifa-expanded-section compact">
+                        <strong>{card.soldNumbers}</strong>
+                        <p>{soldCount} de {Number(rifa.total_numeros || 0)}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {expanded ? (
+                    <div className="rifa-expanded-section compact-block">
+                      <strong>{card.labels.winners}</strong>
+                      {winners.length ? (
+                        <ul className="rifa-inline-list">
+                          {winners.map((item) => (
+                            <li key={item}>{item}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p>{card.detailFallback}</p>
+                      )}
+                      <button
+                        type="button"
+                        className="primary-button rifa-winner-action-small"
+                        onClick={() => onEditGanador(rifa)}
+                        disabled={saving}
+                      >
+                        {winners.length ? 'Editar ganador' : 'Agregar ganador'}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="rifa-expanded-section compact-block rifa-archived-summary">
+                      <strong>{rifa.titulo || card.untitled}</strong>
+                      <p>{card.drawDate}: {formatDateLabel(rifa.fecha_sorteo)}</p>
+                      <p>{card.labels.winners}:</p>
+                      {winners.length ? (
+                        <ul className="rifa-inline-list">
+                          {winners.map((item) => (
+                            <li key={item}>{item}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p>{card.detailFallback}</p>
+                      )}
+                    </div>
+                  )}
                 </>
               ) : (
                 <>
@@ -157,7 +199,7 @@ function RifaCard({ rifa, saving, expanded, onDeleteRifa, onEditRifa, onOpenComp
                     <button
                       type="button"
                       className="primary-button"
-                      style={{marginTop: 8}}
+                      style={{ marginTop: 8 }}
                       onClick={() => onEditGanador(rifa)}
                       disabled={saving}
                     >
@@ -167,7 +209,6 @@ function RifaCard({ rifa, saving, expanded, onDeleteRifa, onEditRifa, onOpenComp
                 </>
               )}
             </div>
-
           </div>
         )}
 
@@ -175,6 +216,10 @@ function RifaCard({ rifa, saving, expanded, onDeleteRifa, onEditRifa, onOpenComp
           <>
             <div className="rifa-panel-header">
               <h5>{card.availableTitle}</h5>
+              <div className="rifa-panel-metrics">
+                <span className="rifa-numbers-count">{soldCount}-{totalNumbers}</span>
+                <span className="rifa-sales-total-under-count">Q {soldTotalDisplay}</span>
+              </div>
             </div>
             <p className="rifa-number-legend">{card.numberLegend}</p>
 
@@ -195,6 +240,7 @@ function RifaCard({ rifa, saving, expanded, onDeleteRifa, onEditRifa, onOpenComp
                 </button>
               ))}
             </div>
+
           </>
         )}
       </section>

@@ -22,7 +22,8 @@
   border: 0;
   background: transparent;
   color: rgba(203, 213, 225, 0.8);
-  padding: 0.52rem 0.35rem;
+  --tab-icon-color: rgba(203, 213, 225, 0.85);
+  padding: 0.62rem 0.35rem;
   border-radius: 0.75rem;
   display: grid;
   place-items: center;
@@ -34,12 +35,34 @@
 }
 
 .bottom-app-tab svg {
-  font-size: 1rem;
+  font-size: 1.38rem;
+  color: var(--tab-icon-color);
+}
+
+.bottom-app-tab:nth-child(1) {
+  --tab-icon-color: #60a5fa;
+}
+
+.bottom-app-tab:nth-child(2) {
+  --tab-icon-color: #f59e0b;
+}
+
+.bottom-app-tab:nth-child(3) {
+  --tab-icon-color: #34d399;
+}
+
+.bottom-app-tab:nth-child(4) {
+  --tab-icon-color: #f472b6;
 }
 
 .bottom-app-tab.active {
   background: rgba(37, 211, 102, 0.10);
   color: var(--wa-bg-fab, #25D366);
+}
+
+.bottom-app-tab.active svg {
+  color: var(--tab-icon-color);
+  filter: drop-shadow(0 0 6px var(--tab-icon-color));
 }
 
 .bottom-app-tab:disabled {

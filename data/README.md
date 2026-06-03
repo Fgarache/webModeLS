@@ -15,6 +15,8 @@ Detalle de data/database.rules.json:
 - perfil:
 	lectura publica del perfil.
 	escritura solo por el usuario autenticado cuyo uid coincide con la ruta `perfil/$uid`.
+	`servicios` admite string legado o objeto por item con este formato recomendado:
+	`servicios/sX/nombre` (obligatorio), `servicios/sX/link` (opcional), `servicios/sX/precio` (opcional) y `servicios/sX/detalles` (opcional).
 	`rol` queda bloqueado desde cliente: solo se permite crear el perfil con valor inicial `user` o conservar el valor ya existente.
 	`tipo` queda bloqueado desde cliente: no puede crearse ni cambiarse desde la app cliente.
 	`verificado` queda bloqueado desde cliente: solo se permite crear el perfil con valor inicial `false` o conservar el valor ya existente.

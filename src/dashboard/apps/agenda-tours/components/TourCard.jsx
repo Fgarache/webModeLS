@@ -29,6 +29,28 @@ function TourCard({
   const locations = getTourLocations(tour.publico?.ubicacion_maps);
   const isTourExpanded = expandedTourId === tour.id;
   const reservationCount = reservations.length;
+  const totalDeposits = reservations.reduce((accumulator, [, reservation]) => {
+    const rawValue = reservation?.lugar ?? reservation?.deposito ?? '';
+    const normalizedValue = String(rawValue).trim();
+
+    if (!normalizedValue) {
+      return accumulator;
+    }
+
+    const hasComma = normalizedValue.includes(',');
+    const hasDot = normalizedValue.includes('.');
+    let sanitized = normalizedValue.replace(/[^\d,.-]/g, '');
+
+    if (hasComma && hasDot) {
+      sanitized = sanitized.replace(/,/g, '');
+    } else if (hasComma && !hasDot) {
+      sanitized = sanitized.replace(/,/g, '.');
+    }
+
+    const numericValue = Number.parseFloat(sanitized);
+    return Number.isFinite(numericValue) ? accumulator + numericValue : accumulator;
+  }, 0);
+  const totalDepositsDisplay = Number.isInteger(totalDeposits) ? totalDeposits.toFixed(0) : totalDeposits.toFixed(2);
   const timeline = [
     ...availableSlots.map(([slotKey, hourValue]) => ({
       type: 'available',
@@ -48,11 +70,11 @@ function TourCard({
       <div className="tour-card-header">
         <div>
           <h4>{tour.publico?.titulo || tourCard.untitledTour}</h4>
+          <p className="tour-date-under-title">{formatDateLabel(tour.publico?.fecha)}</p>
         </div>
 
         <div className="tour-meta">
-          <span>{formatDateLabel(tour.publico?.fecha)}</span>
-          {isArchived && <span className="tour-archive-count">{reservationCount} agendas</span>}
+          <span className="tour-archive-count">{reservationCount}</span>
         </div>
       </div>
 
@@ -182,7 +204,10 @@ function TourCard({
         </section>
       ) : (
         <section className="tour-panel">
-          <h5>{tourCard.scheduleTitle}</h5>
+          <div className="tour-panel-header-row">
+            <h5>{tourCard.scheduleTitle}</h5>
+            <span className="tour-deposit-total">Q {totalDepositsDisplay}</span>
+          </div>
           {!timeline.length && <p className="tour-empty">{tourCard.emptySchedule}</p>}
           {!!timeline.length && (
             <div className="slot-board">

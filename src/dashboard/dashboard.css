@@ -11,7 +11,7 @@
 
 .dashboard-shell {
   --dashboard-topbar-height: 4.5rem;
-  --dashboard-bottombar-height: 5rem;
+  --dashboard-bottombar-height: 6.25rem;
   padding-top: calc(var(--dashboard-topbar-height) + env(safe-area-inset-top, 0px));
   padding-bottom: calc(var(--dashboard-bottombar-height) + env(safe-area-inset-bottom, 0px));
 }
@@ -133,6 +133,10 @@
   padding: 1rem;
 }
 
+.dashboard-body-launcher {
+  padding-bottom: calc(1rem + var(--dashboard-bottombar-height) + env(safe-area-inset-bottom, 0px));
+}
+
 .dashboard-app-stage {
   width: 100%;
 }
@@ -155,26 +159,38 @@
 }
 
 .profile-public-link-launcher {
-  display: grid;
-  gap: 0.25rem;
+  display: flex;
+  align-items: stretch;
+  gap: 0.65rem;
   padding: 0.95rem 1rem;
   border-radius: 1rem;
   background: rgba(82, 224, 160, 0.08);
   border: 1px solid rgba(82, 224, 160, 0.18);
-  text-decoration: none;
-  color: #eafff5;
 }
 
-.profile-public-link-launcher span {
+.profile-public-link-launcher-link {
+  flex: 1 1 auto;
+  display: grid;
+  gap: 0.25rem;
+  text-decoration: none;
+  color: #eafff5;
+  min-width: 0;
+}
+
+.profile-public-link-launcher-link span {
   font-size: 0.78rem;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.7);
 }
 
-.profile-public-link-launcher strong {
+.profile-public-link-launcher-link strong {
   font-size: 0.9rem;
   color: #8df3bd;
   overflow-wrap: anywhere;
+}
+
+.profile-public-link-launcher-link:hover {
+  opacity: 0.92;
 }
 
 .profile-public-link-launcher:hover {
@@ -183,15 +199,8 @@
 }
 
 .launcher-public-link-wrap {
-  display: flex;
-  align-items: stretch;
-  gap: 0.65rem;
+  display: block;
   margin-top: 0.85rem;
-  flex-wrap: wrap;
-}
-
-.launcher-public-link-wrap .profile-public-link-launcher {
-  flex: 1 1 18rem;
 }
 
 .profile-public-copy-button {
@@ -571,7 +580,7 @@
 
   .dashboard-shell {
     --dashboard-topbar-height: 4.1rem;
-    --dashboard-bottombar-height: 4.9rem;
+    --dashboard-bottombar-height: 6.1rem;
   }
 
   .dashboard-topbar {
@@ -607,6 +616,10 @@
 
   .dashboard-body {
     padding: 0.75rem 0.65rem;
+  }
+
+  .dashboard-body-launcher {
+    padding-bottom: calc(0.75rem + var(--dashboard-bottombar-height) + env(safe-area-inset-bottom, 0px));
   }
 
   .welcome-header {
@@ -672,6 +685,10 @@
 @media (max-width: 520px) {
   .dashboard-body {
     padding: 0.65rem 0.5rem;
+  }
+
+  .dashboard-body-launcher {
+    padding-bottom: calc(0.65rem + var(--dashboard-bottombar-height) + env(safe-area-inset-bottom, 0px));
   }
 
   .profile-header-block {

@@ -128,6 +128,57 @@
   color: #e9fff5;
 }
 
+.public-service-list {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.public-service-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.public-service-copy {
+  min-width: 0;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.public-service-copy strong,
+.public-service-copy span,
+.public-service-copy p {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.public-service-copy span {
+  color: #9ef0c8;
+  font-size: 0.8rem;
+}
+
+.public-service-copy p {
+  color: rgba(226, 232, 240, 0.68);
+  font-size: 0.76rem;
+}
+
+.public-chip-link {
+  text-decoration: none;
+  border: 1px solid rgba(82, 224, 160, 0.45);
+}
+
+.public-chip-link:hover {
+  background: rgba(31, 143, 106, 0.28);
+  border-color: rgba(82, 224, 160, 0.85);
+}
+
 .public-status-pill.offline {
   background: rgba(180, 67, 67, 0.18);
   color: #ffd9d9;

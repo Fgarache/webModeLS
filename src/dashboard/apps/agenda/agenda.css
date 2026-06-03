@@ -15,7 +15,7 @@
   display: flex !important;
   flex-direction: column !important;
   gap: 4px !important; /* Espacio mínimo entre el título principal y las listas */
-  padding: 8px 4px 110px 4px !important; /* Margen para el botón flotante */
+  padding: 8px 4px calc(var(--dashboard-bottombar-height, 6.1rem) + 3rem + env(safe-area-inset-bottom, 0px)) 4px !important; /* Margen para el botón flotante y barra inferior */
   min-height: 100vh;
   background: transparent;
 }

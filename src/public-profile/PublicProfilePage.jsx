@@ -53,7 +53,22 @@ function PublicProfilePage({ username, onNavigate }) {
   }, [normalizedUsername]);
 
   const photos = useMemo(() => normalizeMediaPhotos(profile?.fotos || {}).slice(0, 15), [profile?.fotos]);
-  const servicios = useMemo(() => Object.values(profile?.servicios || {}).filter(Boolean), [profile?.servicios]);
+  const servicios = useMemo(() => {
+    return Object.values(profile?.servicios || {})
+      .map((item) => {
+        if (typeof item === 'string') {
+          return { nombre: item.trim(), link: '', precio: '', detalles: '' };
+        }
+
+        return {
+          nombre: String(item?.nombre || '').trim(),
+          link: String(item?.link || '').trim(),
+          precio: String(item?.precio || '').trim(),
+          detalles: String(item?.detalles || '').trim(),
+        };
+      })
+      .filter((item) => item.nombre);
+  }, [profile?.servicios]);
   const ubicaciones = useMemo(() => Object.values(profile?.ubicaciones || {}).filter(Boolean), [profile?.ubicaciones]);
 
   if (loading) {
@@ -118,10 +133,25 @@ function PublicProfilePage({ username, onNavigate }) {
             <h3><FaTicketAlt /> Servicios</h3>
             {!servicios.length && <p>Sin servicios publicados.</p>}
             {!!servicios.length && (
-              <div className="public-chip-list">
-                {servicios.map((servicio) => (
-                  <span key={servicio} className="public-chip">{servicio}</span>
-                ))}
+              <div className="public-service-list">
+                {servicios.map((servicio, index) => {
+                  const hasProtocol = /^https?:\/\//i.test(servicio.link);
+                  const href = servicio.link ? (hasProtocol ? servicio.link : `https://${servicio.link}`) : '';
+                  return (
+                    <article key={`${servicio.nombre}-${index}`} className="public-service-card">
+                      <div className="public-service-copy">
+                        <strong>{servicio.nombre}</strong>
+                        {servicio.precio && <span>{servicio.precio}</span>}
+                        {servicio.detalles && <p>{servicio.detalles}</p>}
+                      </div>
+                      {href && (
+                        <a className="public-chip public-chip-link" href={href} target="_blank" rel="noreferrer">
+                          Ir
+                        </a>
+                      )}
+                    </article>
+                  );
+                })}
               </div>
             )}
           </article>

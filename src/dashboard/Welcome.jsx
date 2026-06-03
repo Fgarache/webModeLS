@@ -6,11 +6,12 @@ import BottomNavBar from '../components/BottomNavBar.jsx';
 import AppsLauncher from './AppsLauncher.jsx';
 import AgendaApp from './apps/agenda/AgendaApp.jsx';
 import PerfilApp from './apps/perfil/PerfilApp.jsx';
-import ProfileCollectionApp from './apps/perfil/PerfilCollectionApp.jsx';
 import AgendaToursApp from './apps/agenda-tours/AgendaToursApp.jsx';
 import MediaApp from './apps/media/MediaApp.jsx';
 import RedesApp from './apps/redes/RedesApp.jsx';
 import RifasApp from './apps/rifas/RifasApp.jsx';
+import ServiciosApp from './apps/servicios/ServiciosApp.jsx';
+import UbicacionesApp from './apps/ubicaciones/UbicacionesApp.jsx';
 import AppLoader from '../components/AppLoader.jsx';
 import { canUseApp } from './apps/apps.roles.config.js';
 import './dashboard.css';
@@ -297,44 +298,13 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
       case 'servicios':
         return (
           <div className="app-content-wrapper">
-            <ProfileCollectionApp
-              user={user}
-              profile={currentProfile}
-              onUpdate={handleProfileUpdate}
-              collectionKey="servicios"
-              title="Servicios"
-              addLabel="Agregar servicio"
-              helpTitle="Como funcionan tus servicios"
-              helpText={[
-                'Cada servicio se guarda como una lista editable dentro de tu perfil.',
-                'Agrega, cambia o elimina tus servicios sin tocar el resto de tu perfil.',
-              ]}
-              emptyText="Todavia no has agregado servicios."
-              itemLabel="Servicio"
-              prefix="s"
-            />
+            <ServiciosApp user={user} profile={currentProfile} onUpdate={handleProfileUpdate} />
           </div>
         );
       case 'ubicaciones':
         return (
           <div className="app-content-wrapper">
-            <ProfileCollectionApp
-              user={user}
-              profile={currentProfile}
-              onUpdate={handleProfileUpdate}
-              collectionKey="ubicaciones"
-              title="Ubicaciones"
-              addLabel="Agregar ubicacion"
-              helpTitle="Como funcionan tus ubicaciones"
-              helpText={[
-                'Cada ubicacion se guarda como una lista editable dentro de tu perfil.',
-                'Desde aqui tambien eliges la ubicacion donde estas disponible hoy.',
-              ]}
-              emptyText="Todavia no has agregado ubicaciones."
-              itemLabel="Ubicacion"
-              prefix="u"
-              includeAvailableToday
-            />
+            <UbicacionesApp user={user} profile={currentProfile} onUpdate={handleProfileUpdate} />
           </div>
         );
       case 'agenda':
@@ -424,7 +394,7 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
         </div>
       </header>
 
-      <main className="dashboard-body">
+      <main className={`dashboard-body ${isLauncherView ? 'dashboard-body-launcher' : ''}`.trim()}>
         {isLauncherView ? (
           <>
             <div className="welcome-header">
@@ -554,13 +524,15 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
 
             {publicProfileUrl && (
               <div className="launcher-public-link-wrap">
-                <a className="profile-public-link-launcher" href={publicProfileUrl} target="_blank" rel="noreferrer">
-                  <span>Ver mi perfil en linea</span>
-                  <strong>{publicProfileUrl}</strong>
-                </a>
-                <button type="button" className="profile-public-copy-button" onClick={handleCopyPublicProfileLink}>
-                  {copyStatus === 'copied' ? 'Copiado' : copyStatus === 'error' ? 'Error' : 'Copiar'}
-                </button>
+                <div className="profile-public-link-launcher">
+                  <a className="profile-public-link-launcher-link" href={publicProfileUrl} target="_blank" rel="noreferrer">
+                    <span>Ver mi perfil en linea</span>
+                    <strong>{publicProfileUrl}</strong>
+                  </a>
+                  <button type="button" className="profile-public-copy-button" onClick={handleCopyPublicProfileLink}>
+                    {copyStatus === 'copied' ? 'Copiado' : copyStatus === 'error' ? 'Error' : 'Copiar'}
+                  </button>
+                </div>
               </div>
             )}
           </>
