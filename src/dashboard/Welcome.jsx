@@ -15,7 +15,7 @@ import AppLoader from '../components/AppLoader.jsx';
 import { canUseApp } from './apps/apps.roles.config.js';
 import './dashboard.css';
 
-const DESCRIPTION_PREVIEW_LIMIT = 180;
+const DESCRIPTION_PREVIEW_LIMIT = 360;
 const SUPPORT_WHATSAPP_NUMBER = '50248037777';
 const SUPPORT_REFERENCE_EMAIL = 'velaxmia@gail.com';
 const STATUS_MAX_AGE = 24 * 60 * 60 * 1000;
@@ -53,14 +53,18 @@ function renderFormattedText(text) {
   return String(text || '')
     .split(/\r?\n/)
     .map((line, lineIndex) => {
-      const parts = line.split(/(\*\*.*?\*\*)/g).filter(Boolean);
+      const parts = line.split(/(\*[^*]+\*)/g).filter(Boolean);
 
       return (
         <span key={`line-${lineIndex}`} className="formatted-text-line">
           {parts.map((part, partIndex) => {
-            const boldMatch = part.match(/^\*\*(.*)\*\*$/);
+            const boldMatch = part.match(/^\*([^*]+)\*$/);
             if (boldMatch) {
-              return <strong key={`part-${lineIndex}-${partIndex}`}>{boldMatch[1]}</strong>;
+              return (
+                <strong key={`part-${lineIndex}-${partIndex}`} className="formatted-text-strong">
+                  {boldMatch[1]}
+                </strong>
+              );
             }
 
             return <span key={`part-${lineIndex}-${partIndex}`}>{part}</span>;
@@ -123,7 +127,7 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
   }, [currentProfile?.estado_actualizado_en, currentProfile?.estado_texto]);
 
   const descriptionText = String(currentProfile?.descripcion || config.message || '').trim();
-  const shouldCollapseDescription = descriptionText.length > DESCRIPTION_PREVIEW_LIMIT || descriptionText.split(/\r?\n/).length > 3;
+  const shouldCollapseDescription = descriptionText.length > DESCRIPTION_PREVIEW_LIMIT;
   const supportWhatsappLink = `https://wa.me/${SUPPORT_WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hola, quiero sugerir cambios o reportar un error. Referencia: ${SUPPORT_REFERENCE_EMAIL}`)}`;
   const publicProfileUsername = String(currentProfile?.nombre_usuario || '').replace(/^@/, '').trim();
   const publicProfileUrl = publicProfileUsername ? `https://lindasgt.com/${publicProfileUsername}` : '';
@@ -506,11 +510,6 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
                         {descriptionExpanded ? 'Ver menos' : 'Ver mas'}
                       </button>
                     )}
-                  </div>
-                  <div className="dashboard-launcher-actions">
-                    <a className="support-link" href={supportWhatsappLink} target="_blank" rel="noreferrer">
-                      Sugerir cambios o reportar error
-                    </a>
                   </div>
                 </div>
               </div>

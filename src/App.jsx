@@ -13,6 +13,8 @@ const PATH_TO_APP = {
   '/rifas': 'rifas',
   '/fotos': 'media',
   '/redes': 'redes',
+  '/servicios': 'servicios',
+  '/ubicaciones': 'ubicaciones',
   '/editar-perfil': 'perfil',
 };
 
@@ -23,6 +25,8 @@ const APP_TO_PATH = {
   rifas: '/rifas',
   media: '/fotos',
   redes: '/redes',
+  servicios: '/servicios',
+  ubicaciones: '/ubicaciones',
 };
 
 function getRouteState(pathname) {

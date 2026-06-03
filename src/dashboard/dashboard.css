@@ -263,14 +263,15 @@
 
 .header-description-copy {
   color: #cbd5e1;
-  line-height: 1.7;
+  font-size: 0.9rem;
+  line-height: 1.45;
   min-width: 0;
 }
 
 .header-description-copy.collapsed {
   display: -webkit-box;
-  line-clamp: 3;
-  -webkit-line-clamp: 3;
+  line-clamp: 8;
+  -webkit-line-clamp: 8;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -284,6 +285,11 @@
   display: block;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
+}
+
+.formatted-text-strong {
+  font-weight: 800;
+  font-size: calc(100% + 2px);
 }
 
 .header-description-toggle {

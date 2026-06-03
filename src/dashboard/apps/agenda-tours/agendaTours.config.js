@@ -22,7 +22,7 @@ const agendaToursConfig = {
     deleteTour: 'Eliminar tour',
     scheduleTitle: 'Horarios',
     emptySchedule: 'No hay horarios configurados.',
-    archivedScheduleText: 'Este tour ya no muestra horarios porque esta inactivo o su fecha ya paso.',
+    archivedScheduleText: '',
     noLocations: 'Sin ubicaciones',
     noPlace: 'Sin deposito',
     noContact: 'Sin contacto',
