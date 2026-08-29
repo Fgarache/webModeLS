@@ -75,8 +75,8 @@ function AgendaCard({ item, expanded, saving, subdued = false, onEdit, onToggleV
           .agenda-card-title-row {
             display: flex;
             align-items: center;
-            gap: 8px;
-            flex-wrap: nowrap;
+            gap: 4px 8px;
+            flex-wrap: wrap;
             min-width: 0;
           }
 
@@ -84,9 +84,12 @@ function AgendaCard({ item, expanded, saving, subdued = false, onEdit, onToggleV
             font-size: 1rem;
             font-weight: 700;
             color: #fff;
+            word-break: break-word;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
           }
 
           /* ESTILO DEL DEPÓSITO EN LA TARJETA */
@@ -197,14 +200,22 @@ function AgendaCard({ item, expanded, saving, subdued = false, onEdit, onToggleV
                 </span>
               )}
 
-              <span className={`agenda-card-date-badge ${isPendiente ? 'agenda-card-date-pendiente' : ''}`}>
-                {formatAgendaDate(item.fecha)}
-              </span>
+              {!isPendiente && (
+                <span className="agenda-card-date-badge">
+                  {formatAgendaDate(item.fecha)}
+                </span>
+              )}
             </div>
             {!!detailsPreview && !expanded && <span className="agenda-details-preview">{detailsPreview}</span>}
           </div>
 
-          <div className="agenda-card-actions">
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
+            {isPendiente && (
+              <span style={{ fontSize: '0.65rem', color: '#6366f1', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                Pendiente
+              </span>
+            )}
+            <div className="agenda-card-actions">
             <button
               type="button"
               className="icon-button"
@@ -233,6 +244,7 @@ function AgendaCard({ item, expanded, saving, subdued = false, onEdit, onToggleV
               <FaPen />
             </button>
           </div>
+          </div>
         </div>
 
         {/* DETALLES EXPANDIDOS */}
@@ -250,6 +262,14 @@ function AgendaCard({ item, expanded, saving, subdued = false, onEdit, onToggleV
               <strong>Detalles</strong>
               <p>{item.detalles || 'Sin notas adicionales.'}</p>
             </div>
+            {item.creado_en && (
+              <div className="agenda-card-panel full-width">
+                <strong>Registro creado el</strong>
+                <p style={{ fontSize: '0.85rem', color: 'rgba(255, 255, 255, 0.55)', fontWeight: 'normal' }}>
+                  {new Date(item.creado_en).toLocaleString('es-GT', { dateStyle: 'medium', timeStyle: 'short' })}
+                </p>
+              </div>
+            )}
           </div>
         )}
       </article>

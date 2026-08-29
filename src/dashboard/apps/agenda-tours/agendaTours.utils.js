@@ -35,6 +35,7 @@ export function createEmptyTourForm() {
     activo: true,
     disponibles: {},
     ubicacion_maps: '',
+    lugar: [],
   };
 }
 
@@ -75,6 +76,19 @@ export function formatDateLabel(value) {
     day: '2-digit',
     month: 'long',
   }).format(date);
+}
+
+export function generateAutoTitle(fecha, lugares) {
+  if (!fecha) return '';
+  
+  const dateStr = formatDateLabel(fecha).replace(',', '');
+  
+  if (!lugares || lugares.length === 0) {
+    return dateStr;
+  }
+  
+  const lugaresStr = lugares.join(', ');
+  return `${dateStr} en ${lugaresStr}`;
 }
 
 export function getTourLocations(value) {
@@ -118,6 +132,7 @@ export function normalizeTour(tourId, tourData) {
       ...publico,
       disponibles: publico.disponibles || {},
       ubicacion_maps: publico.ubicacion_maps || '',
+      lugar: publico.lugar || [],
     },
     privado: {
       ...privado,

@@ -357,13 +357,7 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
               <FaChevronLeft />
             </button>
           )}
-          <div className="dashboard-topbar-avatar">
-            {currentProfile.foto_perfil ? (
-              <img src={currentProfile.foto_perfil} alt={currentProfile.nombre_completo || 'Perfil'} />
-            ) : (
-              <span>{String(currentProfile.nombre_completo || currentProfile.nombre_usuario || 'P').charAt(0).toUpperCase()}</span>
-            )}
-          </div>
+
           <div className="dashboard-topbar-copy">
             <strong>{currentProfile.nombre_completo || 'Mi panel'}</strong>
             <span>{isLauncherView ? `@${currentProfile.nombre_usuario || 'usuario'} · ${currentProfile.rol}` : getSectionLabel(activeApp)}</span>

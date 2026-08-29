@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { get, push, ref, remove, set } from 'firebase/database';
 import { db } from '../../../../auth/firebaseConfig.js';
 import { buildAgendaDateTime, normalizeAgenda, sanitizeAgendaContact, sortAgenda } from '../agenda.utils.js';
@@ -7,54 +8,26 @@ function getErrorMessage(error, fallbackMessage) {
   if (error?.code === 'PERMISSION_DENIED') {
     return 'Firebase rechazo la operacion por permisos.';
   }
-
   return error?.message || fallbackMessage;
 }
 
 function useAgenda(user) {
-  const [agendaItems, setAgendaItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    let cancelled = false;
-
-    async function loadAgenda() {
-      if (!user?.uid) {
-        setAgendaItems([]);
-        setLoading(false);
-        return;
-      }
-
-      setLoading(true);
-      setError('');
-
-      try {
-        const snapshot = await get(ref(db, `agenda/${user.uid}`));
-        const agendaMap = snapshot.exists() ? snapshot.val() : {};
-        const loaded = Object.entries(agendaMap).map(([agendaId, agendaData]) => normalizeAgenda(agendaId, agendaData));
-
-        if (!cancelled) {
-          setAgendaItems(sortAgenda(loaded));
-        }
-      } catch (loadError) {
-        if (!cancelled) {
-          setError(getErrorMessage(loadError, 'No se pudo cargar la agenda.'));
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
-        }
-      }
-    }
-
-    loadAgenda();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [user]);
+  const { data: agendaItems = [], isLoading: loading } = useQuery({
+    queryKey: ['agenda', user?.uid],
+    queryFn: async () => {
+      if (!user?.uid) return [];
+      const snapshot = await get(ref(db, `agenda/${user.uid}`));
+      const agendaMap = snapshot.exists() ? snapshot.val() : {};
+      const loaded = Object.entries(agendaMap).map(([agendaId, agendaData]) => normalizeAgenda(agendaId, agendaData));
+      return sortAgenda(loaded);
+    },
+    enabled: !!user?.uid,
+    staleTime: 5 * 60 * 1000,
+  });
 
   const saveAgenda = async ({ editingAgendaId, form }) => {
     if (!user?.uid) {
@@ -69,7 +42,6 @@ function useAgenda(user) {
 
     const agendaDateTime = buildAgendaDateTime(form);
 
-    // Solo validar fecha si el toggle está activo
     if (form.fecha_activa !== false && !agendaDateTime) {
       setError('Debes elegir una fecha.');
       return false;
@@ -94,7 +66,10 @@ function useAgenda(user) {
 
       await set(ref(db, `agenda/${user.uid}/${agendaId}`), payload);
       const savedAgenda = normalizeAgenda(agendaId, payload);
-      setAgendaItems((current) => sortAgenda([...current.filter((item) => item.id !== agendaId), savedAgenda]));
+      
+      queryClient.setQueryData(['agenda', user.uid], (old = []) => {
+        return sortAgenda([...old.filter((item) => item.id !== agendaId), savedAgenda]);
+      });
       return true;
     } catch (saveError) {
       setError(getErrorMessage(saveError, 'No se pudo guardar la agenda.'));
@@ -114,7 +89,9 @@ function useAgenda(user) {
 
     try {
       await remove(ref(db, `agenda/${user.uid}/${agendaId}`));
-      setAgendaItems((current) => current.filter((item) => item.id !== agendaId));
+      queryClient.setQueryData(['agenda', user.uid], (old = []) => {
+        return old.filter((item) => item.id !== agendaId);
+      });
       return true;
     } catch (deleteError) {
       setError(getErrorMessage(deleteError, 'No se pudo eliminar la agenda.'));

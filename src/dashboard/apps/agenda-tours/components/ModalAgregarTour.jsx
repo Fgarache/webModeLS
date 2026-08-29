@@ -1,4 +1,4 @@
-
+import { useState, useRef, useEffect } from 'react';
 import {
   AVAILABLE_TIME_OPTIONS,
   formatHour12,
@@ -6,12 +6,101 @@ import {
 import agendaToursConfig from '../agendaTours.config.js';
 import ToggleSwitch from './ToggleSwitch.jsx';
 
+function MultiSelectDropdown({ options, selected, onChange, disabled, placeholder = 'Selecciona opciones...' }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const toggleOption = (option) => {
+    if (selected.includes(option)) {
+      onChange(selected.filter(item => item !== option));
+    } else {
+      onChange([...selected, option]);
+    }
+  };
+
+  return (
+    <div ref={dropdownRef} style={{ position: 'relative', width: '100%' }}>
+      <div 
+        onClick={() => !disabled && setIsOpen(!isOpen)}
+        style={{
+          padding: '0.75rem',
+          borderRadius: '8px',
+          border: '1px solid var(--border-color, #444)',
+          backgroundColor: disabled ? 'var(--background-color)' : 'var(--surface-color)',
+          cursor: disabled ? 'not-allowed' : 'pointer',
+          color: 'var(--text-color)',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          minHeight: '44px',
+          fontSize: '0.95rem'
+        }}
+      >
+        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {selected.length > 0 ? selected.join(', ') : placeholder}
+        </span>
+        <span style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s', marginLeft: '8px' }}>▼</span>
+      </div>
+      
+      {isOpen && (
+        <div style={{
+          position: 'absolute',
+          top: '100%',
+          left: 0,
+          right: 0,
+          marginTop: '4px',
+          backgroundColor: 'var(--surface-color, #1a1a1a)',
+          border: '1px solid var(--border-color, #444)',
+          borderRadius: '8px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
+          zIndex: 10,
+          maxHeight: '200px',
+          overflowY: 'auto'
+        }}>
+          {options.length === 0 && (
+            <div style={{ padding: '0.75rem', color: '#888' }}>No hay opciones</div>
+          )}
+          {options.map((opt, i) => (
+            <label key={i} style={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0.75rem',
+              cursor: 'pointer',
+              borderBottom: i < options.length - 1 ? '1px solid var(--border-color, #444)' : 'none',
+              margin: 0
+            }}>
+              <input 
+                type="checkbox" 
+                checked={selected.includes(opt)} 
+                onChange={() => toggleOption(opt)} 
+                style={{ marginRight: '10px', width: '18px', height: '18px', cursor: 'pointer' }}
+              />
+              <span style={{ color: 'var(--text-color)' }}>{opt}</span>
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ModalAgregarTour({
   open,
   editing,
   form,
   saving,
   error,
+  ubicacionesOptions = [],
   onChange,
   onClose,
   onSubmit,
@@ -67,6 +156,17 @@ function ModalAgregarTour({
                 disabled={saving}
               />
             </div>
+          </div>
+
+          <div className="modern-group">
+            <label className="modern-label" htmlFor="lugar">{tourModal.fields.location}</label>
+            <MultiSelectDropdown 
+              options={ubicacionesOptions}
+              selected={form.lugar || []}
+              onChange={(newSelection) => onChange('lugar', newSelection)}
+              disabled={saving}
+              placeholder={tourModal.fields.locationPlaceholder}
+            />
           </div>
 
           <div className="modern-group">

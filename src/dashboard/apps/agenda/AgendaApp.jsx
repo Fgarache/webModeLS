@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../../auth/AuthContext.jsx';
 import agendaConfig from './agenda.config.js';
 import './agenda.css';
@@ -6,6 +6,7 @@ import useAgenda from './hooks/useAgenda.js';
 import ModalCrearAgenda from './components/ModalCrearAgenda.jsx';
 import AgendaCard from './components/AgendaCard.jsx';
 import ModalConfirmarAgenda from './components/ModalConfirmarAgenda.jsx';
+import AgendaSkeleton from './components/AgendaSkeleton.jsx';
 import { createEmptyAgendaForm, splitAgendaByTime, splitAgendaDateTime } from './agenda.utils.js';
 import AppSectionHeader from '../../components/AppSectionHeader.jsx';
 import FloatingActionButton from '../../components/FloatingActionButton.jsx';
@@ -20,6 +21,9 @@ function AgendaApp() {
   const [agendaForm, setAgendaForm] = useState(() => createEmptyAgendaForm());
   const [deletingItem, setDeletingItem] = useState(null);
   const [expandedAgendaId, setExpandedAgendaId] = useState(null);
+  const [pastLimit, setPastLimit] = useState(10);
+  const [showPast, setShowPast] = useState(false);
+  const loaderRef = useRef(null);
 
   const { upcoming, past } = useMemo(() => {
     const split = splitAgendaByTime(agendaItems);
@@ -28,6 +32,25 @@ function AgendaApp() {
       past: split.past
     };
   }, [agendaItems]);
+
+  const pastToDisplay = past.slice(0, pastLimit);
+  const hasMorePast = pastLimit < past.length;
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && hasMorePast) {
+        setPastLimit((prev) => prev + 10);
+      }
+    }, { rootMargin: '200px' });
+    
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+    
+    return () => {
+      if (loaderRef.current) observer.unobserve(loaderRef.current);
+    };
+  }, [hasMorePast, showPast]);
 
   const openCreateModal = () => {
     setEditingAgendaId(null);
@@ -91,9 +114,16 @@ function AgendaApp() {
     if (success) closeDeleteModal();
   };
 
+  const renderSkeletons = (count) => (
+    <div className="agenda-list">
+      {Array.from({ length: count }).map((_, i) => (
+        <AgendaSkeleton key={`skel-${i}`} />
+      ))}
+    </div>
+  );
+
   return (
     <section className="agenda-app">
-      {/* Quitamos onAdd para que el encabezado no muestre el botón superior */}
       <AppSectionHeader 
         title={header.title} 
         addLabel={header.addButton}
@@ -103,29 +133,56 @@ function AgendaApp() {
         addDisabled={saving || !user?.uid} 
       />
 
-      {loading && <div className="agenda-status">{header.loadingText}</div>}
       {!loading && error && <div className="agenda-error">{error}</div>}
       {!loading && !agendaItems.length && !error && <div className="agenda-status">{header.emptyText}</div>}
 
-      {!!upcoming.length && (
+      {(loading || upcoming.length > 0) && (
         <section className="agenda-section">
           <h4 className="agenda-section-title">{header.upcomingSection}</h4>
-          <div className="agenda-list">
-            {upcoming.map((item) => (
-              <AgendaCard key={item.id} item={item} expanded={expandedAgendaId === item.id} saving={saving} onEdit={openEditModal} onToggleView={toggleExpanded} />
-            ))}
-          </div>
+          {loading ? (
+            renderSkeletons(3)
+          ) : (
+            <div className="agenda-list">
+              {upcoming.map((item) => (
+                <AgendaCard key={item.id} item={item} expanded={expandedAgendaId === item.id} saving={saving} onEdit={openEditModal} onToggleView={toggleExpanded} />
+              ))}
+            </div>
+          )}
         </section>
       )}
 
-      {!!past.length && (
+      {(loading || past.length > 0) && (
         <section className="agenda-section agenda-section-past">
           <h4 className="agenda-section-title">{header.pastSection}</h4>
-          <div className="agenda-list">
-            {past.map((item) => (
-              <AgendaCard key={item.id} item={item} expanded={expandedAgendaId === item.id} subdued saving={saving} onEdit={openEditModal} onToggleView={toggleExpanded} />
-            ))}
-          </div>
+          {loading ? (
+            renderSkeletons(2)
+          ) : !showPast ? (
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '12px', paddingBottom: '20px' }}>
+              <button 
+                onClick={() => setShowPast(true)}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  padding: '8px 16px',
+                  borderRadius: '8px',
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  width: '100%'
+                }}
+              >
+                Ver agendas pasadas
+              </button>
+            </div>
+          ) : (
+            <div className="agenda-list">
+              {pastToDisplay.map((item) => (
+                <AgendaCard key={item.id} item={item} expanded={expandedAgendaId === item.id} subdued saving={saving} onEdit={openEditModal} onToggleView={toggleExpanded} />
+              ))}
+              {hasMorePast && <div ref={loaderRef} style={{ height: '20px', width: '100%' }}></div>}
+            </div>
+          )}
         </section>
       )}
 

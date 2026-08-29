@@ -131,6 +131,7 @@ function useAgendaTours(user) {
         activo: nextActiveValue,
         disponibles: form.disponibles || {},
         ubicacion_maps: form.ubicacion_maps.trim(),
+        lugar: form.lugar || [],
         creado_por_uid: user.uid,
         actualizado_en: now,
         creado_en: currentTour?.publico?.creado_en || now,

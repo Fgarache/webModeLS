@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import './agenda-tours.css';
 import { useAuth } from '../../../auth/AuthContext.jsx';
 import ModalAgenda from './components/ModalAgenda.jsx';
@@ -11,12 +11,14 @@ import {
   createEmptyReservationForm,
   createEmptyTourForm,
   splitToursByStatus,
+  generateAutoTitle,
 } from './agendaTours.utils.js';
+import { normalizeUbicacionesMap } from '../ubicaciones/ubicaciones.utils.js';
 import AppSectionHeader from '../../components/AppSectionHeader.jsx';
 import FloatingActionButton from '../../components/FloatingActionButton.jsx';
 
 function AgendaToursApp() {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const { confirmModal, header, messages } = agendaToursConfig;
   const {
     tours,
@@ -40,19 +42,46 @@ function AgendaToursApp() {
   const [expandedAgenda, setExpandedAgenda] = useState(null);
   const [expandedTourId, setExpandedTourId] = useState(null);
   const [confirmState, setConfirmState] = useState(null);
+  const [pastLimit, setPastLimit] = useState(10);
+  const [showPast, setShowPast] = useState(false);
+  const loaderRef = useRef(null);
+
+  const ubicacionesOptions = useMemo(() => {
+    if (!profile?.ubicaciones) return [];
+    return Object.values(normalizeUbicacionesMap(profile.ubicaciones));
+  }, [profile?.ubicaciones]);
 
   const selectedTour = useMemo(() => {
-    if (!selectedSlot?.tourId) {
-      return null;
-    }
-
+    if (!selectedSlot?.tourId) return null;
     return tours.find((tour) => tour.id === selectedSlot.tourId) || null;
   }, [selectedSlot, tours]);
 
-  const { current: currentTours, archived: archivedTours } = useMemo(
-    () => splitToursByStatus(tours),
-    [tours]
-  );
+  const { current: currentTours, archived: archivedTours } = useMemo(() => {
+    const split = splitToursByStatus(tours);
+    return {
+      current: split.current,
+      archived: split.archived.reverse(),
+    };
+  }, [tours]);
+
+  const archivedToDisplay = archivedTours.slice(0, pastLimit);
+  const hasMoreArchived = pastLimit < archivedTours.length;
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && hasMoreArchived) {
+        setPastLimit((prev) => prev + 10);
+      }
+    }, { rootMargin: '200px' });
+    
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+    
+    return () => {
+      if (loaderRef.current) observer.unobserve(loaderRef.current);
+    };
+  }, [hasMoreArchived, showPast]);
 
   const openCreateTourModal = () => {
     setEditingTourId(null);
@@ -69,6 +98,7 @@ function AgendaToursApp() {
       activo: typeof tour.publico?.activo === 'boolean' ? tour.publico.activo : true,
       disponibles: tour.publico?.disponibles || {},
       ubicacion_maps: tour.publico?.ubicacion_maps || '',
+      lugar: tour.publico?.lugar || [],
     });
     setTourModalOpen(true);
   };
@@ -84,10 +114,22 @@ function AgendaToursApp() {
   };
 
   const handleTourFieldChange = (field, value) => {
-    setTourForm((current) => ({
-      ...current,
-      [field]: value,
-    }));
+    setTourForm((current) => {
+      const nextForm = {
+        ...current,
+        [field]: value,
+      };
+
+      if (field === 'fecha' || field === 'lugar') {
+        const expectedOldTitle = generateAutoTitle(current.fecha, current.lugar);
+        const isDefaultOrEmpty = !current.titulo || current.titulo === expectedOldTitle;
+        if (isDefaultOrEmpty) {
+          nextForm.titulo = generateAutoTitle(nextForm.fecha, nextForm.lugar);
+        }
+      }
+
+      return nextForm;
+    });
   };
 
   const handleToggleSlot = (hourValue) => {
@@ -298,25 +340,47 @@ function AgendaToursApp() {
             <p>{header.archivedDescription}</p>
           </div>
 
-          <div className="agenda-tours-list agenda-tours-list-archived">
-            {archivedTours.map((tour) => (
-              <TourCard
-                key={tour.id}
-                tour={tour}
-                saving={saving}
-                expandedTourId={expandedTourId}
-                isArchived={true}
-                onAddReservation={openAgendaModal}
-                onDeleteReservation={requestDeleteReservation}
-                expandedAgenda={expandedAgenda}
-                onEditReservation={openEditAgendaModal}
-                onDeleteTour={requestDeleteTour}
-                onEditTour={openEditTourModal}
-                onViewReservation={toggleViewAgenda}
-                onViewTour={toggleViewTour}
-              />
-            ))}
-          </div>
+          {!showPast ? (
+            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '12px', paddingBottom: '20px' }}>
+              <button 
+                onClick={() => setShowPast(true)}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  color: 'rgba(255, 255, 255, 0.8)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  padding: '8px 16px',
+                  borderRadius: '8px',
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  width: '100%'
+                }}
+              >
+                Ver tours pasados
+              </button>
+            </div>
+          ) : (
+            <div className="agenda-tours-list agenda-tours-list-archived">
+              {archivedToDisplay.map((tour) => (
+                <TourCard
+                  key={tour.id}
+                  tour={tour}
+                  saving={saving}
+                  expandedTourId={expandedTourId}
+                  isArchived={true}
+                  onAddReservation={openAgendaModal}
+                  onDeleteReservation={requestDeleteReservation}
+                  expandedAgenda={expandedAgenda}
+                  onEditReservation={openEditAgendaModal}
+                  onDeleteTour={requestDeleteTour}
+                  onEditTour={openEditTourModal}
+                  onViewReservation={toggleViewAgenda}
+                  onViewTour={toggleViewTour}
+                />
+              ))}
+              {hasMoreArchived && <div ref={loaderRef} style={{ height: '20px', width: '100%' }}></div>}
+            </div>
+          )}
         </div>
       )}
 
@@ -328,6 +392,7 @@ function AgendaToursApp() {
         form={tourForm}
         saving={saving}
         error={error}
+        ubicacionesOptions={ubicacionesOptions}
         onChange={handleTourFieldChange}
         onClose={closeTourModal}
         onSubmit={handleSaveTour}
