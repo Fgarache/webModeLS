@@ -12,6 +12,7 @@ import RedesApp from './apps/redes/RedesApp.jsx';
 import RifasApp from './apps/rifas/RifasApp.jsx';
 import ServiciosApp from './apps/servicios/ServiciosApp.jsx';
 import UbicacionesApp from './apps/ubicaciones/UbicacionesApp.jsx';
+import AdminApp from './apps/admin/AdminApp.jsx';
 import AppLoader from '../components/AppLoader.jsx';
 import { canUseApp } from './apps/apps.roles.config.js';
 import './dashboard.css';
@@ -85,7 +86,7 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
   const [descriptionExpanded, setDescriptionExpanded] = useState(false);
   const copyStatusTimeoutRef = useRef(null);
   const isLauncherView = !activeApp;
-  const activeNavTab = activeApp === 'agenda' || activeApp === 'agenda-tours' || activeApp === 'rifas' ? activeApp : 'perfil';
+  const activeNavTab = activeApp === 'agenda' || activeApp === 'agenda-tours' || activeApp === 'rifas' || activeApp === 'admin' ? activeApp : 'perfil';
 
   useEffect(() => {
     setCurrentProfile(profile);
@@ -313,6 +314,12 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
             <AgendaApp />
           </div>
         );
+      case 'admin':
+        return (
+          <div className="app-content-wrapper">
+            <AdminApp />
+          </div>
+        );
       case 'agenda-tours':
         return (
           <div className="app-content-wrapper">
@@ -535,7 +542,7 @@ function Welcome({ config, user, profile, initialApp = null, onAppRouteChange, o
         )}
       </main>
 
-      <BottomNavBar active={activeNavTab} onTab={handleBottomTabChange} canUseApp={(appId) => canUseApp(appId, currentProfile.rol)} />
+      <BottomNavBar active={activeNavTab} onTab={handleBottomTabChange} canUseApp={(appId) => canUseApp(appId, currentProfile.rol, currentProfile.nombre_usuario)} />
     </section>
   );
 }

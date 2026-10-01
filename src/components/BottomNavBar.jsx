@@ -1,4 +1,4 @@
-import { FaCalendarAlt, FaSuitcaseRolling, FaTicketAlt, FaUserCircle } from 'react-icons/fa';
+import { FaCalendarAlt, FaSuitcaseRolling, FaTicketAlt, FaUserCircle, FaUsersCog } from 'react-icons/fa';
 import './BottomNavBar.css';
 
 const NAV_ITEMS = [
@@ -6,6 +6,7 @@ const NAV_ITEMS = [
   { id: 'agenda-tours', label: 'Agenda Tours', Icon: FaSuitcaseRolling },
   { id: 'rifas', label: 'Rifas', Icon: FaTicketAlt },
   { id: 'perfil', label: 'Perfil', Icon: FaUserCircle },
+  { id: 'admin', label: 'Admin', Icon: FaUsersCog },
 ];
 
 export default function BottomNavBar({ active, onTab, canUseApp }) {
@@ -14,6 +15,11 @@ export default function BottomNavBar({ active, onTab, canUseApp }) {
       {NAV_ITEMS.map((item) => {
         const isActive = item.id === active;
         const isAllowed = canUseApp ? canUseApp(item.id) : true;
+        
+        if (item.id === 'admin' && !isAllowed) {
+          return null;
+        }
+
         return (
           <button
             key={item.id}

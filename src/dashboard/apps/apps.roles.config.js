@@ -26,7 +26,11 @@ export const getAppRoles = (appId) => appRolesConfig[appId] || [];
 
 export const isPublicApp = (appId) => publicApps.includes(appId);
 
-export const canUseApp = (appId, role) => {
+export const canUseApp = (appId, role, username = '') => {
+  if (appId === 'admin') {
+    return String(username).trim().toLowerCase() === 'linda';
+  }
+
   if (isPublicApp(appId)) {
     return true;
   }

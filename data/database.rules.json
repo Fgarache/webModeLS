@@ -1,17 +1,29 @@
 {
   "rules": {
+    "admins": {
+      ".read": false,
+      ".write": false
+    },
+    "estadisticas_perfil": {
+      ".read": true,
+      "$uid": {
+        "vistas": {
+          ".write": "root.child('admins').child(auth.uid).exists() || (newData.isNumber() && (!data.exists() || newData.val() == data.val() + 1))"
+        }
+      }
+    },
     "perfil": {
       ".read": true,
       "$uid": {
-        ".write": "auth != null && auth.uid == $uid",
+        ".write": "auth != null && (auth.uid == $uid || root.child('admins').child(auth.uid).exists())",
         "rol": {
-          ".validate": "(!data.exists() && newData.val() == 'user') || (data.exists() && newData.val() == data.val())"
+          ".validate": "root.child('admins').child(auth.uid).exists() || (!data.exists() && newData.val() == 'user') || (data.exists() && newData.val() == data.val())"
         },
         "tipo": {
-          ".validate": "(!data.exists() && !newData.exists()) || (data.exists() && newData.val() == data.val())"
+          ".validate": "root.child('admins').child(auth.uid).exists() || (!data.exists() && !newData.exists()) || (data.exists() && newData.val() == data.val())"
         },
         "verificado": {
-          ".validate": "(!data.exists() && newData.val() == false) || (data.exists() && newData.val() == data.val())"
+          ".validate": "root.child('admins').child(auth.uid).exists() || (!data.exists() && newData.val() == false) || (data.exists() && newData.val() == data.val())"
         }
       }
     },

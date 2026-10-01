@@ -16,6 +16,7 @@ const PATH_TO_APP = {
   '/servicios': 'servicios',
   '/ubicaciones': 'ubicaciones',
   '/editar-perfil': 'perfil',
+  '/admin': 'admin',
 };
 
 const APP_TO_PATH = {
@@ -27,6 +28,7 @@ const APP_TO_PATH = {
   redes: '/redes',
   servicios: '/servicios',
   ubicaciones: '/ubicaciones',
+  admin: '/admin',
 };
 
 function getRouteState(pathname) {

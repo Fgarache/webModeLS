@@ -8,7 +8,8 @@
   max-width: none;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   gap: 0.25rem;
   padding: 0.55rem 0.45rem calc(0.55rem + env(safe-area-inset-bottom, 0px));
   border-radius: 1rem 1rem 0 0;
@@ -53,6 +54,10 @@
 
 .bottom-app-tab:nth-child(4) {
   --tab-icon-color: #f472b6;
+}
+
+.bottom-app-tab:nth-child(5) {
+  --tab-icon-color: #a78bfa;
 }
 
 .bottom-app-tab.active {
